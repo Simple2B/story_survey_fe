@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import domain from "./domain.json";
 
-export const instance = (
+const instance = (
   query: string = "",
   pageNumber: number = 0
 ): AxiosInstance => {
@@ -24,7 +24,7 @@ export const instance = (
   });
 };
 
-export const authInstance: AxiosInstance = axios.create({
+const authInstance: AxiosInstance = axios.create({
   baseURL: domain.REACT_DOMAIN,
   headers: {
     "Content-Type": "multipart/form-data",
