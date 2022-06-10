@@ -1,0 +1,26 @@
+{
+    "name": "story_survey_fe",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "next dev",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Simple2B/story_survey_fe.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Simple2B/story_survey_fe/issues"
+    },
+    "homepage": "https://github.com/Simple2B/story_survey_fe#readme",
+    "dependencies": {
+        "next": "^12.1.6",
+        "react": "^18.1.0",
+        "react-dom": "^18.1.0"
+    }
+}
