@@ -1,11 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "./Forms.module.css"
 
 function Forms() {
+
+    const [form, setForm] = useState("SignIn");
+
+    const handleToggleForm = (e) => {
+        setForm(e);
+    }
+
     return (
 
         <div className={styles.modalBody}>
-            <div className={`${styles.loginContainer} ${styles.animated} ${styles.fadeInDown} ${styles.bootstrap} ${styles.snippets} ${styles.bootdeys}`}>
+            {form === "SignIn" && <div className={`${styles.loginContainer} ${styles.animated} ${styles.fadeInDown} ${styles.bootstrap} ${styles.snippets} ${styles.bootdeys}`}>
                 <div className={`${styles.loginbox} ${styles.bgWhite}`}>
                     <div className={styles.loginboxTitle}>SIGN IN</div>
                     <div className={styles.loginboxSocial}>
@@ -38,13 +45,39 @@ function Forms() {
                     <div className={styles.loginboxSubmit}>
                         <input type="button" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} value="Login"/>
                     </div>
-                    {/* <div className={styles.loginboxSignup}>
+                    <div className={styles.loginboxSignup} onClick={() => handleToggleForm("SignUp")}>
                         <a href="#register.html">Sign Up With Email</a>
-                    </div> */}
+                    </div>
                 </div>
                 {/* <div className={styles.logobox}>
                 </div> */}
-            </div>
+            </div>}
+
+            {form === "SignUp" && <div className={`${styles.loginContainer} ${styles.animated} ${styles.fadeInDown} ${styles.bootstrap} ${styles.snippets} ${styles.bootdeys}`}>
+                <div className={`${styles.loginbox} ${styles.bgWhite}`}>
+                    <div className={styles.loginboxTitle}>SIGN UP</div>
+
+                    <div className={styles.loginboxTextbox}>
+                        <input type="text" className={styles.formControl} placeholder="First name"/>
+                    </div>
+                    <div className={styles.loginboxTextbox}>
+                        <input type="text" className={styles.formControl} placeholder="Surname name"/>
+                    </div>
+                    <div className={styles.loginboxTextbox}>
+                        <input type="text" className={styles.formControl} placeholder="Email"/>
+                    </div>
+                    <div className={styles.loginboxTextbox}>
+                        <input type="text" className={styles.formControl} placeholder="Password"/>
+                    </div>
+
+                    <div className={styles.loginboxSubmit}>
+                        <input type="button" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} value="Registration"/>
+                    </div>
+                    <div className={styles.loginboxSignup}  onClick={() => handleToggleForm("SignIn")}>
+                        <a href="#register.html">Sign In</a>
+                    </div>
+                </div>
+            </div>}
         </div>
 
     )
