@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
-import domain from "./domain.json";
+
+const API_URI = process.env.API_URI;
 
 const instance = (
   query: string = "",
@@ -9,7 +10,7 @@ const instance = (
   let cancel;
   // console.log("token", token)
   return axios.create({
-    baseURL: domain.REACT_DOMAIN,
+    baseURL: API_URI,
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json; charset=utf-8",
@@ -25,7 +26,7 @@ const instance = (
 };
 
 const authInstance: AxiosInstance = axios.create({
-  baseURL: domain.REACT_DOMAIN,
+  baseURL: API_URI,
   headers: {
     "Content-Type": "multipart/form-data",
     // 'Access-Control-Allow-Origin' : '*',
