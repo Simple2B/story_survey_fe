@@ -4,6 +4,10 @@
     max-width: 340px;
 }
 
+.signUpContainer {
+    height: 401px;
+}
+
 .loginContainer .loginbox {
     position: relative;
     width: 340px !important;

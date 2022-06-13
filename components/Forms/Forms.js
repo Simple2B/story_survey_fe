@@ -54,7 +54,7 @@ function Forms() {
             </div>}
 
             {form === "SignUp" && <div className={`${styles.loginContainer} ${styles.animated} ${styles.fadeInDown} ${styles.bootstrap} ${styles.snippets} ${styles.bootdeys}`}>
-                <div className={`${styles.loginbox} ${styles.bgWhite}`}>
+                <div className={`${styles.loginbox} ${styles.bgWhite} ${styles.signUpContainer}`}>
                     <div className={styles.loginboxTitle}>SIGN UP</div>
 
                     <div className={styles.loginboxTextbox}>

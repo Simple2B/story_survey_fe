@@ -64,6 +64,7 @@
   height: 100px;
 }
 
+
 .containerForms {
   position: absolute;
   width: 100vw;
@@ -124,6 +125,7 @@
   .navBtn {
     display: none;
   }
+  
   .navCenter {
     max-width: 1170px;
     margin: 0 auto;
@@ -131,11 +133,13 @@
     justify-content: space-between;
     align-items: center;
   }
+
   .navLinks {
     height: auto;
     display: flex;
     margin-left: 4rem;
   }
+
   .navLinks a {
     margin: 0 1rem;
     padding: 0.5rem 0;
