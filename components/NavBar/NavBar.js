@@ -1,33 +1,33 @@
-import React from "react";
-// import logo from "../images/logo.svg";
-// import logo from "../images/hyatt-hotels-1.svg";
-import {FaAlignRight, FaTimes} from "react-icons/fa";
-import Link from "next/link";
-import { CustomLink } from "../common/CustomLink";
+import React, {useState} from "react";
 import styles from "./Navbar.module.css"
+// import logo from "../images/logo.svg";
+import {FaAlignRight, FaTimes} from "react-icons/fa";
+import { CustomLink } from "../common/CustomLink";
+import Forms from "../Forms/Forms";
 
-class Navbar extends React.Component {
-    state = {
-        isOpen: false
-    }
-    handleToggle = () => {
-        this.setState({isOpen: !this.state.isOpen})
-    }
+const Navbar = () => {
 
-    render() {
-        return (
+    const [isOpen, setIsOpen] = useState(false);
+    const [isOpenForm, setIsOpenForm] = useState(false);
+
+    const handleToggle = () => setIsOpen(!isOpen);
+
+    const openForms = () => setIsOpenForm(!isOpenForm);
+
+    return (
+        <>
             <nav className={styles.navbar}>
                 <div className={styles.navCenter}>
                     <div className={styles.navHeader}>
                         <CustomLink text={"StorySurvey"}  href="/" style={"navHeaderLogo"}/>
-                        <button type="button" className={styles.navBtn} onClick={this.handleToggle}>
-                            {   !this.state.isOpen
+                        <button type="button" className={styles.navBtn} onClick={handleToggle}>
+                            {   !isOpen
                                 ? <FaAlignRight className={styles.navIcon}/>
                                 : <FaTimes className={styles.navIcon}/>
                             }
                         </button>
                     </div>
-                    <ul className={this.state.isOpen ? `{${styles.navLinks} ${styles.showNav}}` : `${styles.navLinks}`}>
+                    <ul className={isOpen ? `{${styles.navLinks} ${styles.showNav}}` : `${styles.navLinks}`}>
                         <li>
                             <CustomLink text={"About"}  href="/about" style={""}/>
                         </li>
@@ -38,12 +38,21 @@ class Navbar extends React.Component {
                             <CustomLink text={"Contact"}  href="/contact" style={""}/>
                         </li>
                         <li>
-                            <CustomLink text={"Sign in"}  href="/signin" style={"signBtn"}/>
+                            <div style={styles.signBtn} onClick={openForms}>Sign in</div>
                         </li>
                     </ul>
                 </div>
             </nav>
-        )
-    }
+            {isOpenForm && 
+            <div className={styles.containerForms}>
+                <div className={styles.modal}>
+                    <button type="button" className={styles.close} onClick={openForms}>&times;</button>
+                    <Forms/>
+                    {/* <button type="button" className={`${styles.btn} ${styles.btnDefault}`} data-dismiss="modal">Close</button> */}
+                </div>
+            </div>}
+        </>
+        
+    )
 }
-export default Navbar
+export default Navbar;
