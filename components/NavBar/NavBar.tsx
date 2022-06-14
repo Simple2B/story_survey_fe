@@ -1,18 +1,34 @@
 import React, {useState} from "react";
-import styles from "./Navbar.module.css"
-// import logo from "../images/logo.svg";
+import styles from "./Navbar.module.css";
+import { useRouter } from "next/router";
 import {FaAlignRight, FaTimes} from "react-icons/fa";
 import { CustomLink } from "../common/CustomLink";
 import Forms from "../Forms/Forms";
+import { useSession, signOut } from "next-auth/react";
+
 
 const Navbar = () => {
-
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenForm, setIsOpenForm] = useState(false);
 
     const handleToggle = () => setIsOpen(!isOpen);
 
     const openForms = () => setIsOpenForm(!isOpenForm);
+
+    const { push, asPath } = useRouter();
+    const { data: session } = useSession();
+    console.log("NavBar: session => ", session);
+
+    const handleSignOut = async () => {
+        const data = await signOut({redirect: false, callbackUrl: '/'});
+        console.log("NavBar: handleSignOut data => ", data);
+        push(data.url);
+    };
+
+
+    const handleSignIn = () => {
+        push(`/auth/signin?callbackUrl=${asPath}`);
+    };
 
     return (
         <>
@@ -38,19 +54,25 @@ const Navbar = () => {
                             <CustomLink text={"Contact"}  href="/contact" style={""}/>
                         </li>
                         <li>
-                            <div className={styles.signBtn} onClick={openForms}>Sign in</div>
+                            {
+                            session ? 
+                                (<div className={styles.signBtn} onClick={handleSignOut}>Sign out</div>)
+                                :
+                                (<div className={styles.signBtn} onClick={handleSignIn}>Sign in</div>)
+                            }
+                            
                         </li>
                     </ul>
                 </div>
             </nav>
-            {isOpenForm && 
+            {/* {isOpenForm && 
             <div className={styles.containerForms}>
                 <div className={styles.modal}>
                     <button type="button" className={styles.close} onClick={openForms}>&times;</button>
-                    <Forms/>
-                    {/* <button type="button" className={`${styles.btn} ${styles.btnDefault}`} data-dismiss="modal">Close</button> */}
+                        <Forms/>
+                    <button type="button" className={`${styles.btn} ${styles.btnDefault}`} data-dismiss="modal">Close</button>
                 </div>
-            </div>}
+            </div>} */}
         </>
         
     )
