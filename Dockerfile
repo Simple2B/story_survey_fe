@@ -1,27 +1,21 @@
-FROM node:lts-buster-slim AS base
-RUN apt-get update && apt-get install libssl-dev ca-certificates -y
-WORKDIR /app
+FROM node:16-alpine
 
-COPY package.json yarn.lock ./
+RUN mkdir -p /usr/src/app
+ENV PORT 3000
 
-FROM base AS build
-# ENV NODE_ENV=production
+WORKDIR /usr/src/app
 
-RUN yarn
+COPY package.json /usr/src/app
+COPY yarn.lock /usr/src/app
 
-COPY . .
-RUN yarn build
-
-FROM base as prod-build
+# Production use node instead of root
+# USER node
 
 RUN yarn install --production
-RUN cp -R node_modules prod_node_modules
 
-FROM base as prod
+COPY . /usr/src/app
 
-COPY --from=prod-build /app/prod_node_modules /app/node_modules
-COPY --from=build  /app/.next /app/.next
-COPY --from=build  /app/public /app/public
+RUN yarn build
 
-EXPOSE 80
-CMD ["yarn", "start"]
+EXPOSE 3000
+CMD [ "yarn", "start" ]
