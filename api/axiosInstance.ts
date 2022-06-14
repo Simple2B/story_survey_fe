@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 
 const API_URI = process.env.API_URI;
 
-const instance = (
+export const instance = (
   query: string = "",
   pageNumber: number = 0
 ): AxiosInstance => {
@@ -25,7 +25,7 @@ const instance = (
   });
 };
 
-const authInstance: AxiosInstance = axios.create({
+export const authInstance: AxiosInstance = axios.create({
   baseURL: API_URI,
   headers: {
     "Content-Type": "multipart/form-data",
