@@ -6,8 +6,7 @@ const Survey = () => {
     <MainContainer title={"Surveys"} keywords={""} style={""}>
       <div>Survey</div>
     </MainContainer>
-  )
-
-}
+  );
+};
 
 export default Survey;
