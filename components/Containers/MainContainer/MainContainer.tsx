@@ -1,7 +1,6 @@
 import Head from "next/head";
 import React from "react";
 import Navbar from "../../NavBar/NavBar";
-import styles from "./Wrapper.module.css"
 
 
 function MainContainer ({children, title, keywords, style}) {
