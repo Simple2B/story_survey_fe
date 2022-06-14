@@ -1,10 +1,10 @@
 // import { AxiosError, AxiosResponse } from "axios";
-import { ILoginResponse } from "../redux/types/authTypes";
+import { ILoginResponse } from "../../redux/types/authTypes";
 import { authInstance } from "./axiosInstance";
 
-const formatRequestBody = (username: string, password: string) => {
+const formatRequestBody = (email: string, password: string) => {
   const formData = new FormData();
-  formData.append("username", username);
+  formData.append("email", email);
   formData.append("password", password);
   return formData;
 };
@@ -19,13 +19,13 @@ const formatRequestBodyApiKey = (password: string, api_key: string) => {
 
 export const authApi = {
   login: async (
-    username: string,
+    email: string,
     password: string
   ): Promise<ILoginResponse> => {
     try {
       const response = await authInstance.post(
         "/api/auth/sign_in",
-        formatRequestBody(username, password)
+        formatRequestBody(email, password)
       );
       console.log("POST [/auth/sign_in] response received successfully");
       return response.data;

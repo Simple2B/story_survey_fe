@@ -6,13 +6,18 @@ export const instance = (
   query: string = "",
   pageNumber: number = 0
 ): AxiosInstance => {
-  const token = localStorage.getItem("token") ?? "";
+  if (typeof window !== 'undefined') {
+    console.log('You are on the browser')
+    const token = localStorage.getItem("token") ?? "";
+    console.log("token", token)
+  } else {
+    console.log('You are on the server')
+  }
   let cancel;
-  // console.log("token", token)
   return axios.create({
     baseURL: API_URI,
     headers: {
-      Authorization: `Bearer ${token}`,
+      // Authorization: `Bearer ${token}`,
       "Content-Type": "application/json; charset=utf-8",
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, PATCH, OPTIONS",
