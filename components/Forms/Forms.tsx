@@ -1,13 +1,36 @@
+import { signIn } from "next-auth/react";
 import React, {useState} from "react";
-import styles from "./Forms.module.css"
+import styles from "./Forms.module.css";
+
+const providers = [
+    {
+        name: 'twitter',
+        style: `${styles.buttonTwitter}`,
+        Icon: <i className="social-icon fa fa-twitter"/>,
+    },
+    {
+        name: 'facebook',
+        style: `${styles.buttonFacebook}`,
+        Icon: <i className="social-icon fa fa-facebook"/>,
+    },
+    {
+        name: 'google',
+        style: `${styles.buttonGoogle}`,
+        Icon: <i className="social-icon fa fa-google-plus"></i>,
+    },
+]
 
 function Forms() {
-
     const [form, setForm] = useState("SignIn");
 
     const handleToggleForm = (e) => {
         setForm(e);
-    }
+    };
+
+    const handleOAuthSignIn = (provider) => () => {
+        console.log("handleOAuthSignIn => provider: ", provider);
+        signIn(provider);
+    };
 
     return (
         <div className={styles.modalBody}>
@@ -18,15 +41,12 @@ function Forms() {
                         <div className={styles.loginboxSocial}>
                             <div className={styles.socialTitle}>Connect with Your Social Accounts</div>
                             <div className={styles.socialButtons}>
-                                <a href="" className={styles.buttonFacebook}>
-                                    <i className="social-icon fa fa-facebook"></i>
-                                </a>
-                                <a href="" className={styles.buttonTwitter}>
-                                    <i className="social-icon fa fa-twitter"></i>
-                                </a>
-                                <a href="" className={styles.buttonGoogle}>
-                                    <i className="social-icon fa fa-google-plus"></i>
-                                </a>
+                                {providers.map(({name, Icon, style}) => {
+                                    console.log(" name ", name);
+                                    return (
+                                        <div key={name} onClick={handleOAuthSignIn(name)} className={style}>{Icon}</div>
+                                    )
+                                })}
                             </div>
                         </div>
                         <div className={styles.loginboxOr}>
