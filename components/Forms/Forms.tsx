@@ -78,7 +78,7 @@ function Forms() {
                             <input type="button" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} value="Registration"/>
                         </div>
                         <div className={styles.loginboxSignup}  onClick={() => handleToggleForm("SignIn")}>
-                            <a href="#register.html">Sign In</a>
+                            <a href="#login.html">Sign In</a>
                         </div>
                     </div>
                 </div>
