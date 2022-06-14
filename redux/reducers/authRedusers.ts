@@ -1,7 +1,14 @@
 import { AuthAction, AuthActionTypes, IAuthState } from "../types/authTypes";
 
 let initialState: IAuthState = (function () {
-  const tokenInfo = localStorage.getItem("token");
+  let tokenInfo;
+  if (typeof window !== 'undefined') {
+    console.log('You are on the browser')
+    tokenInfo = localStorage.getItem("token");
+  } else {
+    console.log('You are on the server')
+  }
+  
   if (tokenInfo) {
     return {
       loggedIn: true,
