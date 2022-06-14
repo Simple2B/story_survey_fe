@@ -19,13 +19,13 @@ function Forms() {
                         <div className={styles.socialTitle}>Connect with Your Social Accounts</div>
                         <div className={styles.socialButtons}>
                             <a href="" className={styles.buttonFacebook}>
-                                <i class="social-icon fa fa-facebook"></i>
+                                <i className="social-icon fa fa-facebook"></i>
                             </a>
                             <a href="" className={styles.buttonTwitter}>
-                                <i class="social-icon fa fa-twitter"></i>
+                                <i className="social-icon fa fa-twitter"></i>
                             </a>
                             <a href="" className={styles.buttonGoogle}>
-                                <i class="social-icon fa fa-google-plus"></i>
+                                <i className="social-icon fa fa-google-plus"></i>
                             </a>
                         </div>
                     </div>
@@ -56,6 +56,8 @@ function Forms() {
             {form === "SignUp" && <div className={`${styles.loginContainer} ${styles.animated} ${styles.fadeInDown} ${styles.bootstrap} ${styles.snippets} ${styles.bootdeys}`}>
                 <div className={`${styles.loginbox} ${styles.bgWhite} ${styles.signUpContainer}`}>
                     <div className={styles.loginboxTitle}>SIGN UP</div>
+
+                    <div className={styles.hiddenSocialTitle}>Connect with Your Social Accounts</div>
 
                     <div className={styles.loginboxTextbox}>
                         <input type="text" className={styles.formControl} placeholder="First name"/>

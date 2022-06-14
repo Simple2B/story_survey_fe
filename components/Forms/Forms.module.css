@@ -11,7 +11,7 @@
 .loginContainer .loginbox {
     position: relative;
     width: 340px !important;
-    height: auto !important;
+    /* height: auto !important; */
     padding: 0 0 20px 0;
     -webkit-box-shadow: 0 0 14px rgba(0,0,0,.1);
     -moz-box-shadow: 0 0 14px rgba(0,0,0,.1);
@@ -45,6 +45,10 @@
     font-weight: 500;
     color: #a9a9a9;
     margin-top: 10px;
+}
+
+.hiddenSocialTitle {
+    color: transparent;
 }
 
 .loginContainer .loginbox .loginboxSocial .socialButtons {
