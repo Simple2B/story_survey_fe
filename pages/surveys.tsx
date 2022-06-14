@@ -1,7 +1,12 @@
 import React from "react";
+import MainContainer from "../components/Containers/MainContainer/MainContainer";
 
 const Survey = () => {
-  return  <div>Survey</div>
+  return  (
+    <MainContainer title={"Surveys"} keywords={""} style={""}>
+      <div>Survey</div>
+    </MainContainer>
+  )
 
 }
 
