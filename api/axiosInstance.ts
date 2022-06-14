@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from "axios";
-import domain from "./domain.json";
 
-export const instance = (
+const API_URI = process.env.API_URI;
+
+const instance = (
   query: string = "",
   pageNumber: number = 0
 ): AxiosInstance => {
@@ -9,7 +10,7 @@ export const instance = (
   let cancel;
   // console.log("token", token)
   return axios.create({
-    baseURL: domain.REACT_DOMAIN,
+    baseURL: API_URI,
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json; charset=utf-8",
@@ -24,8 +25,8 @@ export const instance = (
   });
 };
 
-export const authInstance: AxiosInstance = axios.create({
-  baseURL: domain.REACT_DOMAIN,
+const authInstance: AxiosInstance = axios.create({
+  baseURL: API_URI,
   headers: {
     "Content-Type": "multipart/form-data",
     // 'Access-Control-Allow-Origin' : '*',

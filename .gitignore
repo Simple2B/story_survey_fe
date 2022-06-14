@@ -8,6 +8,10 @@
 
 # production
 # /build
+/.next
+/.next/cache
+/.next/*
+.env
 
 # misc
 .DS_Store
