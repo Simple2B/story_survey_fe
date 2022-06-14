@@ -22,8 +22,8 @@ const Navbar = () => {
                         <CustomLink text={"StorySurvey"}  href="/" style={"navHeaderLogo"}/>
                         <button type="button" className={styles.navBtn} onClick={handleToggle}>
                             {   !isOpen
-                                ? <FaAlignRight className={styles.navIcon}/>
-                                : <FaTimes className={styles.navIcon}/>
+                                ? <FaAlignRight size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/>
+                                : <FaTimes size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/>
                             }
                         </button>
                     </div>
@@ -38,7 +38,7 @@ const Navbar = () => {
                             <CustomLink text={"Contact"}  href="/contact" style={""}/>
                         </li>
                         <li>
-                            <div style={styles.signBtn} onClick={openForms}>Sign in</div>
+                            <div className={styles.signBtn} onClick={openForms}>Sign in</div>
                         </li>
                     </ul>
                 </div>
