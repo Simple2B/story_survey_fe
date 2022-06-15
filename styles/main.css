@@ -72,3 +72,11 @@ h6 {
     background: transparent;
     color: var(--primaryColor);
 }
+
+.error {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
