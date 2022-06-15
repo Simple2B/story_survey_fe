@@ -18,10 +18,12 @@ const providers = [
         style: `${styles.buttonGoogle}`,
         Icon: <i className="social-icon fa fa-google-plus"></i>,
     },
-]
+];
 
 function Forms() {
     const [form, setForm] = useState("SignIn");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleToggleForm = (e) => {
         setForm(e);
@@ -30,6 +32,18 @@ function Forms() {
     const handleOAuthSignIn = (provider) => () => {
         console.log("handleOAuthSignIn => provider: ", provider);
         signIn(provider);
+    };
+
+    const handleOnchange = (e, setFunc) => {
+        setFunc(e.target.value);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Forms: handleSubmit => ", {
+            'email': email,
+            'password': password,
+        })
     };
 
     return (
@@ -42,7 +56,6 @@ function Forms() {
                             <div className={styles.socialTitle}>Connect with Your Social Accounts</div>
                             <div className={styles.socialButtons}>
                                 {providers.map(({name, Icon, style}) => {
-                                    console.log(" name ", name);
                                     return (
                                         <div key={name} onClick={handleOAuthSignIn(name)} className={style}>{Icon}</div>
                                     )
@@ -54,16 +67,30 @@ function Forms() {
                             <div className={styles.or}>OR</div>
                         </div>
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} placeholder="Email"/>
+                            <input type="text" 
+                                   className={styles.formControl} 
+                                   value={email} 
+                                   placeholder="Email"
+                                   onChange={(e) => handleOnchange(e, setEmail)}
+                            />
                         </div>
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} placeholder="Password"/>
+                            <input type="text"
+                                   className={styles.formControl}
+                                   value={password}
+                                   placeholder="Password"
+                                   onChange={(e) => handleOnchange(e, setPassword)}
+                            />
                         </div>
                         {/* <div className={styles.loginboxForgot}>
                             <a href="">Forgot Password?</a>
                         </div> */}
                         <div className={styles.loginboxSubmit}>
-                            <input type="button" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} value="Login"/>
+                            <input type="submit" 
+                                   className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} 
+                                   value="Login"
+                                   onClick={handleSubmit}
+                            />
                         </div>
                         <div className={styles.loginboxSignup} onClick={() => handleToggleForm("SignUp")}>
                             <a href="#register.html">Sign Up With Email</a>
