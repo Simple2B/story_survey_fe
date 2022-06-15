@@ -17,7 +17,6 @@ const Navbar = () => {
 
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
-    console.log("NavBar: session => ", session);
 
     const handleSignOut = async () => {
         const data = await signOut({redirect: false, callbackUrl: '/'});
