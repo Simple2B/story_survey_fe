@@ -57,7 +57,7 @@
     padding: 15px 35px;
     /* text-align: center; */
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 }
 
