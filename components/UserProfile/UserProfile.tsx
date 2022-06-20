@@ -119,7 +119,8 @@ const UserProfile = () => {
         </div>
 
         <section className={styles.homeSection}>
-          <ProfileNavbar/>
+          <ProfileNavbar isActive={isActive} handleClick={handleClick}/>
+
           <div>
             {menuIcons.map((item) => item.isIconActive && item.menuComponent)}
           </div> 

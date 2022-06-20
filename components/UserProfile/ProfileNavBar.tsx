@@ -5,15 +5,9 @@ import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
 
 
-const ProfileNavbar = () => {
+const ProfileNavbar = ({isActive, handleClick}) => {
 
-  const [isActive, setActive] = useState(false);
-  const { data: session } = useSession();
- 
-
-  const handleClick = () => {
-      setActive(!isActive);
-  };
+  
 
   return  (
     <nav>
