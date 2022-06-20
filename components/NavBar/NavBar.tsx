@@ -9,11 +9,7 @@ import { useSession, signOut } from "next-auth/react";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isOpenForm, setIsOpenForm] = useState(false);
-
     const handleToggle = () => setIsOpen(!isOpen);
-
-    const openForms = () => setIsOpenForm(!isOpenForm);
 
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
@@ -24,14 +20,13 @@ const Navbar = () => {
         push(data.url);
     };
 
-
     const handleSignIn = () => {
         push(`/auth/signin?callbackUrl=${asPath}`);
     };
 
     return (
         <>
-            <nav className={styles.navbar}>
+            <nav className={ session? styles.navbarProfile : styles.navbar }>
                 <div className={styles.navCenter}>
                     <div className={styles.navHeader}>
                         <CustomLink text={"StorySurvey"}  href="/" style={"navHeaderLogo"}/>
@@ -55,7 +50,15 @@ const Navbar = () => {
                         <li>
                             {
                             session ? 
-                                (<div className={styles.signBtn} onClick={handleSignOut}>Sign out</div>)
+                                (   <div className={styles.btnContainer}>  
+                                        
+                                        <div className={styles.signOutBtn} onClick={handleSignOut}>Sign out</div>
+                                        <div className={styles.imageContainer}>
+                                            <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
+                                        </div>
+                                    </div>
+                                    
+                                )
                                 :
                                 (<div className={styles.signBtn} onClick={handleSignIn}>Sign in</div>)
                             }
@@ -64,14 +67,6 @@ const Navbar = () => {
                     </ul>
                 </div>
             </nav>
-            {/* {isOpenForm && 
-            <div className={styles.containerForms}>
-                <div className={styles.modal}>
-                    <button type="button" className={styles.close} onClick={openForms}>&times;</button>
-                        <Forms/>
-                    <button type="button" className={`${styles.btn} ${styles.btnDefault}`} data-dismiss="modal">Close</button>
-                </div>
-            </div>} */}
         </>
         
     )
