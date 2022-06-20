@@ -1,0 +1,317 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+.sidebar{
+    position: fixed;
+    height: 100%;
+    width: 240px;
+    /* background: #0A2558; */
+    transition: all 0.5s ease;
+  }
+  .sidebar.active{
+    width: 60px;
+  }
+  .sidebar .logoDetails{
+    height: 80px;
+    display: flex;
+    align-items: center;
+  }
+  .sidebar .logoDetails i{
+    font-size: 28px;
+    font-weight: 500;
+    /* color: #fff; */
+    min-width: 60px;
+    text-align: center
+  }
+  .sidebar .logoDetails .logo_name{
+    color: #0A2558;
+    font-size: 24px;
+    font-weight: 500;
+  }
+  .sidebar .navLinks{
+    /* margin-top: 12px; */
+  }
+  .sidebar .navLinks li{
+    position: relative;
+    list-style: none;
+    height: 50px;
+  }
+  .sidebar .navLinks li a{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.4s ease;
+  }
+  .sidebar .navLinks li a.active{
+    background: var(--mainBackground) center/cover no-repeat;
+  }
+  .sidebar .navLinks li a:hover{
+    background: var(--mainBackground) center/cover no-repeat;
+  }
+  .sidebar .navLinks li i{
+    min-width: 60px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sidebar .navLinks li a .linksName{
+    color: #0A2558;
+    font-size: 15px;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  .sidebar .navLinks .logOut{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .sidebar .navLinks li:last-child {
+    margin-top: 100px;
+  }
+  .homeSection{
+    position: relative;
+    background: #f5f5f5;
+    min-height: 100vh;
+    width: calc(100% - 240px);
+    left: 240px;
+    transition: all 0.5s ease;
+  }
+
+  .containerCentered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #0A2558;
+    padding-top: 104px;
+  }
+  .sidebar.active ~ .homeSection{
+    width: calc(100% - 60px);
+    left: 60px;
+    
+  }
+  .homeSection nav{
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    width: calc(100%);
+    /* left: 240px; */
+    left: 0px;
+    z-index: 100;
+    padding: 0 20px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease;
+  }
+
+  .sidebar.active ~ .homeSection nav{
+    left: 0px;
+    /* left: 60px; */
+    width: calc(100%);
+  }
+
+  .homeSection nav .sidebarButton{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  nav .sidebarButton i{
+    font-size: 35px;
+    margin-right: 10px;
+  }
+
+  nav .sidebarButton i .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .homeSection nav .searchBox{
+    position: relative;
+    height: 50px;
+    max-width: 550px;
+    width: 100%;
+    margin: 0 20px;
+  }
+  nav .searchBox input{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    background: #F5F6FA;
+    border: 2px solid #EFEEF1;
+    border-radius: 6px;
+    font-size: 18px;
+    padding: 0 15px;
+  }
+  nav .searchBox .bxSearch{
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    background: #2697FF;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 4px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    font-size: 22px;
+    transition: all 0.4 ease;
+  }
+  .homeSection nav .profileDetails{
+    display: flex;
+    align-items: center;
+    background: #F5F6FA;
+    border: 2px solid #EFEEF1;
+    border-radius: 6px;
+    height: 50px;
+    min-width: 190px;
+    padding: 0 15px 0 2px;
+  }
+  nav .profileDetails img{
+    height: 40px;
+    width: 40px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+  nav .profileDetails .adminName{
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    margin: 0 10px;
+    white-space: nowrap;
+  }
+  nav .profileDetails i{
+    font-size: 25px;
+    color: #333;
+  }
+
+
+  .btnContainer {
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .imageContainer {
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+  }
+  
+  .imageContainer img {
+    padding: 0.5rem 0;
+    border-radius: 50%;
+    width: 55%;
+  }
+
+  .singOutIcon {
+    margin-top: 50px;
+  }
+  
+  
+  /* Responsive Media Query */
+  @media (max-width: 1240px) {
+    .sidebar{
+      width: 60px;
+    }
+    .sidebar.active{
+      width: 220px;
+    }
+    .homeSection{
+      width: calc(100% - 60px);
+      left: 60px;
+    }
+    .sidebar.active ~ .homeSection{
+      width: calc(100% - 220px);
+      overflow: hidden;
+      left: 220px;
+    }
+    .homeSection nav{
+      width: calc(100%);
+      left: 0px;
+      /* left: 60px; */
+    }
+    .sidebar.active ~ .homeSection nav{
+      width: calc(100%);
+      left: 0
+      /* left: 220px; */
+    }
+  }
+
+  @media (max-width: 1000px) {
+    .overviewBoxes .box{
+      width: calc(100% / 2 - 15px);
+      margin-bottom: 15px;
+    }
+  }
+  @media (max-width: 700px) {
+    nav .profileDetails .adminName,
+    nav .profileDetails i{
+      display: none;
+    }
+
+    nav .sidebarButton i {
+      display: block;
+    }
+
+    nav .sidebarButton .dashboard {
+      display: none;
+    }
+
+    .homeSection nav .profileDetails{
+      height: 50px;
+      min-width: 40px;
+    }
+
+  }
+  @media (max-width: 550px) {
+    .overviewBoxes .box{
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    .sidebar.active ~ .homeSection nav .profileDetails{
+      display: none;
+    }
+  }
+    @media (max-width: 400px) {
+    .sidebar{
+      width: 0;
+    }
+    .sidebar.active{
+      width: 60px;
+    }
+    .homeSection{
+      width: 100%;
+      left: 0;
+    }
+    .sidebar.active ~ .homeSection{
+      left: 60px;
+      width: calc(100% - 60px);
+    }
+    .homeSection nav{
+      width: 100%;
+      left: 0;
+    }
+    .sidebar.active ~ .homeSection nav{
+      left: 0px;
+      /* left: 60px; */
+      width: calc(100%);
+    }
+  }
+  
