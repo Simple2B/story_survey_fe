@@ -48,8 +48,8 @@ export default NextAuth({
   // },
   // callbacks: {
   //   async jwt({ token }) {
-  //     token.userRole = "admin"
+  //     token.userRole = "user"
   //     return token
   //   },
   // },
-})
+});
