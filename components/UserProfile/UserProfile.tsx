@@ -10,6 +10,7 @@ import singOutIcon from "../../styles/icons/icons8-logout-64.png";
 import SectionDashboard from "./SectionDashboard/SectionDashboard";
 import { useRouter } from "next/router";
 import { signOut, useSession } from "next-auth/react";
+import ProfileNavbar from "./ProfileNavBar";
 
 const SIGN_OUT = 'sing out';
 
@@ -118,26 +119,7 @@ const UserProfile = () => {
         </div>
 
         <section className={styles.homeSection}>
-
-          <nav>
-              <div className={styles.sidebarButton} onClick={handleClick}>
-                <i className={`bx ${isActive ? 'bx-menu-alt-right': 'bx-menu'} sidebarBtn`}></i>
-                <span className={styles.dashboard}>Dashboard</span>
-              </div>
-
-              <div className={styles.searchBox}>
-                <input type={styles.text} placeholder="Search..."/>
-                <i className={`${styles.bx} ${styles.bxSearch} bx bx-search`}></i>
-              </div>
-
-              {session && <div className={styles.btnContainer}>  
-                                        
-                  <div className={styles.signOutBtn}>{session.user.name}</div>
-                  <div className={styles.imageContainer}>
-                      <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
-                  </div>
-              </div>}
-          </nav>
+          <ProfileNavbar/>
           <div>
             {menuIcons.map((item) => item.isIconActive && item.menuComponent)}
           </div> 

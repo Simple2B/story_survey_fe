@@ -13,7 +13,7 @@ function MainContainer ({children, title, keywords, style}) {
                 <title>{title}</title>
                 <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'></link>
             </Head>
-            {!session && <Navbar/>}
+            <Navbar/>
             <div className={style}>
                 {children}
             </div>

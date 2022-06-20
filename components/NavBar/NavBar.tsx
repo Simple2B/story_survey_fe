@@ -49,13 +49,13 @@ const Navbar = () => {
                         <li>
                             {
                             session ? 
-                                (   <div className={styles.btnContainer}>  
+                                (session && <div className={styles.btnContainer}>  
                                         
-                                        <div className={styles.signOutBtn} onClick={handleSignOut}>Sign out</div>
-                                        <div className={styles.imageContainer}>
-                                            <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
-                                        </div>
+                                    <div className={styles.signOutBtn}>{session.user.name}</div>
+                                    <div className={styles.imageContainer}>
+                                        <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
                                     </div>
+                                </div>
                                     
                                 )
                                 :

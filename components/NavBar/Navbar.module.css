@@ -4,6 +4,7 @@
     top: 0;
     left: 0;
     width: 100%;
+    /* padding: 0.75rem 2rem; */
     padding: 0rem 2rem;
     background: var(--offWhite);
     z-index: 1;
@@ -11,7 +12,7 @@
 .navbarProfile {
   padding: 0rem 2rem;
   background: var(--mainBackground) center/cover no-repeat;
-  box-shadow: 1px 3px 8px 5px var(--mainBackground);
+  box-shadow: 1px 3px 8px 5px #1F87FF var(--mainBackground);
 }
 .navCenter {
   width: 100%;
@@ -36,7 +37,10 @@
   cursor: pointer;
   outline: none;
 }
-
+/* .navIcon {
+  font-size: 1.5rem;
+  color: var(--primaryColor);
+} */
 .navLinks {
   height: 0;
   overflow: hidden;
@@ -116,6 +120,36 @@
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+/* .btnPrimary {
+  color: var(--offWhite);
+  background-color: var(--mainBlack);
+  border-color: var(--mainBlack);
+} */
+
+.btnContainer {
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imageContainer {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.imageContainer img {
+  padding: 0.5rem 0;
+  border-radius: 50%;
+  width: 55%;
+}
+
+
+
 @media screen and (min-width: 768px) {
   .navBtn {
     display: none;
@@ -141,6 +175,7 @@
   }
 
   .navLinks li:last-child div {
+    /* padding: 0.5rem 1rem; */
     cursor: pointer;
   }
 
