@@ -4,7 +4,6 @@
     position: fixed;
     height: 100%;
     width: 240px;
-    /* background: #0A2558; */
     transition: all 0.5s ease;
   }
   .sidebar.active{
@@ -18,17 +17,13 @@
   .sidebar .logoDetails i{
     font-size: 28px;
     font-weight: 500;
-    /* color: #fff; */
     min-width: 60px;
     text-align: center
   }
   .sidebar .logoDetails .logo_name{
-    color: #0A2558;
+    color: var(--mainBlack);
     font-size: 24px;
     font-weight: 500;
-  }
-  .sidebar .navLinks{
-    /* margin-top: 12px; */
   }
   .sidebar .navLinks li{
     position: relative;
@@ -99,7 +94,7 @@
     display: flex;
     justify-content: space-between;
     height: 80px;
-    background: #fff;
+    background: var(--mainWhite);
     display: flex;
     align-items: center;
     position: fixed;
@@ -108,7 +103,7 @@
     left: 0px;
     z-index: 100;
     padding: 0 20px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 1px var(--mainOpacity);
     transition: all 0.5s ease;
   }
 
@@ -119,6 +114,7 @@
   }
 
   .homeSection nav .sidebarButton{
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -311,8 +307,6 @@
     }
     .sidebar.active ~ .homeSection nav{
       left: 0px;
-      /* left: 60px; */
       width: calc(100%);
     }
   }
-  

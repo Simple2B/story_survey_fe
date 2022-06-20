@@ -11,7 +11,7 @@
   }
 .navbarProfile {
   padding: 0rem 2rem;
-  background: var(--mainBackground) center/cover no-repeat;
+  background: var(--mainOpacity) center/cover no-repeat;
   box-shadow: 1px 3px 8px 5px #1F87FF var(--mainBackground);
 }
 .navCenter {

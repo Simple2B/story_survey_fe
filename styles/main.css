@@ -12,6 +12,7 @@
     --mainBackground: rgba(26, 59, 114, .3);
     --mainGrey: #ececec;
     --darkGrey: #cfcfcf;
+    --mainOpacity: rgba(0,0,0,.1);
     --mainTransition: all 0.3s linear;
     --mainSpacing: 3px;
     --lightShadow: 2px 5px 3px 0px rgba(0, 0, 0, 0.5);

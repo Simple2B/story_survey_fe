@@ -66,8 +66,8 @@ const UserProfile = () => {
 
   const [isActive, setActive] = useState(false);
   const [icons, setMenuIcons] = useState(menuIcons);
-  const { push, asPath } = useRouter();
-  const { data: session } = useSession();
+  const [headerName, setHeaderName] = useState("Dashboard");
+  const { push } = useRouter();
  
 
   const handleClick = () => {
@@ -80,6 +80,7 @@ const UserProfile = () => {
         handleSignOut();
       }
       if ( index === i && icon.classIcon.length === 0) {
+        setHeaderName(icon.name);
         icon.classIcon = styles.active;
         icon.isIconActive = true;
       } else {
@@ -119,7 +120,7 @@ const UserProfile = () => {
         </div>
 
         <section className={styles.homeSection}>
-          <ProfileNavbar isActive={isActive} handleClick={handleClick}/>
+          <ProfileNavbar isActive={isActive} handleClick={handleClick} headerName={headerName}/>
 
           <div>
             {menuIcons.map((item) => item.isIconActive && item.menuComponent)}
