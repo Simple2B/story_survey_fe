@@ -13,15 +13,13 @@ const Navbar = () => {
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
 
-    const handleSignOut = async () => {
-        const data = await signOut({redirect: false, callbackUrl: '/'});
-        console.log("NavBar: handleSignOut data => ", data);
-        push(data.url);
-    };
-
     const handleSignIn = () => {
         push(`/auth/signin?callbackUrl=${asPath}`);
     };
+
+    const getProfile = () => {
+        push(`/user_profile/user`);
+    }
 
     return (
         <>
@@ -49,7 +47,7 @@ const Navbar = () => {
                         <li>
                             {
                             session ? 
-                                (session && <div className={styles.btnContainer}>  
+                                (session && <div className={styles.btnContainer} onClick={getProfile}>  
                                         
                                     <div className={styles.signOutBtn}>{session.user.name}</div>
                                     <div className={styles.imageContainer}>

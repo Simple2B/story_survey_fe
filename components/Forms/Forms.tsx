@@ -4,11 +4,11 @@ import { useStore } from "react-redux";
 import styles from "./Forms.module.css";
 
 const providers = [
-    {
-        name: 'twitter',
-        style: `${styles.buttonTwitter}`,
-        Icon: <i className="social-icon fa fa-twitter"/>,
-    },
+    // {
+    //     name: 'twitter',
+    //     style: `${styles.buttonTwitter}`,
+    //     Icon: <i className="social-icon fa fa-twitter"/>,
+    // },
     {
         name: 'facebook',
         style: `${styles.buttonFacebook}`,
