@@ -1,5 +1,6 @@
 import { signIn } from "next-auth/react";
 import React, {useState} from "react";
+import { useStore } from "react-redux";
 import styles from "./Forms.module.css";
 
 const providers = [
@@ -29,9 +30,13 @@ function Forms() {
         setForm(e);
     };
 
+    console.log(" Form => user ", useStore().getState())
+
     const handleOAuthSignIn = (provider) => () => {
-        console.log("handleOAuthSignIn => provider: ", provider);
+        // console.log("handleOAuthSignIn => provider: ", provider);
         signIn(provider);
+
+        
     };
 
     const handleOnchange = (e, setFunc) => {
