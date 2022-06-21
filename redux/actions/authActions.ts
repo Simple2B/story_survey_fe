@@ -20,13 +20,15 @@ import { clientApi } from "../../pages/api/backend/userInstance";
 
         // console.log(" LOGIN => email" , {username: userData.username, email: userData.email});
 
+        dispatch({ type: AuthActionTypes.GET_CURRENT_USER, payload:  userData});
+
         return {username: userData.username, email: userData.email}
       } catch (e: any) {
         console.log("createUser: error from redux -> ", e);
-        dispatch({
-          type: AuthActionTypes.LOGIN_FAILURE,
-          payload: "Invalid credentials. Please try again!",
-        });
+        // dispatch({
+        //   type: AuthActionTypes.LOGIN_FAILURE,
+        //   payload: "Invalid credentials. Please try again!",
+        // });
         // return e.message;
       }
     };
