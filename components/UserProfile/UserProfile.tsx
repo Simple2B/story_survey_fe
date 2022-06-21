@@ -9,8 +9,9 @@ import messageIcon from "../../styles/icons/icons8-messages-64.png";
 import singOutIcon from "../../styles/icons/icons8-logout-64.png";
 import SectionDashboard from "./SectionDashboard/SectionDashboard";
 import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import ProfileNavbar from "./ProfileNavBar";
+import SurveyList from "./CreateSurvey/CreateSurvey";
 
 const SIGN_OUT = 'sing out';
 
@@ -29,7 +30,7 @@ const menuIcons = [
     href: '#create_survey',
     classIcon: "",
     isIconActive: false,
-    menuComponent: <div className={styles.containerCentered}>Create survey</div>,
+    menuComponent: <SurveyList/>,
   },
   {
     image: dashboardIcon,
@@ -93,7 +94,6 @@ const UserProfile = () => {
 
   const handleSignOut = async () => {
     const data = await signOut({redirect: false, callbackUrl: '/'});
-    console.log("NavBar: handleSignOut data => ", data);
     push(data.url);
   };
 
@@ -121,10 +121,9 @@ const UserProfile = () => {
 
         <section className={styles.homeSection}>
           <ProfileNavbar isActive={isActive} handleClick={handleClick} headerName={headerName}/>
-
-          <div>
-            {menuIcons.map((item) => item.isIconActive && item.menuComponent)}
-          </div> 
+          <div className={styles.mainContent}>
+            {menuIcons.map((item, index) => item.isIconActive && <div key={index}>{item.menuComponent}</div> )}
+          </div>
         </section>
       </>
   );
