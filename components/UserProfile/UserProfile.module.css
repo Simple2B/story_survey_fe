@@ -15,14 +15,16 @@
     align-items: center;
   }
   .sidebar .logoDetails i{
+    align-self: center;
     font-size: 28px;
     font-weight: 500;
     min-width: 60px;
     text-align: center
   }
-  .sidebar .logoDetails .logo_name{
+  .sidebar .logoDetails .logoName{
+    align-self: center;
     color: var(--mainBlack);
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 500;
   }
   .sidebar .navLinks li{
@@ -101,9 +103,8 @@
     display: flex;
     align-items: center;
     position: fixed;
-    width: calc(100%);
-    /* left: 240px; */
-    left: 0px;
+    width: calc(100% - 240px);
+    left: 240px;
     z-index: 100;
     padding: 0 20px;
     box-shadow: 0 1px 1px var(--mainOpacity);
@@ -111,9 +112,8 @@
   }
 
   .sidebar.active ~ .homeSection nav{
-    left: 0px;
-    /* left: 60px; */
-    width: calc(100%);
+    left: 60px;
+    width: calc(100% - 60px);
   }
 
   .homeSection nav .sidebarButton{
@@ -140,7 +140,7 @@
     position: relative;
     height: 50px;
     max-width: 550px;
-    width: 100%;
+    width: 50%;
     margin: 0 20px;
   }
   nav .searchBox input{
@@ -199,7 +199,7 @@
 
   .btnContainer {
     cursor: pointer;
-    width: 100%;
+    /* width: 100%; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -243,14 +243,14 @@
       left: 220px;
     }
     .homeSection nav{
-      width: calc(100%);
-      left: 0px;
-      /* left: 60px; */
+      width: calc(100% - 60px);
+      /* left: 0px; */
+      left: 60px;
     }
     .sidebar.active ~ .homeSection nav{
-      width: calc(100%);
-      left: 0
-      /* left: 220px; */
+      width: calc(100% - 220px);
+      /* left: 0 */
+      left: 220px;
     }
   }
 
@@ -309,7 +309,7 @@
       left: 0;
     }
     .sidebar.active ~ .homeSection nav{
-      left: 0px;
-      width: calc(100%);
+      left: 60px;
+      width: calc(100% - 60px);
     }
   }

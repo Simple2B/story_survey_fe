@@ -97,11 +97,15 @@ const UserProfile = () => {
     push(data.url);
   };
 
+  const getMainPage = () => {
+    push("/");
+  }
+
   return  (
       <>
         <div className={isActive ? `${styles.sidebar} ${styles.active}` : styles.sidebar }>
-          <div className={styles.logoDetails}>
-            <i className={`${styles.bx} ${styles.bxlPlusPlus}`}/>
+          <div className={styles.logoDetails} onClick={getMainPage}>
+            <i className="bx">SS</i>
             <span className={styles.logoName}>Survey</span>
           </div>
           
