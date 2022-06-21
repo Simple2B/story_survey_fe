@@ -1,9 +1,11 @@
 import React, {useState} from "react";
 import styles from "./Navbar.module.css";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import {FaAlignRight, FaTimes} from "react-icons/fa";
 import { CustomLink } from "../common/CustomLink";
 import { useSession, signOut } from "next-auth/react";
+import singOutIcon from "../../styles/icons/icons8-logout-64 (1).png";
 
 
 const Navbar = () => {
@@ -19,7 +21,12 @@ const Navbar = () => {
 
     const getProfile = () => {
         push(`/user_profile/user`);
-    }
+    };
+
+    const handleSignOut = async () => {
+        const data = await signOut({redirect: false, callbackUrl: '/'});
+        push(data.url);
+    };
 
     return (
         <>
@@ -47,13 +54,18 @@ const Navbar = () => {
                         <li>
                             {
                             session ? 
-                                (session && <div className={styles.btnContainer} onClick={getProfile}>  
+                                (session && <>
+                                
+                                    <div className={styles.btnContainer} onClick={getProfile}>  
+                                            
+                                        <div className={styles.signOutBtn}>{session.user.name}</div>
+                                        <div className={styles.imageContainer}>
+                                            <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
+                                        </div>
                                         
-                                    <div className={styles.signOutBtn}>{session.user.name}</div>
-                                    <div className={styles.imageContainer}>
-                                        <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
                                     </div>
-                                </div>
+                                    <i onClick={handleSignOut}><Image src={singOutIcon} height={25} width={25} className={styles.icon}/></i>
+                                </>
                                     
                                 )
                                 :

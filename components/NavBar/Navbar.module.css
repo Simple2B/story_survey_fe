@@ -8,7 +8,7 @@
     padding: 0rem 2rem;
     background: var(--offWhite);
     z-index: 1;
-  }
+}
 .navbarProfile {
   padding: 0rem 2rem;
   background: var(--mainOpacity) center/cover no-repeat;
@@ -37,10 +37,12 @@
   cursor: pointer;
   outline: none;
 }
-/* .navIcon {
-  font-size: 1.5rem;
-  color: var(--primaryColor);
-} */
+.icon {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .navLinks {
   height: 0;
   overflow: hidden;

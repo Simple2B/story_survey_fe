@@ -26,11 +26,20 @@ function Forms() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const [passwordError, setPasswordErr] = useState("");
+
+    const [username, setUserName] = useState('');
+
+    const [passwordCreate, setPasswordCreate] = useState('');
+    const [error, setErr] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState('');
+
+
     const handleToggleForm = (e) => {
         setForm(e);
     };
 
-    console.log(" Form => user ", useStore().getState())
+    // console.log(" Form => user ", useStore().getState())
 
     const handleOAuthSignIn = (provider) => () => {
         // console.log("handleOAuthSignIn => provider: ", provider);
@@ -48,9 +57,82 @@ function Forms() {
             'password': password,
         });
 
-        if (!email) return false;
+        // if (!email) return false;
 
-        signIn('email', {email, redirect: false})
+        // signIn('email', {email, redirect: false});
+    };
+
+    const handleNewPassword = (e: {
+        target: { value: string };
+      }) => {
+        setPasswordCreate(e.target.value);
+    
+        const newOwnerPassword = e.target.value;
+
+        const specialCharRegExp = /(?=.*?[#?!@$%^&*-])/;
+        const minLengthRegExp   = /.{8,}/;
+        const passwordLength = newOwnerPassword.length;
+          
+        const specialCharPassword = specialCharRegExp.test(newOwnerPassword);
+        const minLengthPassword = minLengthRegExp.test(newOwnerPassword);
+        let errMsg ="";
+        if (newOwnerPassword !== undefined) {
+            errMsg="Password is empty";
+        }
+        if (passwordLength===0){
+            errMsg="Password is empty";
+        } else if (!specialCharPassword){
+            errMsg="At least one Special Characters";
+        } else if (!minLengthPassword){
+            errMsg="At least minimum 8 characters";
+        } else {
+            errMsg="";
+        }
+        
+        console.log("errMsg ", errMsg)
+          
+        if (errMsg.length === 0) {
+            setPasswordErr("");
+            setPasswordCreate(newOwnerPassword);
+        } else {
+            setPasswordErr(errMsg);
+        }
+      };
+
+    const handlePasswordConfirm = (e: {
+        target: { value: string };
+      }) => {
+        console.log("handlePasswordConfirm ", e.target.value);
+        console.log("passwordCreate ", passwordCreate);
+        
+        setPasswordConfirm(e.target.value);
+
+        const confirmPass = e.target.value;
+        let errMessage = "";
+
+        if (passwordCreate !== undefined) {
+            errMessage="Password is empty";
+        }
+
+        if (confirmPass !== undefined) {
+            errMessage="Confirm password is empty";
+        }
+
+        if (confirmPass.length === 0) {
+            errMessage="Please enter Confirm Password."
+            setErr("Please enter Confirm Password.");
+          } else if (passwordCreate.length > 0 && confirmPass !== passwordCreate) {
+            errMessage="Password and Confirm Password does not match."
+          } else {
+            errMessage="";
+          }
+
+          if (errMessage.length === 0) {
+            setErr("");
+            setPasswordConfirm(confirmPass);
+          } else {
+            setErr(errMessage);
+          }
     };
 
     return (
@@ -119,17 +201,19 @@ function Forms() {
                             <input type="text" className={styles.formControl} placeholder="First name"/>
                         </div> */}
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} placeholder="User name"/>
+                            <input type="text" className={styles.formControl} value={username} onChange={(e) => handleOnchange(e, setUserName)} placeholder="User name"/>
                         </div>
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} placeholder="Email"/>
+                            <input type="text" className={styles.formControl} value={email} onChange={(e) => handleOnchange(e, setEmail)} placeholder="Email"/>
                         </div>
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} placeholder="Password"/>
+                            {passwordError.length > 0 && <div className={styles.errorMessage}>{passwordError}</div>}
+                            <input type="text" className={passwordError.length > 0 ? `${styles.formControl} ${styles.errorSaleInput}` : `${styles.formControl}`}  value={passwordCreate} onChange={handleNewPassword} placeholder="Password"/>
                         </div>
 
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} placeholder="Confirm password"/>
+                            {error.length > 0 && <div className={styles.errorMsg}>{error}</div>}
+                            <input type="text" className={error.length > 0 ? `${styles.formControl} ${styles.errorSaleInput}` : `${styles.formControl}`} value={passwordConfirm} onChange={handlePasswordConfirm} placeholder="Confirm password"/>
                         </div>
 
                         <div className={styles.loginboxSubmit}>
