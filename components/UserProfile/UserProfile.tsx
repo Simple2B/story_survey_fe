@@ -16,19 +16,11 @@ const SIGN_OUT = 'sing out';
 
 const menuIcons = [
   {
-    image: dashboardIcon,
-    name: 'Dashboard',
-    href: '#dashboard',
-    classIcon: styles.active,
-    isIconActive: true,
-    menuComponent: <SectionDashboard/>,
-  },
-  {
     image: surveysIcon,
     name: 'Surveys list',
     href: '#surveys_list',
-    classIcon: "",
-    isIconActive: false,
+    classIcon: styles.active,
+    isIconActive: true,
     menuComponent: <div className={styles.containerCentered}>Surveys list</div>,
   },
   {
@@ -38,6 +30,14 @@ const menuIcons = [
     classIcon: "",
     isIconActive: false,
     menuComponent: <div className={styles.containerCentered}>Create survey</div>,
+  },
+  {
+    image: dashboardIcon,
+    name: 'Dashboard',
+    href: '#dashboard',
+    classIcon: "",
+    isIconActive: false,
+    menuComponent: <SectionDashboard/>,
   },
   {
     image: messageIcon,
@@ -66,7 +66,7 @@ const UserProfile = () => {
 
   const [isActive, setActive] = useState(false);
   const [icons, setMenuIcons] = useState(menuIcons);
-  const [headerName, setHeaderName] = useState("Dashboard");
+  const [headerName, setHeaderName] = useState("Surveys list");
   const { push } = useRouter();
  
 
