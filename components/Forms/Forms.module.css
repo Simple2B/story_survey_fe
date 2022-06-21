@@ -238,15 +238,6 @@
 .errorMessage {
     position: absolute;
     top: -8px;
-    font-size: 14px;
-    left: 43px;
-    color: red;
-}
-
-.errorMsg {
-    width: 100%;
-    position: absolute;
-    top: -8px;
     font-size: 12px;
     left: 43px;
     color: red;

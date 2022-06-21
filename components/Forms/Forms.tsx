@@ -23,20 +23,36 @@ const providers = [
 
 function Forms() {
     const [form, setForm] = useState("SignIn");
+
+    const [emailError, setEmailErr] = useState("");
     const [email, setEmail] = useState('');
+
+    const [passError, setPassError] = useState("");
     const [password, setPassword] = useState('');
-
-    const [passwordError, setPasswordErr] = useState("");
-
+    
+    const [userNameError, setUseNameError] = useState("");
     const [username, setUserName] = useState('');
 
+    const [passwordError, setPasswordErr] = useState("");
     const [passwordCreate, setPasswordCreate] = useState('');
+
     const [error, setErr] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState('');
 
 
     const handleToggleForm = (e) => {
         setForm(e);
+        setEmail("");
+        setPassword("");
+        setUserName("");
+        setPasswordCreate("");
+        setPasswordConfirm("");
+        setEmailErr("");
+        setPassError("");
+        setUseNameError("");
+        setPasswordErr("");
+        setErr("");
+        setPasswordConfirm("");
     };
 
     // console.log(" Form => user ", useStore().getState())
@@ -46,8 +62,29 @@ function Forms() {
         signIn(provider);        
     };
 
-    const handleOnchange = (e, setFunc) => {
+    const handleOnchange = (e, setFunc, setErr, passValue) => {
         setFunc(e.target.value);
+
+        const value = e.target.value;
+
+        let errMsg ="";
+
+        if (value !== undefined) {
+            errMsg=`${passValue} is empty`;
+        }
+
+        if ( value.length === 0){
+            errMsg=`${passValue} is empty`;
+        }  else {
+            errMsg="";
+        }
+
+        if (errMsg.length === 0) {
+            setErr("");
+            setFunc(value);
+        } else {
+            setErr(errMsg);
+        }
     };
 
     const handleSubmit = (e) => {
@@ -76,6 +113,7 @@ function Forms() {
         const specialCharPassword = specialCharRegExp.test(newOwnerPassword);
         const minLengthPassword = minLengthRegExp.test(newOwnerPassword);
         let errMsg ="";
+
         if (newOwnerPassword !== undefined) {
             errMsg="Password is empty";
         }
@@ -156,19 +194,21 @@ function Forms() {
                             <div className={styles.or}>OR</div>
                         </div>
                         <div className={styles.loginboxTextbox}>
+                            {emailError.length > 0 && <div className={styles.errorMessage}>{emailError}</div>}
                             <input type="text" 
                                    className={styles.formControl} 
                                    value={email} 
                                    placeholder="Email"
-                                   onChange={(e) => handleOnchange(e, setEmail)}
+                                   onChange={(e) => handleOnchange(e, setEmail, setEmailErr, "Email")}
                             />
                         </div>
                         <div className={styles.loginboxTextbox}>
+                           {passError.length > 0 && <div className={styles.errorMessage}>{passError}</div>}
                             <input type="text"
                                    className={styles.formControl}
                                    value={password}
                                    placeholder="Password"
-                                   onChange={(e) => handleOnchange(e, setPassword)}
+                                   onChange={(e) => handleOnchange(e, setPassword, setPassError, "Password")}
                             />
                         </div>
                         {/* <div className={styles.loginboxForgot}>
@@ -201,10 +241,12 @@ function Forms() {
                             <input type="text" className={styles.formControl} placeholder="First name"/>
                         </div> */}
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} value={username} onChange={(e) => handleOnchange(e, setUserName)} placeholder="User name"/>
+                            {userNameError.length > 0 && <div className={styles.errorMessage}>{userNameError}</div>}
+                            <input type="text" className={styles.formControl} value={username} onChange={(e) => handleOnchange(e, setUserName, setUseNameError, "User name")} placeholder="User name"/>
                         </div>
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} value={email} onChange={(e) => handleOnchange(e, setEmail)} placeholder="Email"/>
+                            {emailError.length > 0 && <div className={styles.errorMessage}>{emailError}</div>}
+                            <input type="text" className={styles.formControl} value={email} onChange={(e) => handleOnchange(e, setEmail, setEmailErr, "Email")} placeholder="Email"/>
                         </div>
                         <div className={styles.loginboxTextbox}>
                             {passwordError.length > 0 && <div className={styles.errorMessage}>{passwordError}</div>}
@@ -212,7 +254,7 @@ function Forms() {
                         </div>
 
                         <div className={styles.loginboxTextbox}>
-                            {error.length > 0 && <div className={styles.errorMsg}>{error}</div>}
+                            {error.length > 0 && <div className={styles.errorMessage}>{error}</div>}
                             <input type="text" className={error.length > 0 ? `${styles.formControl} ${styles.errorSaleInput}` : `${styles.formControl}`} value={passwordConfirm} onChange={handlePasswordConfirm} placeholder="Confirm password"/>
                         </div>
 
