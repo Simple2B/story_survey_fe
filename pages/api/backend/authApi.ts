@@ -19,19 +19,19 @@ const formatRequestBodyApiKey = (password: string, api_key: string) => {
 
 export const authApi = {
   login: async (
-    email: string,
+    username: string,
     password: string
   ): Promise<any> => {
     try {
       const response = await authInstance.post(
-        "/api/auth/sign_in",
-        formatRequestBody(email, password)
+        "/login",
+        formatRequestBody(username, password)
       );
-      console.log("POST [/auth/sign_in] response received successfully");
+      console.log("POST [/login] response received successfully");
       return response.data;
     } catch (error: any) {
       // place to handle errors and rise custom errors
-      // console.log(`POST [api/auth/sign_in] error message: ${error.message}`);
+      // console.log(`POST [/auth/login] error message: ${error.message}`);
       throw new Error(error.message);
     }
   },
@@ -39,17 +39,17 @@ export const authApi = {
   setPassword: async (password: string, api_key: string): Promise<void> => {
     try {
       const response = await authInstance.post(
-        "api/auth/sign_up",
+        "/auth/sign_up",
         formatRequestBodyApiKey(password, api_key)
       );
       console.log(
-        `POST [api/sing_up/${api_key}] response received successfully`
+        `POST [/sing_up/${api_key}] response received successfully`
       );
       return response.data;
     } catch (error: any) {
       // place to handle errors and rise custom errors
       console.log(
-        `POST [api/sing_up/${api_key}] error message: ${error.message}`
+        `POST [/sing_up/${api_key}] error message: ${error.message}`
       );
       throw new Error(error.message);
     }
