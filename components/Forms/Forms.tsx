@@ -34,9 +34,7 @@ function Forms() {
 
     const handleOAuthSignIn = (provider) => () => {
         // console.log("handleOAuthSignIn => provider: ", provider);
-        signIn(provider);
-
-        
+        signIn(provider);        
     };
 
     const handleOnchange = (e, setFunc) => {
@@ -48,7 +46,11 @@ function Forms() {
         console.log("Forms: handleSubmit => ", {
             'email': email,
             'password': password,
-        })
+        });
+
+        if (!email) return false;
+
+        signIn('email', {email, redirect: false})
     };
 
     return (
@@ -113,17 +115,21 @@ function Forms() {
 
                         <div className={styles.hiddenSocialTitle}>Connect with Your Social Accounts</div>
 
-                        <div className={styles.loginboxTextbox}>
+                        {/* <div className={styles.loginboxTextbox}>
                             <input type="text" className={styles.formControl} placeholder="First name"/>
-                        </div>
+                        </div> */}
                         <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} placeholder="Surname name"/>
+                            <input type="text" className={styles.formControl} placeholder="User name"/>
                         </div>
                         <div className={styles.loginboxTextbox}>
                             <input type="text" className={styles.formControl} placeholder="Email"/>
                         </div>
                         <div className={styles.loginboxTextbox}>
                             <input type="text" className={styles.formControl} placeholder="Password"/>
+                        </div>
+
+                        <div className={styles.loginboxTextbox}>
+                            <input type="text" className={styles.formControl} placeholder="Confirm password"/>
                         </div>
 
                         <div className={styles.loginboxSubmit}>
