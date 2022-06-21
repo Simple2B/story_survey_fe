@@ -10,6 +10,7 @@
     width: 60px;
   }
   .sidebar .logoDetails{
+    cursor: pointer;
     height: 80px;
     display: flex;
     align-items: center;
