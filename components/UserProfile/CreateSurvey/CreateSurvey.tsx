@@ -2,14 +2,16 @@ import React, { ReactElement, useState } from "react";
 import Image from "next/image";
 import styles from "./CreateSurvey.module.css";
 import plusIcon from "../../../styles/icons/icons8-add-property-64.png";
+import { useStore } from "../../../redux/store";
 
 
 const CreateSurvey = (): ReactElement => {
     const [isFormCreateOpen, setIsFormCreateOpen] = useState<boolean>(false);
 
+    const {user} = useStore().getState();
 
-
-
+    console.log("CreateSurvey: user => ", user);
+    
     const createSurvey = () => {
         setIsFormCreateOpen(!isFormCreateOpen);
     }

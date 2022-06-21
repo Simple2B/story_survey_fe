@@ -1,6 +1,9 @@
 import { signIn } from "next-auth/react";
 import React, {useState} from "react";
-import { useStore } from "react-redux";
+import { clientApi } from "../../pages/api/backend/userInstance";
+import { authApi } from "../../pages/api/backend/authApi";
+import { IUserProvider } from "../../redux/types/userTypes";
+import { useActions } from "../../redux/useActions";
 import styles from "./Forms.module.css";
 
 const providers = [
@@ -22,6 +25,7 @@ const providers = [
 ];
 
 function Forms() {
+    const {login } = useActions()
     const [form, setForm] = useState("SignIn");
 
     const [emailError, setEmailErr] = useState("");
@@ -39,6 +43,8 @@ function Forms() {
     const [error, setErr] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState('');
 
+    const isSubmitRegistration = emailError.length > 0 || userNameError.length > 0 || passwordError.length > 0 || error.length > 0;
+    const isSubmitLogin = emailError.length > 0 || passError.length > 0;
 
     const handleToggleForm = (e) => {
         setForm(e);
@@ -54,8 +60,6 @@ function Forms() {
         setErr("");
         setPasswordConfirm("");
     };
-
-    // console.log(" Form => user ", useStore().getState())
 
     const handleOAuthSignIn = (provider) => () => {
         // console.log("handleOAuthSignIn => provider: ", provider);
@@ -94,9 +98,63 @@ function Forms() {
             'password': password,
         });
 
-        // if (!email) return false;
+        if (email.length === 0) {
+            setEmailErr("Email is empty")
+        };
 
-        // signIn('email', {email, redirect: false});
+        if (password.length === 0) {
+            setPassError("Password is empty")
+        };
+
+        // login({username: email, password: password });
+
+        // const userLogin = async(email, password) => {
+        //     const loginUser = await authApi.login(email, password)
+        //     console.log("loginUser ", loginUser);
+            
+        // }
+        // userLogin(email, password);
+    };
+
+    const handleCreateUser = (): void => {
+        // console.log("Forms: createUser => ", {
+        //     'username': username,
+        //     'email': email,
+        //     'password': passwordCreate,
+        //     'passwordConfirm': passwordConfirm,
+        // });
+
+        if (email.length === 0) {
+            setEmailErr("Email is empty")
+        };
+
+        if (username.length === 0) {
+            setUseNameError("User name is empty")
+        };
+
+        if (passwordCreate.length === 0) {
+            setPasswordErr("Password is empty")
+        };
+
+        if (passwordConfirm.length === 0) {
+            setErr("Confirm password is empty")
+        };
+
+        const userData = {
+            'username': username,
+            'email': email,
+            'password': passwordCreate,
+        }
+
+
+        const createUser = async(createUser: IUserProvider) =>  {
+            const user = await clientApi.createUserProvider(createUser);
+            // console.log("createUser: user => " , user); 
+            // return user;
+            setForm("SignIn");
+        }
+        
+        createUser(userData);
     };
 
     const handleNewPassword = (e: {
@@ -219,6 +277,7 @@ function Forms() {
                                    className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} 
                                    value="Login"
                                    onClick={handleSubmit}
+                                   disabled={isSubmitLogin}
                             />
                         </div>
                         <div className={styles.loginboxSignup} onClick={() => handleToggleForm("SignUp")}>
@@ -259,7 +318,7 @@ function Forms() {
                         </div>
 
                         <div className={styles.loginboxSubmit}>
-                            <input type="button" className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} value="Registration"/>
+                            <input type="button" onClick={handleCreateUser} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={isSubmitRegistration} value="Registration"/>
                         </div>
                         <div className={styles.loginboxSignup}  onClick={() => handleToggleForm("SignIn")}>
                             <a href="#login.html">Sign In</a>
