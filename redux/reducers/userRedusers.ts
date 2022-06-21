@@ -1,16 +1,25 @@
-import {IUserResponse, UserAction, UserActionTypes } from "../types/userTypes";
+import {IUserProvider, IUserResponse, UserAction, UserActionTypes } from "../types/userTypes";
 
+const initialState = {
+  // id: null,
+  // created_at: "",
+  email: "",
+  image: "",
+  // role: "",
+  username: "",
+  password: "",
+}
 
 export const userReducer = (
-  state = {},  
+  state = initialState,  
   action: UserAction,
-): IUserResponse => {
+): IUserProvider => {
   switch (action.type) {
-    case UserActionTypes.SET_CURRENT_USER:
-      return {
-        ...action.payload,
-      };
+  //   case UserActionTypes.SET_CURRENT_USER:
+  //     return {
+  //       ...action.payload,
+  //     };
     default:
-      return null;
+      return state;
   }
 };

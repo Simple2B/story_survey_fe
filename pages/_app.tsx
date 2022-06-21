@@ -9,6 +9,8 @@ export default function App({
   pageProps: { session, ...pageProps },
 }) {
   const store = useStore(pageProps.initialReduxState);
+  console.log("STORE => ", store.getState());
+  
   return (
     <SessionProvider session={session}>
       <Provider store={store}>

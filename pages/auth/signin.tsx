@@ -11,28 +11,27 @@ const SignIn = () => {
   const { push } = useRouter();
 
   if (status === 'loading') <div>Checking Authentication ...</div>;
-  const { setCurrentUser } = useActions();
+  const { createUser } = useActions();
 
   if (session){ 
     setTimeout(() => {
       push('/user_profile/user');
     }, 1500);
 
-    const user = {
+    const userProvide = {
       email: session.user.email,
       image: session.user.image,
       username: session.user.name,
       password: session.user.email,
     }
 
-    // setCurrentUser(user);
-    
+    createUser(userProvide);
 
-    return <h1 className={styles.centerContainer}>You are already sign in</h1>
+    return <h3 className={styles.centerContainer}>Signed in as {session.user.email}</h3>
   };
 
   const handleBack = () => push('/');
-
+  
   return (
     <>
         {
