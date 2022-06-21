@@ -3,18 +3,30 @@ import styles from './signin.module.css';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Forms from "../../components/Forms/Forms";
+import { useActions } from "../../redux/useActions";
 
 
 const SignIn = () => {
   const { data: session, status } = useSession();
-  const { push, asPath } = useRouter();
+  const { push } = useRouter();
 
   if (status === 'loading') <div>Checking Authentication ...</div>;
+  const { setCurrentUser } = useActions();
 
   if (session){ 
     setTimeout(() => {
-        push('/')
-    }, 3000);
+      push('/user_profile/user');
+    }, 1500);
+
+    const user = {
+      email: session.user.email,
+      image: session.user.image,
+      username: session.user.name,
+      password: session.user.email,
+    }
+
+    // setCurrentUser(user);
+    
 
     return <h1 className={styles.centerContainer}>You are already sign in</h1>
   };

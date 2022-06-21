@@ -1,5 +1,5 @@
 // import { AxiosError, AxiosResponse } from "axios";
-import { ILoginResponse } from "../../redux/types/authTypes";
+// import { ILoginResponse } from "../../redux/types/authTypes";
 import { authInstance } from "./axiosInstance";
 
 const formatRequestBody = (email: string, password: string) => {
@@ -21,7 +21,7 @@ export const authApi = {
   login: async (
     email: string,
     password: string
-  ): Promise<ILoginResponse> => {
+  ): Promise<any> => {
     try {
       const response = await authInstance.post(
         "/api/auth/sign_in",

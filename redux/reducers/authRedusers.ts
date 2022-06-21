@@ -4,7 +4,7 @@ let initialState: IAuthState = (function () {
   let tokenInfo;
   if (typeof window !== 'undefined') {
     console.log('You are on the browser')
-    tokenInfo = localStorage.getItem("token");
+    // tokenInfo = localStorage.getItem("token");
   } else {
     console.log('You are on the server')
   }

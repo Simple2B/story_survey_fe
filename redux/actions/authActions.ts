@@ -6,7 +6,7 @@ import {
     ILogoutResponse,
   } from "../types/authTypes";
   import { Dispatch } from "redux";
-  import { authApi } from "../../pages/api/authApi";
+import { authApi } from "../../pages/api/backend/authApi";
   
   export const login = ({ password, email }: ILoginParams) => {
     return async (dispatch: Dispatch<AuthAction>): Promise<any> => {
@@ -16,9 +16,9 @@ import {
 
         if (typeof window !== 'undefined') {
           console.log('You are on the browser')
-          localStorage.setItem("token", data.access_token);
+          // localStorage.setItem("token", data.access_token);
           const now = new Date();
-          localStorage['dateNow'] = ''+now.getTime();
+          // localStorage['dateNow'] = ''+now.getTime();
         } else {
           console.log('You are on the server')
         }
@@ -48,7 +48,7 @@ import {
         // const data: ILogoutResponse = await authApi.logout();
         if (typeof window !== 'undefined') {
           console.log('You are on the browser')
-          localStorage.removeItem("token");
+          // localStorage.removeItem("token");
         } else {
           console.log('You are on the server')
         }

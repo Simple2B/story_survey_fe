@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
-      "NEXTAUTH"
+      "NEXTAUTH",
+      "Redusers",
+      "reduxjs"
     ],
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",

@@ -1,13 +1,14 @@
 import { signIn } from "next-auth/react";
 import React, {useState} from "react";
+import { useStore } from "react-redux";
 import styles from "./Forms.module.css";
 
 const providers = [
-    {
-        name: 'twitter',
-        style: `${styles.buttonTwitter}`,
-        Icon: <i className="social-icon fa fa-twitter"/>,
-    },
+    // {
+    //     name: 'twitter',
+    //     style: `${styles.buttonTwitter}`,
+    //     Icon: <i className="social-icon fa fa-twitter"/>,
+    // },
     {
         name: 'facebook',
         style: `${styles.buttonFacebook}`,
@@ -29,9 +30,13 @@ function Forms() {
         setForm(e);
     };
 
+    console.log(" Form => user ", useStore().getState())
+
     const handleOAuthSignIn = (provider) => () => {
-        console.log("handleOAuthSignIn => provider: ", provider);
+        // console.log("handleOAuthSignIn => provider: ", provider);
         signIn(provider);
+
+        
     };
 
     const handleOnchange = (e, setFunc) => {
