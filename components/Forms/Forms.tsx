@@ -117,13 +117,6 @@ function Forms() {
     };
 
     const handleCreateUser = (): void => {
-        // console.log("Forms: createUser => ", {
-        //     'username': username,
-        //     'email': email,
-        //     'password': passwordCreate,
-        //     'passwordConfirm': passwordConfirm,
-        // });
-
         if (email.length === 0) {
             setEmailErr("Email is empty")
         };
