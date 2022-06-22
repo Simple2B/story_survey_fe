@@ -43,6 +43,12 @@ export default NextAuth({
     signIn: '/auth/signin',
   },
   secret: process.env.NEXTAUTH_SECRET,
+  // jwt: {
+  //   signingKey: {"kty":"oct","kid":"--","alg":"HS256","k":"--"},
+  //   verificationOptions: {
+  //     algorithms: ["HS256"]
+  //   }
+  // }
   // theme: {
   //   colorScheme: "light",
   // },
