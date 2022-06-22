@@ -11,7 +11,8 @@ import SectionDashboard from "./SectionDashboard/SectionDashboard";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import ProfileNavbar from "./ProfileNavBar";
-import SurveyList from "./CreateSurvey/CreateSurvey";
+import CreateSurvey from "./CreateSurvey/CreateSurvey";
+import SurveyList from "./SurveyList/SurveyList";
 
 const SIGN_OUT = 'sing out';
 
@@ -22,7 +23,7 @@ const menuIcons = [
     href: '#surveys_list',
     classIcon: styles.active,
     isIconActive: true,
-    menuComponent: <div className={styles.containerCentered}>Surveys list</div>,
+    menuComponent: <SurveyList/>,
   },
   {
     image: surveysCreateIcon,
@@ -30,7 +31,7 @@ const menuIcons = [
     href: '#create_survey',
     classIcon: "",
     isIconActive: false,
-    menuComponent: <SurveyList/>,
+    menuComponent: <CreateSurvey/>,
   },
   {
     image: dashboardIcon,
