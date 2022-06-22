@@ -117,7 +117,7 @@ const CreateSurvey = (): ReactElement => {
         const data: ICreateSurvey = {
             "title": title,
             "user_id": user.id,
-            "email": session.user.email,
+            "email": user.email,
             "questions": questions,
         }
 
@@ -128,7 +128,8 @@ const CreateSurvey = (): ReactElement => {
         saveSurveyToDB(data);
         setIsFormCreateOpen(false);
         push('/user_profile/user');
-    };
+
+    }
 
     return  (
         <div className={styles.container}>

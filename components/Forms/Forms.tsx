@@ -106,14 +106,14 @@ function Forms() {
             setPassError("Password is empty")
         };
 
-        // login({username: email, password: password });
+        login({username: email, password: password });
 
-        // const userLogin = async(email, password) => {
-        //     const loginUser = await authApi.login(email, password)
-        //     console.log("loginUser ", loginUser);
+        const userLogin = async(email: string, password: string) => {
+            const loginUser = await authApi.login(email, password)
+            console.log("loginUser ", loginUser);
             
-        // }
-        // userLogin(email, password);
+        }
+        userLogin(email, password);
     };
 
     const handleCreateUser = (): void => {
@@ -134,17 +134,17 @@ function Forms() {
         };
 
         const userData = {
-            'username': username,
-            'email': email,
-            'password': passwordCreate,
-        }
-
+            username: username,
+            email: email,
+            password: passwordCreate,
+        };
+        console.log("createUser: userData => " , userData);
 
         const createUser = async(createUser: IUserProvider) =>  {
             const user = await clientApi.createUserProvider(createUser);
-            // console.log("createUser: user => " , user); 
-            // return user;
+            console.log("createUser: user => " , user); 
             setForm("SignIn");
+            return user;
         }
         
         createUser(userData);
