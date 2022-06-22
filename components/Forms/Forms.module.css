@@ -139,6 +139,7 @@
 }
 
 .loginContainer .loginbox .loginboxTextbox {
+    position: relative;
     padding: 10px 40px;
 }
 
@@ -227,4 +228,17 @@
     box-shadow: 0 0 14px rgba(0,0,0,.1);
     background-color: #fff;
     text-align: left;
+}
+
+
+.errorSaleInput {
+    border: 1px solid red;
+}
+
+.errorMessage {
+    position: absolute;
+    top: -8px;
+    font-size: 12px;
+    left: 43px;
+    color: red;
 }

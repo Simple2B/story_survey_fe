@@ -11,14 +11,22 @@ export interface IUserProvider {
 // }
 // action types
 export enum UserActionTypes {
-  SET_CURRENT_USER = "SET_CURRENT_USER",
+  CREATE_CURRENT_USER = "CREATE_CURRENT_USER",
   GET_CURRENT_USER = "GET_CURRENT_USER",
 }
 
 interface ISetUserAction {
-  type: UserActionTypes.SET_CURRENT_USER;
-  payload: IUserResponse;
+  type: UserActionTypes.CREATE_CURRENT_USER;
 }
+// interface ILoginRequestSuccessAction {
+//   type: AuthActionTypes.LOGIN_SUCCESS;
+//   payload: ILoginResponse;
+// }
+// interface ILoginRequestFailureAction {
+//   type: AuthActionTypes.LOGIN_FAILURE;
+//   payload: string;
+// }
+
 
 interface IGetUserAction {
   type: UserActionTypes.GET_CURRENT_USER;

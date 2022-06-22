@@ -4,8 +4,14 @@ import { authInstance } from "./axiosInstance";
 
 const formatRequestBody = (email: string, password: string) => {
   const formData = new FormData();
-  formData.append("email", email);
+  formData.append("grant_type", "");
+  formData.append("username", email);
   formData.append("password", password);
+  formData.append("scope", "");
+  formData.append("client_id", ""); 
+  formData.append("client_secret", ""); 
+  
+  
   return formData;
 };
 
@@ -24,14 +30,14 @@ export const authApi = {
   ): Promise<any> => {
     try {
       const response = await authInstance.post(
-        "/api/auth/sign_in",
+        "/user/sign_in",
         formatRequestBody(email, password)
       );
-      console.log("POST [/auth/sign_in] response received successfully");
+      console.log("POST [/sign_in] response received successfully");
       return response.data;
     } catch (error: any) {
       // place to handle errors and rise custom errors
-      // console.log(`POST [api/auth/sign_in] error message: ${error.message}`);
+      // console.log(`POST [/auth/sign_in] error message: ${error.message}`);
       throw new Error(error.message);
     }
   },
@@ -39,17 +45,17 @@ export const authApi = {
   setPassword: async (password: string, api_key: string): Promise<void> => {
     try {
       const response = await authInstance.post(
-        "api/auth/sign_up",
+        "/auth/sign_up",
         formatRequestBodyApiKey(password, api_key)
       );
       console.log(
-        `POST [api/sing_up/${api_key}] response received successfully`
+        `POST [/sing_up/${api_key}] response received successfully`
       );
       return response.data;
     } catch (error: any) {
       // place to handle errors and rise custom errors
       console.log(
-        `POST [api/sing_up/${api_key}] error message: ${error.message}`
+        `POST [/sing_up/${api_key}] error message: ${error.message}`
       );
       throw new Error(error.message);
     }

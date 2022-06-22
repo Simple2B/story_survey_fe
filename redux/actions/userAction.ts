@@ -5,24 +5,23 @@ import { IUserProvider, IUserResponse, UserAction, UserActionTypes } from "../ty
 
   
   export const setCurrentUser = (user: IUserProvider) => {
-    return async (dispatch: Dispatch<UserAction>): Promise<any> => {
-      try {
-        const dataUser: IUserResponse = await clientApi.createUserProvider(user);
+    // return async (dispatch: Dispatch<UserAction>): Promise<any> => {
+    //   try {
 
-        console.log("getInfo dataUser => ", dataUser);
+    //     dispatch({
+    //         type: UserActionTypes.SET_CURRENT_USER,
+    //         payload: user
+    //     });
 
-        dispatch({
-            type: UserActionTypes.SET_CURRENT_USER,
-            payload: dataUser
-        });
+    //     return user;
 
-      } catch (e: any) {
-        console.log("setCurrentUser: error from redux -> ", e);
-        // dispatch({
-        //   type: UserActionTypes.SET_CURRENT_USER,
-        //   payload: "setCurrentUser: Invalid login credentials. Please try again!",
-        // });
-      }
-    };
+    //   } catch (e: any) {
+    //     console.log("setCurrentUser: error from redux -> ", e);
+    //     dispatch({
+    //       type: UserActionTypes.SET_CURRENT_USER,
+    //       payload: "setCurrentUser: Invalid login credentials. Please try again!",
+    //     });
+    //   }
+    // };
   };
  

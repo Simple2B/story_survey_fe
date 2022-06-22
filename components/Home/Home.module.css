@@ -1,44 +1,63 @@
 .homeContent{
+    cursor: pointer;
+    margin-top: 20px;
+    align-self: flex-start;
     position: relative;
-}
-
-.homeContent .overviewBoxes{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .homeContent .overviewBoxes{
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     padding: 0 20px;
     margin-bottom: 26px;
-}
-
-.overviewBoxes .box{
+  }
+  
+  .overviewBoxes .box{
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: calc(100% / 4 - 15px);
+    /* width: calc(100% / 4 - 15px); */
     background: #fff;
-    padding: 15px 14px;
+    padding: 25px 24px;
     border-radius: 12px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-}
-
-.overviewBoxes .boxTopic{
+  }
+  
+  .editIcon {
+    cursor: pointer;
+    width: 21px;
+    height: 21px;
+    position: absolute;
+    z-index: 3;
+    right: 8px;
+    top: 8px;
+  }
+  
+  .overviewBoxes .boxTopic{
     font-size: 20px;
     font-weight: 500;
-}
-
-.homeContent .box .number{
+  }
+  
+  .homeContent .box .number{
     display: inline-block;
     font-size: 35px;
     margin-top: -6px;
     font-weight: 500;
   }
-.homeContent .box .indicator{
+  .homeContent .box .indicator{
     display: flex;
     align-items: center;
-}
-
-.homeContent .box .indicator i{
+    padding-bottom: 5px;
+  }
+  
+  .homeContent .box .indicator i{
     height: 20px;
     width: 20px;
     background: #8FDACB;
@@ -48,17 +67,17 @@
     color: #fff;
     font-size: 20px;
     margin-right: 5px;
-}
-
-.box .indicator i.down{
+  }
+  
+  .box .indicator i.down{
     background: #e87d88;
-}
-
-.homeContent .box .indicator .text{
+  }
+  
+  .homeContent .box .indicator .text{
     font-size: 12px;
-}
-
-.homeContent .box .cart{
+  }
+  
+  .homeContent .box .cart{
     display: inline-block;
     font-size: 32px;
     height: 50px;
@@ -69,49 +88,49 @@
     color: #66b0ff;
     border-radius: 12px;
     margin: -15px 0 0 6px;
-}
-
-.homeContent .box .cart.two{
+  }
+  
+  .homeContent .box .cart.two{
     color: #2BD47D;
     background: #C0F2D8;
-}
-
-.homeContent .box .cart.three{
+  }
+  
+  .homeContent .box .cart.three{
     color: #ffc233;
     background: #ffe8b3;
-}
-
-.homeContent .box .cart.four{
+  }
+  
+  .homeContent .box .cart.four{
     color: #e05260;
     background: #f7d4d7;
-}
-
-.homeContent .totalOrder{
+  }
+  
+  .homeContent .totalOrder{
     font-size: 20px;
     font-weight: 500;
-}
-
-.homeContent .salesBoxes{
+  }
+  
+  .homeContent .salesBoxes{
     display: flex;
     justify-content: space-between;
-}
-
-.homeContent .salesBoxes .recentSales{
+  }
+  
+  .homeContent .salesBoxes .recentSales{
     width: 65%;
     background: #fff;
     padding: 20px 30px;
     margin: 0 20px;
     border-radius: 12px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-}
-
-.homeContent .salesBoxes .salesDetails{
+  }
+  
+  .homeContent .salesBoxes .salesDetails{
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.salesBoxes .box .title{
+  }
+  
+  .salesBoxes .box .title{
     font-size: 24px;
     font-weight: 500;
   }
@@ -183,8 +202,113 @@
     color: #333;
   }
 
-/* Responsive Media Query */
-@media (max-width: 1150px) {
+  .modalWindow {
+    position: fixed;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--mainOpacity);
+  }
+
+  .modal {
+    position: relative;
+    width: 80%;
+    height: 80%;
+    background-color: var(--mainWhite);
+    border-radius: 15px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    /* height: 100vh; */
+  }
+
+  .title {
+    font-size: 22px;
+    /* align-self: flex-start; */
+  }
+
+  .containerQuestion {
+    position: relative;
+    width: 95%;
+    height: 90%;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .questionBlock {
+    height: 85%;
+    text-align: center;
+  }
+
+  .question {
+    margin-top: 25px;
+  }
+
+  .answerContainer {
+    margin: 0 auto;
+    width: 75%;
+    height: 70%;
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .answerContainer textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .answerContainer textarea[placeholder] {
+      padding: 15px 14px;
+      outline-color: var(--mainOpacity);
+  }
+
+  .nextQuestion {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+  }
+
+  .btn {
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btnPrimary {
+    width: 60%;
+    color: var(--offWhite);
+    background-color: var(--mainBlack);
+    border-color: var(--mainBlack);
+    margin: 30px auto;
+  }
+
+.btn:hover {
+    color: var(--primaryColor);
+    background-color: var(--mainBackground);
+    border-color: transparent;
+}
+  
+  /* Responsive Media Query */
+  @media (max-width: 1150px) {
     .homeContent .salesBoxes{
       flex-direction: column;
       align-items: center;
@@ -198,36 +322,36 @@
     .homeContent .salesBoxes .topSales{
       margin: 0;
     }
-}
-
-@media (max-width: 1000px) {
+  }
+  
+  @media (max-width: 1000px) {
     .overviewBoxes .box{
-      width: calc(100% / 2 - 15px);
+      /* width: calc(100% / 2 - 15px); */
       margin-bottom: 15px;
     }
-}
-
-@media (max-width: 700px) {
-
+  }
+  
+  @media (max-width: 700px) {
+  
     .homeContent .salesBoxes .salesDetails{
       width: 560px;
     }
-
-}
-
-@media (max-width: 550px) {
+  
+  }
+  
+  @media (max-width: 550px) {
     .overviewBoxes .box{
       width: 100%;
       margin-bottom: 15px;
     }
-}
-
-@media (max-width: 400px) {
+  }
+  
+  @media (max-width: 400px) {
     .sidebar{
       width: 0;
     }
     .sidebar.active{
       width: 60px;
     }
-}
+  }
   

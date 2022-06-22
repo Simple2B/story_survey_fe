@@ -9,8 +9,10 @@ import messageIcon from "../../styles/icons/icons8-messages-64.png";
 import singOutIcon from "../../styles/icons/icons8-logout-64.png";
 import SectionDashboard from "./SectionDashboard/SectionDashboard";
 import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import ProfileNavbar from "./ProfileNavBar";
+import CreateSurvey from "./CreateSurvey/CreateSurvey";
+import SurveyList from "./SurveyList/SurveyList";
 
 const SIGN_OUT = 'sing out';
 
@@ -21,7 +23,7 @@ const menuIcons = [
     href: '#surveys_list',
     classIcon: styles.active,
     isIconActive: true,
-    menuComponent: <div className={styles.containerCentered}>Surveys list</div>,
+    menuComponent: <SurveyList/>,
   },
   {
     image: surveysCreateIcon,
@@ -29,7 +31,7 @@ const menuIcons = [
     href: '#create_survey',
     classIcon: "",
     isIconActive: false,
-    menuComponent: <div className={styles.containerCentered}>Create survey</div>,
+    menuComponent: <CreateSurvey/>,
   },
   {
     image: dashboardIcon,
@@ -93,15 +95,18 @@ const UserProfile = () => {
 
   const handleSignOut = async () => {
     const data = await signOut({redirect: false, callbackUrl: '/'});
-    console.log("NavBar: handleSignOut data => ", data);
     push(data.url);
   };
+
+  const getMainPage = () => {
+    push("/");
+  }
 
   return  (
       <>
         <div className={isActive ? `${styles.sidebar} ${styles.active}` : styles.sidebar }>
-          <div className={styles.logoDetails}>
-            <i className={`${styles.bx} ${styles.bxlPlusPlus}`}/>
+          <div className={styles.logoDetails} onClick={getMainPage}>
+            <i className="bx">SS</i>
             <span className={styles.logoName}>Survey</span>
           </div>
           
@@ -121,10 +126,9 @@ const UserProfile = () => {
 
         <section className={styles.homeSection}>
           <ProfileNavbar isActive={isActive} handleClick={handleClick} headerName={headerName}/>
-
-          <div>
-            {menuIcons.map((item) => item.isIconActive && item.menuComponent)}
-          </div> 
+          <div className={styles.mainContent}>
+            {menuIcons.map((item, index) => item.isIconActive && <div key={index}>{item.menuComponent}</div> )}
+          </div>
         </section>
       </>
   );

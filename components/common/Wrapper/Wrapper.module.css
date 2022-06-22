@@ -1,5 +1,6 @@
 .defaultWrapper,
 .roomsWrapper {
+  padding-top: 64px;
   min-height: calc(100vh - 66px);
   background: var(--mainBackground) center/cover no-repeat;
   display: flex;

@@ -37,7 +37,8 @@ export const authInstance: AxiosInstance = axios.create({
   headers: {
     "Content-Type": "multipart/form-data",
     'Access-Control-Allow-Origin' : '*',
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+    // "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
     // "Allow": "GET, POST, HEAD",
   },
+  
 });

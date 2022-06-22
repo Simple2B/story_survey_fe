@@ -1,8 +1,10 @@
 {
     "cSpell.words": [
       "NEXTAUTH",
+      "Questionquestion",
       "Redusers",
-      "reduxjs"
+      "reduxjs",
+      "swiper"
     ],
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
