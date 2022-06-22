@@ -4,12 +4,14 @@ import { authInstance } from "./axiosInstance";
 
 const formatRequestBody = (email: string, password: string) => {
   const formData = new FormData();
-  formData.append("email", email);
+  formData.append("grant_type", "");
+  formData.append("username", email);
   formData.append("password", password);
+  formData.append("scope", "");
   formData.append("client_id", ""); 
   formData.append("client_secret", ""); 
-  formData.append("grant_type", "");
-  formData.append("scope", "");
+  
+  
   return formData;
 };
 
@@ -23,13 +25,13 @@ const formatRequestBodyApiKey = (password: string, api_key: string) => {
 
 export const authApi = {
   login: async (
-    username: string,
+    email: string,
     password: string
   ): Promise<any> => {
     try {
       const response = await authInstance.post(
         "/user/sign_in",
-        formatRequestBody(username, password)
+        formatRequestBody(email, password)
       );
       console.log("POST [/sign_in] response received successfully");
       return response.data;

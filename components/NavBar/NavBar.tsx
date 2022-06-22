@@ -6,6 +6,7 @@ import {FaAlignRight, FaTimes} from "react-icons/fa";
 import { CustomLink } from "../common/CustomLink";
 import { useSession, signOut } from "next-auth/react";
 import singOutIcon from "../../styles/icons/icons8-logout-64 (1).png";
+import { useTypedSelector } from "../../redux/useTypeSelector";
 
 
 const Navbar = () => {
@@ -14,6 +15,7 @@ const Navbar = () => {
 
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
+    const isLogin = useTypedSelector((state) => state.auth.loggedIn);
 
     const handleSignIn = () => {
         push(`/auth/signin?callbackUrl=${asPath}`);
@@ -27,6 +29,10 @@ const Navbar = () => {
         const data = await signOut({redirect: false, callbackUrl: '/'});
         push(data.url);
     };
+
+    const handleLogOut = () => {
+
+    }
 
     return (
         <>
@@ -46,7 +52,7 @@ const Navbar = () => {
                             <CustomLink text={"About"}  href="/about" style={""}/>
                         </li>
                         <li>
-                            <CustomLink text={"Surveys"}  href="/surveys" style={""}/>
+                            <CustomLink text={"Surveys"}  href="/" style={""}/>
                         </li>
                         <li>
                             <CustomLink text={"Contact"}  href="/contact" style={""}/>
@@ -67,8 +73,13 @@ const Navbar = () => {
                                     <i onClick={handleSignOut}><Image src={singOutIcon} height={25} width={25} className={styles.icon}/></i>
                                 </>
                                     
-                                )
-                                :
+                                ) : isLogin ? (
+                                        <div className={styles.btnContainer}>
+                                            <div onClick={getProfile}>Profile</div>
+                                            {/* <i onClick={handleLogOut}><Image src={singOutIcon} height={25} width={25} className={styles.icon}/></i> */}
+                                        </div>
+                                        ) :
+                                
                                 (<div className={styles.signBtn} onClick={handleSignIn}>Sign in</div>)
                             }
                             

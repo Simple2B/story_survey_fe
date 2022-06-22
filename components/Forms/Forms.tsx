@@ -5,6 +5,8 @@ import { authApi } from "../../pages/api/backend/authApi";
 import { IUserProvider } from "../../redux/types/userTypes";
 import { useActions } from "../../redux/useActions";
 import styles from "./Forms.module.css";
+import { useTypedSelector } from "../../redux/useTypeSelector";
+import { useRouter } from "next/router";
 
 const providers = [
     // {
@@ -45,6 +47,10 @@ function Forms() {
 
     const isSubmitRegistration = emailError.length > 0 || userNameError.length > 0 || passwordError.length > 0 || error.length > 0;
     const isSubmitLogin = emailError.length > 0 || passError.length > 0;
+
+    const isLogin = useTypedSelector((state) => state.auth.loggedIn);
+    const { push } = useRouter();
+    console.log("isLogin", isLogin)
 
     const handleToggleForm = (e) => {
         setForm(e);
@@ -108,12 +114,14 @@ function Forms() {
 
         login({username: email, password: password });
 
-        const userLogin = async(email: string, password: string) => {
-            const loginUser = await authApi.login(email, password)
-            console.log("loginUser ", loginUser);
+        isLogin && push("/user_profile/user")
+        
+        // const userLogin = async(email: string, password: string) => {
+        //     const loginUser = await authApi.login(email, password)
+        //     console.log("loginUser ", loginUser);
             
-        }
-        userLogin(email, password);
+        // }
+        // userLogin(email, password);
     };
 
     const handleCreateUser = (): void => {

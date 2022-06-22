@@ -51,8 +51,19 @@ function Home() {
 
         const getListSurveys = async() => {
             const list = await surveyApi.getSurveys();
-            setUserSurveys(list);
-            console.log("list", list);
+            if (list.length > 0 ) {
+                const listUserSurvey = list.map(( l ) =>{ return {
+                    id: l.id,
+                    title: l.title,
+                    created_at: l.created_at,
+                    user_id: l.user_id,
+                    email: l.email,
+                    questions: l.questions,
+                }}) 
+                setUserSurveys(listUserSurvey);
+                console.log("list", list);
+            }
+            
             
         }
         getListSurveys();
@@ -109,7 +120,7 @@ function Home() {
                                     email: item.email,
                                     questions: item.questions,
                                 }, index)
-                                setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: session.user.email}} ));
+                                setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: session? session.user.email : ""}} ));
                             }}>
                                 <div className={styles.box}>
                                     <div className={styles.rightSide}>

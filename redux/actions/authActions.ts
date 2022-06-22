@@ -34,11 +34,12 @@ import { clientApi } from "../../pages/api/backend/userInstance";
     };
   };
 
-  export const login = ({ username, password}: ILoginParams) => {
+  
+  export const login = ({ password, username }: ILoginParams) => {
     return async (dispatch: Dispatch<AuthAction>): Promise<any> => {
       try {
         dispatch({ type: AuthActionTypes.AUTH_API_REQUEST });
-        const data: ILoginResponse = await authApi.login( username, password);
+        const data: ILoginResponse = await authApi.login(username, password);
   
         localStorage.setItem("token", data.access_token);
         // const now = new Date();
@@ -48,7 +49,7 @@ import { clientApi } from "../../pages/api/backend/userInstance";
           type: AuthActionTypes.LOGIN_SUCCESS,
           payload: data,
         });
-        // return data.access_token;
+        return data.access_token;
       } catch (e: any) {
         console.log("authAction: error from redux -> ", e);
         dispatch({
@@ -65,13 +66,8 @@ import { clientApi } from "../../pages/api/backend/userInstance";
     return async (dispatch: Dispatch<AuthAction>) => {
       try {
         // const data: ILogoutResponse = await authApi.logout();
-        if (typeof window !== 'undefined') {
-          console.log('You are on the browser')
-          // localStorage.removeItem("token");
-        } else {
-          console.log('You are on the server')
-        }
-        
+        localStorage.removeItem("token");
+  
         dispatch({ type: AuthActionTypes.LOGOUT });
       } catch (e: any) {
         dispatch({ type: AuthActionTypes.LOGIN_FAILURE, payload: e });

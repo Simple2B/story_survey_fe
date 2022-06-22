@@ -19,7 +19,7 @@ const SignIn = () => {
     }, 1500);
 
     const userProvide = {
-      email: session.user.email,
+      email: session ? session.user.email : "" ,
       image: session.user.image,
       username: session.user.name,
       password: session.user.email,
@@ -27,7 +27,7 @@ const SignIn = () => {
 
     createUser(userProvide);
 
-    return <h3 className={styles.centerContainer}>Signed in as {session.user.email}</h3>
+    return <h3 className={styles.centerContainer}>Signed in {session.user.email}</h3>
   };
 
   const handleBack = () => push('/');

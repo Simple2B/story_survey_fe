@@ -110,7 +110,7 @@ const CreateSurvey = (): ReactElement => {
         console.log("survey ", {
             "title": title,
             "user_id": user.id,
-            "email": session.user.email,
+            "email": session? session.user.email : "",
             "questions": questions,
         });
 

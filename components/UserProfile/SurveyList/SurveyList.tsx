@@ -36,7 +36,7 @@ const SurveyList = (): ReactElement => {
     console.log("userSurveys", userSurveys);
 
     const deleteSurvey = (index: number) => {
-        const email: string= session.user.email;
+        const email: string= session? session.user.email : "";
 
         setUserSurveys(prev => prev.filter((_, ind) => ind !== index));
 

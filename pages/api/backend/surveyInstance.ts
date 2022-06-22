@@ -1,4 +1,4 @@
-import { ICreateSurvey } from "../../../redux/types/surveyTypes";
+import { ICreateSurvey, IGetSurvey } from "../../../redux/types/surveyTypes";
 import { IUserProvider, IUserResponse } from "../../../redux/types/userTypes";
 import { instance } from "./axiosInstance";
 
@@ -39,7 +39,7 @@ export const surveyApi = {
       }
     },
 
-    getSurveys: async (): Promise<ICreateSurvey[]> => {
+    getSurveys: async (): Promise<IGetSurvey[]> => {
       try {
         const response = await instance().get('/survey/surveys');
         console.log(`getSurveys: response `, response);
