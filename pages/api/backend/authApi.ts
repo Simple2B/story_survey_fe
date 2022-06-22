@@ -6,6 +6,10 @@ const formatRequestBody = (email: string, password: string) => {
   const formData = new FormData();
   formData.append("email", email);
   formData.append("password", password);
+  formData.append("client_id", ""); 
+  formData.append("client_secret", ""); 
+  formData.append("grant_type", "");
+  formData.append("scope", "");
   return formData;
 };
 
@@ -24,14 +28,14 @@ export const authApi = {
   ): Promise<any> => {
     try {
       const response = await authInstance.post(
-        "/login",
+        "/user/sign_in",
         formatRequestBody(username, password)
       );
-      console.log("POST [/login] response received successfully");
+      console.log("POST [/sign_in] response received successfully");
       return response.data;
     } catch (error: any) {
       // place to handle errors and rise custom errors
-      // console.log(`POST [/auth/login] error message: ${error.message}`);
+      // console.log(`POST [/auth/sign_in] error message: ${error.message}`);
       throw new Error(error.message);
     }
   },

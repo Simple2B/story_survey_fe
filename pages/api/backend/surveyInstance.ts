@@ -70,4 +70,20 @@ export const surveyApi = {
         throw new Error(error.message);
       }
     },
+
+    answerTheQuestion: async (data:{answer: string, question: {question: string, id: number, survey_id: number}, email: string }[]): Promise<void> => {
+      try {
+        const response = await instance().post('/answer/create_answer', data);
+        console.log(`answerTheQuestion: response `, response);
+  
+        const res = response.data;
+        console.log(`answerTheQuestion: response received successfully `, res);
+        return res;
+      } catch (error: any) {
+        // place to handle errors and rise custom errors
+        console.log(`POST: answerTheQuestion error message => ${error.message}`);
+        // console.log("error.response.data) => ", error.response.data);
+        throw new Error(error.message);
+      }
+    },
 }

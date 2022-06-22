@@ -35,10 +35,9 @@ export const instance = (
 export const authInstance: AxiosInstance = axios.create({
   baseURL: API_URI,
   headers: {
-    // "Content-Type": "application/json; charset=utf-8",
     "Content-Type": "multipart/form-data",
     'Access-Control-Allow-Origin' : '*',
-    "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+    // "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
     // "Allow": "GET, POST, HEAD",
   },
   
