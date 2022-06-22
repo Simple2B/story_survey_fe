@@ -1,0 +1,252 @@
+.homeContent{
+    cursor: pointer;
+    margin-top: 20px;
+    align-self: flex-start;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .homeContent .overviewBoxes{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 20px;
+    margin-bottom: 26px;
+  }
+  
+  .overviewBoxes .box{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* width: calc(100% / 4 - 15px); */
+    background: #fff;
+    padding: 25px 24px;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  }
+  
+  .editIcon {
+    cursor: pointer;
+    width: 21px;
+    height: 21px;
+    position: absolute;
+    z-index: 3;
+    right: 8px;
+    top: 8px;
+  }
+  
+  .overviewBoxes .boxTopic{
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .homeContent .box .number{
+    display: inline-block;
+    font-size: 35px;
+    margin-top: -6px;
+    font-weight: 500;
+  }
+  .homeContent .box .indicator{
+    display: flex;
+    align-items: center;
+    padding-bottom: 5px;
+  }
+  
+  .homeContent .box .indicator i{
+    height: 20px;
+    width: 20px;
+    background: #8FDACB;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+    margin-right: 5px;
+  }
+  
+  .box .indicator i.down{
+    background: #e87d88;
+  }
+  
+  .homeContent .box .indicator .text{
+    font-size: 12px;
+  }
+  
+  .homeContent .box .cart{
+    display: inline-block;
+    font-size: 32px;
+    height: 50px;
+    width: 50px;
+    background: #cce5ff;
+    line-height: 50px;
+    text-align: center;
+    color: #66b0ff;
+    border-radius: 12px;
+    margin: -15px 0 0 6px;
+  }
+  
+  .homeContent .box .cart.two{
+    color: #2BD47D;
+    background: #C0F2D8;
+  }
+  
+  .homeContent .box .cart.three{
+    color: #ffc233;
+    background: #ffe8b3;
+  }
+  
+  .homeContent .box .cart.four{
+    color: #e05260;
+    background: #f7d4d7;
+  }
+  
+  .homeContent .totalOrder{
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  .homeContent .salesBoxes{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .homeContent .salesBoxes .recentSales{
+    width: 65%;
+    background: #fff;
+    padding: 20px 30px;
+    margin: 0 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .homeContent .salesBoxes .salesDetails{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .salesBoxes .box .title{
+    font-size: 24px;
+    font-weight: 500;
+  }
+  .salesBoxes .salesDetails li.topic{
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .salesBoxes .salesDetails li{
+    list-style: none;
+    margin: 8px 0;
+  }
+  .salesBoxes .salesDetails li a{
+    font-size: 18px;
+    color: #333;
+    font-size: 400;
+    text-decoration: none;
+  }
+  .salesBoxes .box .button{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .salesBoxes .box .button a{
+    color: #fff;
+    background: #0A2558;
+    padding: 4px 12px;
+    font-size: 15px;
+    font-weight: 400;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  .salesBoxes .box .button a:hover{
+    background:  #0d3073;
+  }
+  
+  /* Right box */
+  .homeContent .salesBoxes .topSales{
+    width: 35%;
+    background: #fff;
+    padding: 20px 30px;
+    margin: 0 20px 0 0;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  .salesBoxes .topSales li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+  }
+  .salesBoxes .topSales li a img{
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-right: 10px;
+    background: #333;
+  }
+  .salesBoxes .topSales li a{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  .salesBoxes .topSales li .product,
+  .price{
+    font-size: 17px;
+    font-weight: 400;
+    color: #333;
+  }
+  
+  /* Responsive Media Query */
+  @media (max-width: 1150px) {
+    .homeContent .salesBoxes{
+      flex-direction: column;
+      align-items: center;
+      margin: 0 20px;
+    }
+    .homeContent .salesBoxes .box{
+      width: 100%;
+      overflow-x: scroll;
+      margin-bottom: 30px;
+    }
+    .homeContent .salesBoxes .topSales{
+      margin: 0;
+    }
+  }
+  
+  @media (max-width: 1000px) {
+    .overviewBoxes .box{
+      /* width: calc(100% / 2 - 15px); */
+      margin-bottom: 15px;
+    }
+  }
+  
+  @media (max-width: 700px) {
+  
+    .homeContent .salesBoxes .salesDetails{
+      width: 560px;
+    }
+  
+  }
+  
+  @media (max-width: 550px) {
+    .overviewBoxes .box{
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
+  
+  @media (max-width: 400px) {
+    .sidebar{
+      width: 0;
+    }
+    .sidebar.active{
+      width: 60px;
+    }
+  }
+  
