@@ -111,36 +111,62 @@ function Home() {
 
                     userSurveys.map((item, index) => {
                         return (
-                            <div className={styles.overviewBoxes} key={index} onClick={() => {
-                                openSurvey({
-                                    id: item.id,
-                                    title: item.title,
-                                    created_at: item.created_at,
-                                    user_id: item.user_id,
-                                    email: item.email,
-                                    questions: item.questions,
-                                }, index)
-                                setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: session? session.user.email : ""}} ));
-                            }}>
+                            <div className={styles.overviewBoxes} key={index}>
                                 <div className={styles.box}>
                                     <div className={styles.rightSide}>
                                         {/* <i className={styles.editIcon} onClick={deleteSurvey}><Image src={deleteIcon} height={30} width={30}/></i> */}
-                                        <div className={styles.number}>{item.title}</div>
-                                        {   
-                                            item.questions.length > 0 && (
-                                                item.questions.map((item, index) => {
-                                                    return (
-                                                        <div className={styles.containerStep}>
-                                                            <div className={styles.indicator} key={index}>
-                                                                <i className={`bx bx-right-arrow-alt`}></i>
-                                                                <span className={styles.text}>{item.question}</span>
-                                                            </div>
-
-                                                        </div>
+                                            <div className={styles.titleCard}>
+                                                <div className={styles.title}>{item.title}</div>
+                                            </div>
+                                            <div className={styles.containerQuestionList}>
+                                                {   
+                                                    item.questions.length > 0 && (
+                                                        item.questions.slice(0, 1).map((item, index) => {
+                                                            return (
+                                                                <div className={styles.containerStep}>
+                                                                    <div className={styles.indicator} key={index}>
+                                                                        <i className={`bx bx-right-arrow-alt`}></i>
+                                                                        <span className={styles.text}>{item.question}</span>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        })
                                                     )
-                                                })
-                                            )
-                                        }
+                                                }
+                                                <div className={styles.hideContainerQuestion}>
+                                                    {   
+                                                        item.questions.length > 0 && (
+                                                            item.questions.slice(1).map((item, index) => {
+                                                                return (
+                                                                    <div className={styles.containerStep}>
+                                                                        <div className={styles.indicator} key={index}>
+                                                                            <i className={`bx bx-right-arrow-alt`}></i>
+                                                                            <span className={styles.text}>{item.question}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            })
+                                                        )
+                                                    }
+                                                </div>
+                                                
+                                            </div>
+                                    </div>
+                                    <div className="">
+                                        <a href="#" className="card-link">survey link</a>
+                                        <a href="#" className="card-link" onClick={() => {
+                                                openSurvey({
+                                                    id: item.id,
+                                                    title: item.title,
+                                                    created_at: item.created_at,
+                                                    user_id: item.user_id,
+                                                    email: item.email,
+                                                    questions: item.questions,
+                                                }, index)
+                                                setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: session? session.user.email : ""}} ));
+                                            }}>
+                                                show more
+                                        </a>
                                     </div>
                                 </div>
                             </div>

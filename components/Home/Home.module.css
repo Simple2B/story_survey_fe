@@ -1,6 +1,6 @@
 .homeContent{
     cursor: pointer;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     align-self: flex-start;
     position: relative;
     display: flex;
@@ -14,20 +14,29 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 0 20px;
+    /* padding: 0 20px; */
     margin-bottom: 26px;
   }
   
   .overviewBoxes .box{
     position: relative;
+    width: 18rem;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* width: calc(100% / 4 - 15px); */
+    /* width: calc(100% - 15px); */
+    max-height: auto;
+    height: 10rem;
     background: #fff;
-    padding: 25px 24px;
+    padding: 15px 14px;
     border-radius: 12px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  }
+
+  .rightSide {
+    width: 100%;
+    height: 100%;
   }
   
   .editIcon {
@@ -45,12 +54,42 @@
     font-weight: 500;
   }
   
-  .homeContent .box .number{
+  .homeContent .box .titleCard{
+    width: 260px;
+    text-align: justify;
+    align-self: flex-start;
     display: inline-block;
-    font-size: 35px;
-    margin-top: -6px;
+    /* font-size: 25px; */
+    /* margin-top: -6px;
+    margin-bottom: 10px; */
+    /* padding: 10px auto; */
     font-weight: 500;
+
+    cursor: pointer;
+    /* white-space: nowrap; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: overflow .3s ease-in-out;
   }
+
+  .homeContent .box .titleCard:hover {
+    
+    white-space: wrap;
+    overflow: visible;
+    overflow-wrap: break-word;
+  }
+
+  .containerQuestionList {
+    padding-top: 10px;
+    width: 100%;
+    height: auto;
+    display: inline-block;
+  }
+
+  .hideContainerQuestion {
+    visibility: hidden;
+  }
+
   .homeContent .box .indicator{
     display: flex;
     align-items: center;
@@ -58,8 +97,8 @@
   }
   
   .homeContent .box .indicator i{
-    height: 20px;
-    width: 20px;
+    height: 15px;
+    width: 15px;
     background: #8FDACB;
     line-height: 20px;
     text-align: center;
@@ -310,6 +349,9 @@
   
   /* Responsive Media Query */
   @media (max-width: 1150px) {
+    .homeContent {
+      /* margin-top: 100px; */
+    }
     .homeContent .salesBoxes{
       flex-direction: column;
       align-items: center;
@@ -342,7 +384,7 @@
   
   @media (max-width: 550px) {
     .overviewBoxes .box{
-      width: 100%;
+      /* width: 100%; */
       margin-bottom: 15px;
     }
   }
