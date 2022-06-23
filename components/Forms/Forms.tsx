@@ -68,7 +68,7 @@ function Forms() {
     };
 
     const handleOAuthSignIn = (provider) => () => {
-        // console.log("handleOAuthSignIn => provider: ", provider);
+        console.log("handleOAuthSignIn => provider: ", provider);
         signIn(provider);        
     };
 
@@ -261,15 +261,6 @@ function Forms() {
                                    onChange={(e) => handleOnchange(e, setEmail, setEmailErr, "Email")}
                             />
                         </div>
-                        <div className={styles.loginboxTextbox}>
-                           {passError.length > 0 && <div className={styles.errorMessage}>{passError}</div>}
-                            <input type="text"
-                                   className={styles.formControl}
-                                   value={password}
-                                   placeholder="Password"
-                                   onChange={(e) => handleOnchange(e, setPassword, setPassError, "Password")}
-                            />
-                        </div>
                         {/* <div className={styles.loginboxForgot}>
                             <a href="">Forgot Password?</a>
                         </div> */}
@@ -281,52 +272,11 @@ function Forms() {
                                    disabled={isSubmitLogin}
                             />
                         </div>
-                        <div className={styles.loginboxSignup} onClick={() => handleToggleForm("SignUp")}>
-                            <a href="#register.html">Sign Up With Email</a>
-                        </div>
-                    </div>
-                    {/* <div className={styles.logobox}>
-                    </div> */}
-                </div>
-            }
-
-            {
-                form === "SignUp" && <div className={`${styles.loginContainer} ${styles.animated} ${styles.fadeInDown} ${styles.bootstrap} ${styles.snippets} ${styles.bootdeys}`}>
-                    <div className={`${styles.loginbox} ${styles.bgWhite} ${styles.signUpContainer}`}>
-                        <div className={styles.loginboxTitle}>SIGN UP</div>
-
-                        <div className={styles.hiddenSocialTitle}>Connect with Your Social Accounts</div>
-
-                        {/* <div className={styles.loginboxTextbox}>
-                            <input type="text" className={styles.formControl} placeholder="First name"/>
-                        </div> */}
-                        <div className={styles.loginboxTextbox}>
-                            {userNameError.length > 0 && <div className={styles.errorMessage}>{userNameError}</div>}
-                            <input type="text" className={styles.formControl} value={username} onChange={(e) => handleOnchange(e, setUserName, setUseNameError, "User name")} placeholder="User name"/>
-                        </div>
-                        <div className={styles.loginboxTextbox}>
-                            {emailError.length > 0 && <div className={styles.errorMessage}>{emailError}</div>}
-                            <input type="text" className={styles.formControl} value={email} onChange={(e) => handleOnchange(e, setEmail, setEmailErr, "Email")} placeholder="Email"/>
-                        </div>
-                        <div className={styles.loginboxTextbox}>
-                            {passwordError.length > 0 && <div className={styles.errorMessage}>{passwordError}</div>}
-                            <input type="text" className={passwordError.length > 0 ? `${styles.formControl} ${styles.errorSaleInput}` : `${styles.formControl}`}  value={passwordCreate} onChange={handleNewPassword} placeholder="Password"/>
-                        </div>
-
-                        <div className={styles.loginboxTextbox}>
-                            {error.length > 0 && <div className={styles.errorMessage}>{error}</div>}
-                            <input type="text" className={error.length > 0 ? `${styles.formControl} ${styles.errorSaleInput}` : `${styles.formControl}`} value={passwordConfirm} onChange={handlePasswordConfirm} placeholder="Confirm password"/>
-                        </div>
-
-                        <div className={styles.loginboxSubmit}>
-                            <input type="button" onClick={handleCreateUser} className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={isSubmitRegistration} value="Registration"/>
-                        </div>
-                        <div className={styles.loginboxSignup}  onClick={() => handleToggleForm("SignIn")}>
-                            <a href="#login.html">Sign In</a>
-                        </div>
                     </div>
                 </div>
             }
+
+            
         </div>
     )
 }
