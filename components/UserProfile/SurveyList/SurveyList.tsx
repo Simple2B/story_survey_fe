@@ -76,7 +76,7 @@ const SurveyList = (): ReactElement => {
                                                     item.questions.length > 0 && (
                                                         item.questions.slice(0, 1).map((item, index) => {
                                                             return (
-                                                                <div className={styles.containerStep}>
+                                                                <div className={styles.containerStep} key={index}>
                                                                     <div className={styles.indicator} key={index}>
                                                                         <i className={`bx bx-right-arrow-alt`}></i>
                                                                         <span className={styles.text}>{item}</span>
@@ -88,10 +88,10 @@ const SurveyList = (): ReactElement => {
                                                 }
                                                 <div className={styles.hideContainerQuestion}>
                                                     {   
-                                                        item.questions.length > 0 && (
+                                                        item.questions.length > 1 && (
                                                             item.questions.slice(1).map((item, index) => {
                                                                 return (
-                                                                    <div className={styles.containerStep}>
+                                                                    <div className={styles.containerStep} key={index}>
                                                                         <div className={styles.indicator} key={index}>
                                                                             <i className={`bx bx-right-arrow-alt`}></i>
                                                                             <span className={styles.text}>{item}</span>

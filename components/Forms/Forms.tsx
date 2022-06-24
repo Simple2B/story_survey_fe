@@ -1,8 +1,8 @@
-import { signIn } from "next-auth/react";
+// const { useSession } from 'next-auth/client';
+import { signIn, useSession } from "next-auth/react";
 import React, {useState} from "react";
 import { clientApi } from "../../pages/api/backend/userInstance";
 import { authApi } from "../../pages/api/backend/authApi";
-import { IUserProvider } from "../../redux/types/userTypes";
 import { useActions } from "../../redux/useActions";
 import styles from "./Forms.module.css";
 import { useTypedSelector } from "../../redux/useTypeSelector";
@@ -27,7 +27,7 @@ const providers = [
 ];
 
 function Forms() {
-    const {login } = useActions()
+    const { login } = useActions();
     const [form, setForm] = useState("SignIn");
 
     const [emailError, setEmailErr] = useState("");
@@ -48,28 +48,13 @@ function Forms() {
     const isSubmitRegistration = emailError.length > 0 || userNameError.length > 0 || passwordError.length > 0 || error.length > 0;
     const isSubmitLogin = emailError.length > 0 || passError.length > 0;
 
-    const isLogin = useTypedSelector((state) => state.auth.loggedIn);
-    const { push } = useRouter();
-    console.log("isLogin", isLogin)
-
-    const handleToggleForm = (e) => {
-        setForm(e);
-        setEmail("");
-        setPassword("");
-        setUserName("");
-        setPasswordCreate("");
-        setPasswordConfirm("");
-        setEmailErr("");
-        setPassError("");
-        setUseNameError("");
-        setPasswordErr("");
-        setErr("");
-        setPasswordConfirm("");
-    };
+    // const isLogin = useTypedSelector((state) => state.auth.loggedIn);
+    // console.log("isLogin", isLogin)
+    
 
     const handleOAuthSignIn = (provider) => () => {
         console.log("handleOAuthSignIn => provider: ", provider);
-        signIn(provider);        
+        signIn(provider);  
     };
 
     const handleOnchange = (e, setFunc, setErr, passValue) => {
@@ -101,20 +86,17 @@ function Forms() {
         e.preventDefault();
         console.log("Forms: handleSubmit => ", {
             'email': email,
-            'password': password,
         });
 
         if (email.length === 0) {
             setEmailErr("Email is empty")
         };
 
-        if (password.length === 0) {
-            setPassError("Password is empty")
-        };
+        signIn('email', {email, redirect: false});
 
-        login({username: email, password: password });
+        // login({username: email, password: password });
 
-        isLogin && push("/user_profile/user")
+        // isLogin && push("/user_profile/user")
         
         // const userLogin = async(email: string, password: string) => {
         //     const loginUser = await authApi.login(email, password)
@@ -124,113 +106,39 @@ function Forms() {
         // userLogin(email, password);
     };
 
-    const handleCreateUser = (): void => {
-        if (email.length === 0) {
-            setEmailErr("Email is empty")
-        };
+    // const handleCreateUser = (): void => {
+    //     if (email.length === 0) {
+    //         setEmailErr("Email is empty")
+    //     };
 
-        if (username.length === 0) {
-            setUseNameError("User name is empty")
-        };
+    //     if (username.length === 0) {
+    //         setUseNameError("User name is empty")
+    //     };
 
-        if (passwordCreate.length === 0) {
-            setPasswordErr("Password is empty")
-        };
+    //     if (passwordCreate.length === 0) {
+    //         setPasswordErr("Password is empty")
+    //     };
 
-        if (passwordConfirm.length === 0) {
-            setErr("Confirm password is empty")
-        };
+    //     if (passwordConfirm.length === 0) {
+    //         setErr("Confirm password is empty")
+    //     };
 
-        const userData = {
-            username: username,
-            email: email,
-            password: passwordCreate,
-        };
-        console.log("createUser: userData => " , userData);
+    //     const userData = {
+    //         username: username,
+    //         email: email,
+    //         password: passwordCreate,
+    //     };
+    //     console.log("createUser: userData => " , userData);
 
-        const createUser = async(createUser: IUserProvider) =>  {
-            const user = await clientApi.createUserProvider(createUser);
-            console.log("createUser: user => " , user); 
-            setForm("SignIn");
-            return user;
-        }
+    //     const createUser = async(createUser: IUserProvider) =>  {
+    //         const user = await clientApi.createUserProvider(createUser);
+    //         console.log("createUser: user => " , user); 
+    //         setForm("SignIn");
+    //         return user;
+    //     }
         
-        createUser(userData);
-    };
-
-    const handleNewPassword = (e: {
-        target: { value: string };
-      }) => {
-        setPasswordCreate(e.target.value);
-    
-        const newOwnerPassword = e.target.value;
-
-        const specialCharRegExp = /(?=.*?[#?!@$%^&*-])/;
-        const minLengthRegExp   = /.{8,}/;
-        const passwordLength = newOwnerPassword.length;
-          
-        const specialCharPassword = specialCharRegExp.test(newOwnerPassword);
-        const minLengthPassword = minLengthRegExp.test(newOwnerPassword);
-        let errMsg ="";
-
-        if (newOwnerPassword !== undefined) {
-            errMsg="Password is empty";
-        }
-        if (passwordLength===0){
-            errMsg="Password is empty";
-        } else if (!specialCharPassword){
-            errMsg="At least one Special Characters";
-        } else if (!minLengthPassword){
-            errMsg="At least minimum 8 characters";
-        } else {
-            errMsg="";
-        }
-        
-        console.log("errMsg ", errMsg)
-          
-        if (errMsg.length === 0) {
-            setPasswordErr("");
-            setPasswordCreate(newOwnerPassword);
-        } else {
-            setPasswordErr(errMsg);
-        }
-      };
-
-    const handlePasswordConfirm = (e: {
-        target: { value: string };
-      }) => {
-        console.log("handlePasswordConfirm ", e.target.value);
-        console.log("passwordCreate ", passwordCreate);
-        
-        setPasswordConfirm(e.target.value);
-
-        const confirmPass = e.target.value;
-        let errMessage = "";
-
-        if (passwordCreate !== undefined) {
-            errMessage="Password is empty";
-        }
-
-        if (confirmPass !== undefined) {
-            errMessage="Confirm password is empty";
-        }
-
-        if (confirmPass.length === 0) {
-            errMessage="Please enter Confirm Password."
-            setErr("Please enter Confirm Password.");
-          } else if (passwordCreate.length > 0 && confirmPass !== passwordCreate) {
-            errMessage="Password and Confirm Password does not match."
-          } else {
-            errMessage="";
-          }
-
-          if (errMessage.length === 0) {
-            setErr("");
-            setPasswordConfirm(confirmPass);
-          } else {
-            setErr(errMessage);
-          }
-    };
+    //     createUser(userData);
+    // };
 
     return (
         <div className={styles.modalBody}>

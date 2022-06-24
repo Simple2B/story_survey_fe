@@ -5,7 +5,7 @@
     left: 0;
     width: 100%;
     padding: 0rem 2rem;
-    padding-top: 0.75rem;
+    /* padding-top: 0.75rem; */
     background: var(--offWhite);
     z-index: 3;
 }
