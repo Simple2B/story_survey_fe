@@ -31,7 +31,7 @@ export const authApi = {
     try {
       const response = await authInstance.post(
         "/user/sign_in",
-        formatRequestBody(email, password)
+        {email, password}
       );
       console.log("POST [/sign_in] response received successfully");
       return response.data;

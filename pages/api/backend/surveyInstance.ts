@@ -1,5 +1,5 @@
 import { ICreateSurvey, IGetSurvey } from "../../../redux/types/surveyTypes";
-import { IUserProvider, IUserResponse } from "../../../redux/types/userTypes";
+import { IUserResponse } from "../../../redux/types/userTypes";
 import { instance } from "./axiosInstance";
 
 export const surveyApi = {
