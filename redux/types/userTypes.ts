@@ -1,9 +1,9 @@
-export interface IUserProvider {
-    email?: string;
-    image?: string;
-    username?: string;
-    password?: string;
-}
+// export interface IUserProvider {
+//     email?: string;
+//     image?: string;
+//     username?: string;
+//     password?: string;
+// }
 
 // state
 // export interface IUserState {
