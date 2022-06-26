@@ -1,4 +1,5 @@
-import { IUserProvider, IUserResponse } from "../../../redux/types/userTypes";
+import { IUserProvider } from "../../../redux/types/authTypes";
+import {  IUserResponse } from "../../../redux/types/userTypes";
 import { instance } from "./axiosInstance";
 
 export const clientApi = {
