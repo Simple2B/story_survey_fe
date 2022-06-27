@@ -5,8 +5,9 @@ export interface ICreateSurvey {
     // question: string;
     id?: number,
     title: string,
+    description?: string,
     created_at?: string;
-    user_id: number,
+    user_id?: number,
     email: string,
     questions: string[],
 }
@@ -14,9 +15,11 @@ export interface ICreateSurvey {
 export interface IGetSurvey {
         // question: string;
         id?: number,
+        uuid?: string,
         title: string,
+        description?: string,
         created_at?: string;
-        user_id: number,
-        email: string,
+        user_id?: number,
+        email?: string,
         questions: IQuestion[],
     }

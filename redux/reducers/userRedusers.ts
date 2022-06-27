@@ -1,5 +1,5 @@
-import { AuthAction, AuthActionTypes } from "../types/authTypes";
-import {IUserProvider, IUserResponse, UserAction, UserActionTypes } from "../types/userTypes";
+import { AuthActionTypes } from "../types/authTypes";
+import {IUserResponse, UserAction, UserActionTypes } from "../types/userTypes";
 
 const initialState = {
   id: null,
@@ -13,12 +13,12 @@ const initialState = {
 
 export const userReducer = (
   state = initialState,  
-  action: AuthAction,
+  action: UserAction,
 ): IUserResponse => {
   switch (action.type) {
-    case AuthActionTypes.CREATE_CURRENT_USER:
+    case UserActionTypes.SET_CURRENT_USER:
       return state;
-    case AuthActionTypes.GET_CURRENT_USER:
+    case UserActionTypes.GET_CURRENT_USER:
       return {
         ...state,
         ...action.payload,

@@ -11,12 +11,12 @@
 // }
 // action types
 export enum UserActionTypes {
-  CREATE_CURRENT_USER = "CREATE_CURRENT_USER",
+  SET_CURRENT_USER = "SET_CURRENT_USER",
   GET_CURRENT_USER = "GET_CURRENT_USER",
 }
 
 interface ISetUserAction {
-  type: UserActionTypes.CREATE_CURRENT_USER;
+  type: UserActionTypes.SET_CURRENT_USER;
 }
 // interface ILoginRequestSuccessAction {
 //   type: AuthActionTypes.LOGIN_SUCCESS;
@@ -37,10 +37,10 @@ export type UserAction = ISetUserAction | IGetUserAction;
 
 // object types
 export interface IUserResponse {
-  id: number;
-  created_at: string;
-  email: string;
-  image: string;
-  role: string;
-  username: string;
+  id?: number;
+  created_at?: string;
+  email?: string;
+  image?: string;
+  role?: string;
+  username?: string;
 }
