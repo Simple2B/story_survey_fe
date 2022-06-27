@@ -116,6 +116,8 @@
 
 .hideContainerQuestion {
   visibility: hidden;
+  height: 60px;
+  overflow: scroll;
 }
 
 .homeContent .box .indicator{
@@ -294,6 +296,7 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+  overflow-y: scroll;
   /* height: 100vh; */
 }
 

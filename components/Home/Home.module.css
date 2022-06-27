@@ -97,6 +97,8 @@
 
   .hideContainerQuestion {
     visibility: hidden;
+    height: 60px;
+    overflow: scroll;
     transition: all .5s ease-out;
   }
 
@@ -325,6 +327,7 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+  overflow-y: scroll;
   /* height: 100vh; */
 }
 
