@@ -3,43 +3,36 @@ import styles from './signin.module.css';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Forms from "../../components/Forms/Forms";
+import { IUserResponse } from "../../redux/types/userTypes";
+import { useActions } from "../../redux/useActions";
 // import { useActions } from "../../redux/useActions";
 
-function authFetch(token: unknown, url: RequestInfo | URL, options: any ) {
-  options.headers =  options.headers || {};
-  options.headers.Authorization = `Bearer ${token}`;
-
-  return fetch( url, options);
-}
-
 const SignIn = () => {
+  const {setCurrentUser} = useActions();
   const { data: session, status } = useSession();
   const { push } = useRouter();
 
 
   if (status === 'loading') <div>Checking Authentication ...</div>;
-  // const { createUser } = useActions();
 
   if (session){ 
-    const fetchWithToken = (url: RequestInfo | URL, options: RequestInit) => {
-        return authFetch(session.acessToken, url, options)
-    }
     
     setTimeout(() => {
       push('/user_profile/user');
     }, 1500);
-    const userRole: any  = session.profile
+    const userProfile: any  = session.profile
     console.log("SignIn: session", session);
-    console.log("SignIn: user ROLE => ", userRole.role);
 
-    // const userProvide = {
-    //   email: session ? session.user.email : "" ,
-    //   image: session.user.image,
-    //   username: session.user.name,
-    //   password: session.user.email,
-    // }
+    const currentUser: IUserResponse = {
+      id: userProfile.id,
+      created_at: userProfile.created_at,
+      email: session.user.email,
+      image: session.user.image,
+      role: userProfile.role,
+      username: session.user.name,
+    }
 
-    // createUser(userProvide);
+    setCurrentUser(currentUser);
 
     return <h3 className={styles.centerContainer}>Signed in {session.user.email}</h3>
   };
