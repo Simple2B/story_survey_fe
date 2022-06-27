@@ -10,15 +10,24 @@ import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { ICreateSurvey } from "../../../redux/types/surveyTypes";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useTypedSelector } from "../../../redux/useTypeSelector";
+import { IUserResponse } from "../../../redux/types/userTypes";
+import { stringify } from "querystring";
 
+const initialStateProfile = {
+    id: null,
+    created_at: "",
+    email: "",
+    image: "",
+    role: "",
+    username: "",
+};
 
 const CreateSurvey = (): ReactElement => {
-    const {user} = useStore().getState();
 
     const { data: session} = useSession();
-    const { push } = useRouter();
 
-    console.log("session", session)
+    const { push } = useRouter();
 
     const [isFormCreateOpen, setIsFormCreateOpen] = useState<boolean>(false);
 
@@ -30,6 +39,15 @@ const CreateSurvey = (): ReactElement => {
 
     const [questions, setQuestions] = useState<string[]>([]);
 
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
+    const [description, setDescription] = useState<string>("");
+
+    if (isSuccess === true) {
+        setTimeout(() => {
+            setIsSuccess(false)
+        }, 1500);
+    };
+    
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
 
@@ -55,7 +73,11 @@ const CreateSurvey = (): ReactElement => {
         }
     };
 
-    
+    const handleOnchangeDescription = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setDescription(e.target.value);
+    };
+
+
     const openCreateSurvey = () => {
         setIsFormCreateOpen(!isFormCreateOpen);
         setQuestion("");
@@ -93,43 +115,44 @@ const CreateSurvey = (): ReactElement => {
             setQuestionError(errMsg);
         }
     };
-
-    console.log("question", question);
-
-    console.log("add question", questions);
     
     const deleteQuestion = (index: number) => {
-        setQuestions([...questions.filter((item, ind) => index !==ind)]);
+        setQuestions([...questions.filter((_, ind) => index !==ind)]);
     };
 
     const createSurvey = () => {
+        const profile: IUserResponse = session.profile;
+
         if (title.length === 0) {
             setTitleError("Title is empty");
         };
 
         console.log("survey ", {
             "title": title,
-            "user_id": user.id,
-            "email": session? session.user.email : "",
+            "description": description,
+            "user_id": profile.id,
+            "email": session.user.email,
             "questions": questions,
         });
 
         const data: ICreateSurvey = {
             "title": title,
-            "user_id": user.id,
-            "email": user.email,
+            "description": description,
+            "user_id": profile.id,
+            "email": session.user.email,
             "questions": questions,
         }
 
         const saveSurveyToDB = async(data: ICreateSurvey) => {
-            const newSurvey = surveyApi.createSurvey(data);
-            console.log("newSurvey =>>> ", newSurvey)
+            const newSurvey = await surveyApi.createSurvey(data);
+            console.log("newSurvey =>>> ", newSurvey);
+            setIsSuccess(true);
         };
         saveSurveyToDB(data);
         setIsFormCreateOpen(false);
         push('/user_profile/user');
+    };
 
-    }
 
     return  (
         <div className={styles.container}>
@@ -156,6 +179,10 @@ const CreateSurvey = (): ReactElement => {
                                         placeholder="Title"
                                         onChange={handleOnchange}
                                     />
+                                </div>
+
+                                <div className={styles.titleContainer}>
+                                    <textarea placeholder="Description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>{description}</textarea>
                                 </div>
 
                                 <div className={styles.questionContainer}>
@@ -185,6 +212,11 @@ const CreateSurvey = (): ReactElement => {
                 }
 
             </div>
+            {isSuccess && (
+                <div className={styles.isSuccess} onClick={() => setIsSuccess(false)}>
+                    <div>Survey added successfully</div>
+                </div>
+            )}
         </div>
     );
 };
