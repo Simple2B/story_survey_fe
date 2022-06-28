@@ -53,7 +53,6 @@ function Forms() {
     
 
     const handleOAuthSignIn = (provider) => () => {
-        console.log("handleOAuthSignIn => provider: ", provider);
         signIn(provider);  
     };
 
