@@ -8,6 +8,8 @@
     --primaryColor: rgb(176, 24, 66, .7);
     --mainWhite: #fff;
     --offWhite: #f7f7f7;
+    --success: green;
+    --successShadow: 2px 5px 3px 0px green;
     --mainBlack: rgb(26, 59, 114);
     --mainBackground: rgba(26, 59, 114, .3);
     --mainGrey: #ececec;

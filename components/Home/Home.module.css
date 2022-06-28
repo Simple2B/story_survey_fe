@@ -1,3 +1,8 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
 .homeContent{
     cursor: pointer;
     /* margin-top: 20px; */
@@ -30,6 +35,7 @@
     height: 10rem;
     background: #fff;
     padding: 15px 14px;
+    padding-left: 20px;
     border-radius: 12px;
     box-shadow: 0 5px 10px rgba(0,0,0,0.1);
   }
@@ -59,7 +65,7 @@
     width: 260px;
     text-align: justify;
     align-self: flex-start;
-    display: inline-block;
+    /* display: inline-block; */
     /* font-size: 25px; */
     /* margin-top: -6px;
     margin-bottom: 10px; */
@@ -74,7 +80,6 @@
   }
 
   .homeContent .box .titleCard:hover {
-    
     white-space: wrap;
     overflow: visible;
     overflow-wrap: break-word;
@@ -86,8 +91,42 @@
     display: inline-block;
   }
 
+  .containerStep {
+    position: relative;
+  }
+
   .hideContainerQuestion {
     visibility: hidden;
+    height: 60px;
+    overflow: scroll;
+    transition: all .5s ease-out;
+  }
+
+  .containerQuestionList:hover .hideContainerQuestion {
+    visibility: visible;
+
+  }
+
+  .btnShowMore {
+    position: absolute;
+    top: -3px;
+    left: -13px;
+  }
+
+  .btnShowMore .up {
+    transform: rotate(-135deg);
+    transition: all .3s ease-out;
+  }
+
+  .containerQuestionList:hover .btnShowMore .up {
+    transform: rotate(45deg);
+  }
+
+  .arrow {
+    border: solid #8FDACB;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
   }
 
   .homeContent .box .indicator{
@@ -97,8 +136,8 @@
   }
   
   .homeContent .box .indicator i{
-    height: 15px;
-    width: 15px;
+    height: 10px;
+    width: 10px;
     background: #8FDACB;
     line-height: 20px;
     text-align: center;
@@ -241,36 +280,91 @@
     color: #333;
   }
 
-  .modalWindow {
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--mainOpacity);
-  }
+.containerLink {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .modal {
-    position: relative;
-    width: 80%;
-    height: 80%;
-    background-color: var(--mainWhite);
-    border-radius: 15px;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    /* height: 100vh; */
-  }
+.containerIconLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  .title {
-    font-size: 22px;
-    /* align-self: flex-start; */
-  }
+.iconLink {
+  width: 19px;
+  height: 19px;
+  margin-right: 7px;
+  cursor: pointer;
+}
+
+.hideContainerLink {
+  display: none;
+}
+
+.modalWindow {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--mainOpacity);
+}
+
+.modal {
+  position: relative;
+  width: 80%;
+  height: 80%;
+  background-color: var(--mainWhite);
+  border-radius: 15px;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: scroll;
+  /* height: 100vh; */
+}
+
+.title {
+  font-size: 22px;
+  /* align-self: flex-start; */
+}
+
+.isSuccess {
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--success);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.isSuccess div {
+  cursor: pointer;
+  text-transform: uppercase;
+  word-spacing: 5px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  width: 70vw;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: var(--mainWhite) 1px solid;
+  box-shadow: -10px 0px 13px -7px var(--mainOpacity), 10px 0px 13px -7px var(--mainOpacity), 5px 5px 15px 5px var(--mainOpacity);
+  border-radius: 10px;
+  background-color: var(--offWhite);
+}
 
   .containerQuestion {
     position: relative;

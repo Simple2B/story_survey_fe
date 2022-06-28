@@ -12,10 +12,12 @@ export default function App({
   console.log("_app: session", session);
   
   return (
-    <Provider store={store}>
+    
       <SessionProvider session={session}>
+        <Provider store={store}>
           <Component {...pageProps} />
+        </Provider>
       </SessionProvider>
-    </Provider>
+    
   )
 }
