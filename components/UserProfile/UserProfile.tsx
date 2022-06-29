@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./UserProfile.module.css";
 import settingsIcon from "../../styles/icons/icons8-settings-64.png";
@@ -9,10 +9,11 @@ import messageIcon from "../../styles/icons/icons8-messages-64.png";
 import singOutIcon from "../../styles/icons/icons8-logout-64.png";
 import SectionDashboard from "./SectionDashboard/SectionDashboard";
 import { useRouter } from "next/router";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import ProfileNavbar from "./ProfileNavBar";
 import CreateSurvey from "./CreateSurvey/CreateSurvey";
 import SurveyList from "./SurveyList/SurveyList";
+import Setting from "./Setting/Setting";
 
 const SIGN_OUT = 'sing out';
 
@@ -55,7 +56,7 @@ const menuIcons = [
     href: '#setting',
     classIcon: "",
     isIconActive: false,
-    menuComponent: <div className={styles.containerCentered}>Setting</div>,
+    menuComponent: <Setting/>,
   },
   {
     image: singOutIcon,
@@ -69,7 +70,24 @@ const UserProfile = () => {
   const [isActive, setActive] = useState(false);
   const [icons, setMenuIcons] = useState(menuIcons);
   const [headerName, setHeaderName] = useState("Surveys list");
-  const { push } = useRouter();
+  const { push, asPath } = useRouter();
+  const { data: session} = useSession();
+
+  // console.log(" asPath ", asPath.split('?')[1].split('&')[0] === 'success=true');
+
+  useEffect(() => {
+    if (asPath.includes('success=true')) {
+      setMenuIcons(icons.map((item, index) => {
+        if (item.href === "#setting") {
+          item.isIconActive = true
+        } else {
+          item.isIconActive = false
+        }
+        return item;
+      }))
+    }
+
+  }, [session])
  
 
   const handleClick = () => {
@@ -83,7 +101,7 @@ const UserProfile = () => {
       }
       if ( index === i && icon.classIcon.length === 0) {
         setHeaderName(icon.name);
-        icon.classIcon = styles.active;
+        // icon.classIcon = styles.active;
         icon.isIconActive = true;
       } else {
         icon.classIcon = "";
