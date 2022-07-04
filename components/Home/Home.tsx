@@ -28,6 +28,7 @@ function Home() {
         user_id: 0,
         email: "",
         questions: [],
+        successful_message: "",
     }]);
 
     const [answer, setAnswer] = useState<string>("");
@@ -50,6 +51,7 @@ function Home() {
         uuid: "",
         title: "",
         description: "",
+        successful_message: "",
         created_at: "",
         user_id: 0,
         email: "",
@@ -77,6 +79,7 @@ function Home() {
                     user_id: l.user_id,
                     email: l.email,
                     questions: l.questions,
+                    successful_message: l.successful_message,
                 }}) 
                 setUserSurveys(listUserSurvey);
                 console.log("list", list);
@@ -89,7 +92,7 @@ function Home() {
     },[session]);
 
 
-    const openSurvey = (data: React.SetStateAction<{ id: number; uuid: string; title: string; description: string; created_at: string; user_id: number; email: string; questions: { question: string; id: number; survey_id: number; }[]; }>, index: number) => {
+    const openSurvey = (data: React.SetStateAction<{ id: number; uuid: string; title: string; description: string; successful_message: string; created_at: string; user_id: number; email: string; questions: { question: string; id: number; survey_id: number; }[]; }>, index: number) => {
         setOpenDescription(!isOpenDescription);
         setSurvey(data);
         setIndexSurvey(index);
@@ -208,6 +211,7 @@ function Home() {
                                                             user_id: item.user_id,
                                                             email: item.email,
                                                             questions: item.questions,
+                                                            successful_message: item.successful_message,
                                                         }, index)
                                                         setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: item.email}} ));
                                                     }}
@@ -292,7 +296,8 @@ function Home() {
             </Wrapper>
             {success && (
                     <div className={styles.isSuccess} onClick={() => setSuccess(!success)}>
-                        <div>answers added successfully</div>
+                        {survey.successful_message.length === 0 && <div>answers added successfully</div>}
+                        {survey.successful_message.length > 0 && <div>{survey.successful_message}</div>}
                     </div>
             )}
         </div>
