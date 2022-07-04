@@ -140,9 +140,11 @@ function Home() {
         // saveQuestion(data);
         // setIsOpen(!isOpen);
     };
+
     // TODO: create link for prod
     // process.env.COPY_LINK
-    const link = 'http://localhost:3000';
+    // const link = 'http://localhost:3000';
+    const link = 'https://survey.simple2b.net';
 
     
     return (
