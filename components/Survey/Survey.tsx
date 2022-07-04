@@ -93,7 +93,7 @@ const Survey = ({surveyId}) => {
     
     
     const data = [...answers];
-    console.log("answers data => ", data);
+    // console.log("answers data => ", data);
 
     const saveQuestion = async(answersInfo: { question: any; answer: any; email: string; }[]) => {
         const questions = await surveyApi.answerTheQuestion(answersInfo);

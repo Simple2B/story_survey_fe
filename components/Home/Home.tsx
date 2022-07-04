@@ -124,11 +124,10 @@ function Home() {
 
     };
 
-    console.log("answers ", answers);
+    // console.log("answers ", answers);
 
 
     const answerTheQuestion = () => {
-        console.log("answers ", answers);
         
         // const data = [...answers];
         // const saveQuestion = async(answersInfo: { question: any; answer: any; email: string; }[]) => {
