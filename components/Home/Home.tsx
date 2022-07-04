@@ -9,14 +9,23 @@ import Wrapper from "../common/Wrapper/Wrapper";
 import styles from "./Home.module.css";
 import deleteIcon from "../../styles/icons/icons8-cancel-64.png";
 import { Navigation, Pagination} from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import iconLink from "../../styles/icons/icons8-link-64.png";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
+
+interface IAnswer  {
+    question: string, 
+    answer: string, 
+    email: string
+}
+
 function Home() {
+
+    const swiper = useSwiper();
 
     const {data: session } = useSession();
     const { push } = useRouter();
@@ -31,9 +40,14 @@ function Home() {
         successful_message: "",
     }]);
 
-    const [answer, setAnswer] = useState<string>("");
+    const [answerInfo, setAnswerInfo] = useState<IAnswer>({
+        question: "", 
+        answer: "", 
+        email: ""
+    });
 
     const [answers, setAnswers] = useState([{question: null, answer: null, email: ""}]);
+    const [answer, setAnswer] = useState<string>("");
 
     const [slide, setSlide] = useState(null);
     const [indexSurvey, setIndexSurvey] = useState(null);
@@ -99,7 +113,16 @@ function Home() {
     };
 
     const handleChangeAnswer = (e: { target: { value: React.SetStateAction<string>; }; }, ind: number) => {
-        setAnswers(answers.map((item, index) => index === ind ? {question: item.question, answer: e.target.value, email: item.email} : item));  
+        let answer =  e.target.value
+        // setAnswers(answers.map((item, index) => index === ind ? {question: item.question, answer: e.target.value, email: item.email} : item));  
+        // setAnswer(answer);
+        // const dataSaveToDB = {
+        //     question: answers[ind].question, 
+        //     answer: answer, 
+        //     email: answers[ind].email 
+        // }
+        // setAnswerInfo(dataSaveToDB);
+
     };
 
     console.log("answers ", answers);
@@ -108,14 +131,14 @@ function Home() {
     const answerTheQuestion = () => {
         console.log("answers ", answers);
         
-        const data = [...answers];
-        const saveQuestion = async(answersInfo: { question: any; answer: any; email: string; }[]) => {
-            const questions = await surveyApi.answerTheQuestion(answersInfo);
-            console.log("questions ", questions);
-            setSuccess(!success);
-        }
-        saveQuestion(data);
-        setIsOpen(!isOpen);
+        // const data = [...answers];
+        // const saveQuestion = async(answersInfo: { question: any; answer: any; email: string; }[]) => {
+        //     const questions = await surveyApi.answerTheQuestion(answersInfo);
+        //     console.log("questions ", questions);
+        //     setSuccess(!success);
+        // }
+        // saveQuestion(data);
+        // setIsOpen(!isOpen);
     };
     // TODO: create link for prod
     // process.env.COPY_LINK
@@ -214,6 +237,7 @@ function Home() {
                                                             successful_message: item.successful_message,
                                                         }, index)
                                                         setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: item.email}} ));
+                                                        // setAnswer({question: question, answer: "", email: item.email})
                                                     }}
                                                     >
                                                         show more
@@ -252,7 +276,10 @@ function Home() {
                                             pagination={{
                                             type: "custom",
                                             }}
-                                            navigation={true}
+                                            navigation={{
+                                                prevEl: '.prev',
+                                                nextEl: '.nextSwiper',
+                                              }}
                                             onSlideChange={(swiper) => {
                                                 setSlide(swiper.activeIndex);
                                                 console.log("indexSurvey: ", indexSurvey);
@@ -273,8 +300,15 @@ function Home() {
                                                                         <div className={styles.questionBlock}>
                                                                             <div key={index} className={styles.question}>{index+1}). {item.question}</div>
                                                                             <div className={styles.answerContainer}>
-                                                                                <textarea placeholder="Put you answer" value={answers[index].answer} 
-                                                                                    onChange={(e) => handleChangeAnswer(e, index)} name={item.question} id={item.question} cols={30} rows={10}>
+                                                                                <textarea 
+                                                                                    placeholder="Put you answer" 
+                                                                                    value={answer} 
+                                                                                    onChange={(e) => handleChangeAnswer(e, index)}
+                                                                                    name={item.question} 
+                                                                                    id={item.question} 
+                                                                                    cols={30} 
+                                                                                    rows={10}
+                                                                                >
                                                                                         {answer}
                                                                                 </textarea>
                                                                             </div>
@@ -287,7 +321,8 @@ function Home() {
                                                 }
 
                                         </Swiper>
-                                    <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button>
+                                        { <button className={slide ===  survey.questions.length - 1  ? `nextSwiper ${styles.disabledNextBtn}`: `nextSwiper ${styles.nextSwiper}`} onClick={answerTheQuestion}>+ answer</button>}
+                                    {/* <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button> */}
                                 </div>
                             </div>
                         )

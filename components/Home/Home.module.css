@@ -440,6 +440,23 @@
     background-color: var(--mainBackground);
     border-color: transparent;
 }
+
+.nextSwiper, .disabledNextBtn {
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  background: none;
+  position: absolute;
+  right: 15px;
+  top: 48%;
+  z-index: 10010;
+  color: var(--mainBlack);
+  font-weight: bold;
+}
+
+.disabledNextBtn {
+  color: var(--mainOpacity);
+}
   
   /* Responsive Media Query */
   @media (max-width: 1150px) {
