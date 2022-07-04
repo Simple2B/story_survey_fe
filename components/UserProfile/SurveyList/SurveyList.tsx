@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
-import { ICreateSurvey, IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
+import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import styles from "./SurveyList.module.css";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 import iconLink from "../../../styles/icons/icons8-link-64.png";
@@ -26,6 +26,7 @@ const SurveyList = (): ReactElement => {
     const [title, setTitle] = useState<string>("");
 
     const [description, setDescription] = useState<string>("");
+    const [successMessage, setSuccessMessage] = useState<string>("");
     const [questions, setQuestion] = useState<IQuestion[]>([{
         id: 0,
         question: "",
@@ -37,6 +38,7 @@ const SurveyList = (): ReactElement => {
         uuid: "",
         title: "",
         description: "",
+        successful_message: "",
         created_at: "",
         user_id: 0,
         email: "",
@@ -78,6 +80,10 @@ const SurveyList = (): ReactElement => {
         setDescription(e.target.value);
     };
 
+    const handleOnchangeSuccessMessage = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSuccessMessage(e.target.value);
+    };
+
     useEffect(() => {
 
         if (status === 'authenticated') {
@@ -92,7 +98,7 @@ const SurveyList = (): ReactElement => {
 
             getListSurveys();
         }
-    },[session, isSurveyList]);
+    },[session, isSurveyList, asPath]);
 
     console.log("SurveyList: userSurveys", userSurveys);
 
@@ -141,6 +147,7 @@ const SurveyList = (): ReactElement => {
         const editDataSurvey = {
             title: title,
             description: description,
+            successful_message: successMessage,
             email: userEmail,
             questions: questions
         };
@@ -244,6 +251,7 @@ const SurveyList = (): ReactElement => {
                                                 getEditSurvey(item.id, index)
                                                 setEditSurveyID(item.id);
                                                 setDescription(item.description);
+                                                setSuccessMessage(item.successful_message)
                                                 setTitle(item.title);
                                                 setUserEmail(item.email)
                                                 if (item.questions.length > 0 )setQuestion(item.questions.map((q) => {return {id: q.id, question: q.question, survey_id: q.survey_id}}));
@@ -293,6 +301,10 @@ const SurveyList = (): ReactElement => {
 
                                     <div className={styles.titleContainer}>
                                         <textarea placeholder="description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>{description}</textarea>
+                                    </div>
+
+                                    <div className={styles.titleContainer}>
+                                        <textarea placeholder="success message" value={successMessage} onChange={handleOnchangeSuccessMessage} className={styles.formControl}  name="successMessage" id=""  rows={1}>{successMessage}</textarea>
                                     </div>
 
                                     <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={titleError.length > 0} onClick={editSurvey}>
