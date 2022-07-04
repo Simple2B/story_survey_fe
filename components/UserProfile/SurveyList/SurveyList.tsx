@@ -294,18 +294,24 @@ const SurveyList = (): ReactElement => {
                                             questions[0].id > 1 && questions.map((item, index) => {
                                                 return (
                                                     <div className={styles.titleContainer} key={item.id}>
-                                                        <textarea placeholder="question" value={item.question} onChange={(e) => editQuestions(e, item, index)} className={styles.formControl}  name={item.question} rows={1}>{item.question}</textarea>
+                                                        <textarea placeholder="question" value={item.question} onChange={(e) => editQuestions(e, item, index)} className={styles.formControl}  name={item.question} rows={1}>
+                                                            {/* {item.question} */}
+                                                        </textarea>
                                                     </div>
                                                 )
                                             })
                                     }
 
                                     <div className={styles.titleContainer}>
-                                        <textarea placeholder="description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>{description}</textarea>
+                                        <textarea placeholder="description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>
+                                            {/* {description} */}
+                                        </textarea>
                                     </div>
 
                                     <div className={styles.titleContainer}>
-                                        <textarea placeholder="success message" value={successMessage} onChange={handleOnchangeSuccessMessage} className={styles.formControl}  name="successMessage" id=""  rows={1}>{successMessage}</textarea>
+                                        <textarea placeholder="success message" value={successMessage} onChange={handleOnchangeSuccessMessage} className={styles.formControl}  name="successMessage" id=""  rows={1}>
+                                            {/* {successMessage} */}
+                                        </textarea>
                                     </div>
 
                                     <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={titleError.length > 0} onClick={editSurvey}>

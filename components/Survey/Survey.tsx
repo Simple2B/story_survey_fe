@@ -137,7 +137,7 @@ const Survey = ({surveyId}) => {
                                                   <div className={styles.answerContainer}>
                                                       <textarea placeholder="Put you answer" value={answer} 
                                                           onChange={(e) => handleChangeAnswer(e, index)} name={item.question} id={item.question} cols={30} rows={10}>
-                                                              {answer} 
+                                                              {/* {answer}  */}
                                                       </textarea>
                                                   </div>
                                               </div>
