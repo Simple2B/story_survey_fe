@@ -41,6 +41,7 @@ const CreateSurvey = (): ReactElement => {
 
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const [description, setDescription] = useState<string>("");
+    const [successfulMessage, setSuccessfulMessage] = useState<string>("");
 
     if (isSuccess === true) {
         setTimeout(() => {
@@ -75,6 +76,10 @@ const CreateSurvey = (): ReactElement => {
 
     const handleOnchangeDescription = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setDescription(e.target.value);
+    };
+
+    const handleOnchangeMessageOfSuccess = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSuccessfulMessage(e.target.value);
     };
 
 
@@ -130,6 +135,7 @@ const CreateSurvey = (): ReactElement => {
         console.log("survey ", {
             "title": title,
             "description": description,
+            "successfulMessage": successfulMessage,
             "user_id": profile.id,
             "email": session.user.email,
             "questions": questions,
@@ -138,6 +144,7 @@ const CreateSurvey = (): ReactElement => {
         const data: ICreateSurvey = {
             "title": title,
             "description": description,
+            "successful_message": successfulMessage,
             "user_id": profile.id,
             "email": session.user.email,
             "questions": questions,
@@ -182,7 +189,31 @@ const CreateSurvey = (): ReactElement => {
                                 </div>
 
                                 <div className={styles.titleContainer}>
-                                    <textarea placeholder="Description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>{description}</textarea>
+                                    <textarea 
+                                        placeholder="Description" 
+                                        value={description} 
+                                        onChange={handleOnchangeDescription} 
+                                        className={styles.formControl}  
+                                        name="description" 
+                                        id=""  
+                                        rows={2}>
+                                            {description}
+                                    </textarea>
+                                </div>
+
+                                {/* text about the successful saving of the survey */}
+
+                                <div className={styles.titleContainer}>
+                                    <textarea 
+                                        placeholder="Successful message" 
+                                        value={successfulMessage} 
+                                        onChange={handleOnchangeMessageOfSuccess} 
+                                        className={styles.formControl}  
+                                        name="successfulMessage" 
+                                        id=""  
+                                        rows={1}>
+                                            {successfulMessage}
+                                    </textarea>
                                 </div>
 
                                 <div className={styles.questionContainer}>

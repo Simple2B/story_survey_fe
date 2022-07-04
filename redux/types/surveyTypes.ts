@@ -6,6 +6,7 @@ export interface ICreateSurvey {
     id?: number,
     title: string,
     description?: string,
+    successful_message?: string,
     created_at?: string;
     user_id?: number,
     email: string,
@@ -18,6 +19,7 @@ export interface IGetSurvey {
         uuid?: string,
         title: string,
         description?: string,
+        successful_message?: string,
         created_at?: string;
         user_id?: number,
         email?: string,
