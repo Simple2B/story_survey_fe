@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
 import { clientApi } from "../../../pages/api/backend/userInstance";
 import { IUserResponse } from "../../../redux/types/userTypes";
@@ -6,8 +7,9 @@ import { IUserResponse } from "../../../redux/types/userTypes";
 import styles from "./UsersList.module.css";
 
 const UsersList = (): ReactElement => {
-    const {data: session} = useSession();
-    const [users, setUsers] = useState<IUserResponse[]>();
+    const { data: session} = useSession();
+    const { push } = useRouter();
+    const [ users, setUsers ] = useState<IUserResponse[]>();
 
     useEffect(() => {
           if (session) {
@@ -24,6 +26,10 @@ const UsersList = (): ReactElement => {
         }, [session]);
 
     console.log("UsersList: users", users);
+
+    const openUserList = (id: number) => {
+        push(`/user_profile/survey/users/user/${id}`);
+    }
     
     
     return  (
@@ -41,13 +47,13 @@ const UsersList = (): ReactElement => {
                     {users && users.length > 0 && (
                         users.map((user, index) => {
                             return (
-                                <tr key={index}>
+                                <tr key={index} onClick={() => openUserList(user.id)} className={styles.tableRow}>
                                     <th scope="row">{index+1}</th>
                                     <td>{user.email}</td>
                                     <td>{user.username}</td>
                                     {user.surveys.length > 0 
-                                    ? <td>{user.surveys.length}</td>
-                                    : <td>0</td>
+                                        ? <td>{user.surveys.length}</td>
+                                        : <td>0</td>
                                     }
                                 </tr>
                             )

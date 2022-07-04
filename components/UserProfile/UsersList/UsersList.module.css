@@ -2,3 +2,7 @@
     width: 98%;
     margin: 0 auto;
 }
+
+.tableRow {
+    cursor: pointer;
+}
