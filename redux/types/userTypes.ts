@@ -1,15 +1,7 @@
-// export interface IUserProvider {
-//     email?: string;
-//     image?: string;
-//     username?: string;
-//     password?: string;
-// }
+export const CLIENT = 'Client';
+export const ADMIN = 'Admin';
 
-// state
-// export interface IUserState {
 
-// }
-// action types
 export enum UserActionTypes {
   SET_CURRENT_USER = "SET_CURRENT_USER",
   GET_CURRENT_USER = "GET_CURRENT_USER",

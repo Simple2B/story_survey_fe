@@ -12,11 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             description: 'Customer created ',
             email: email,
           });
-        
-        //  create user in stripe and save customer id stripe to db on Fast API
-        // const dataToDB = {email: customer.email, stripe_customer: customer.id}
-        // const saveCustomerToDB = async() => await stripeApi.createStripeCustomer(dataToDB);
-        // saveCustomerToDB();
+
 
         const session = await stripe.checkout.sessions.create({
             // payment_method_types: ['card'],
@@ -38,7 +34,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             basic_product_key: process.env.BASIC_PRICE_LOOKUP_KEY,
             stripe_customer: customer.id,
             stripe_session_id: session.id,
-            // subscription_id: session.subscription
         }
 
         const saveSessionToDB = async() => await stripeApi.createSessionStripe(dataSessionToDB)
