@@ -217,7 +217,6 @@ function UserContainer ({children, title, keywords, style, headerName}) {
                               </Link>
                             }
                           </>
-                            
                         )
                       } 
                       else {

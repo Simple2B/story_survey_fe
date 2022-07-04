@@ -1,3 +1,5 @@
+import { IGetSurvey } from "./surveyTypes";
+
 export const CLIENT = 'Client';
 export const ADMIN = 'Admin';
 
@@ -35,4 +37,5 @@ export interface IUserResponse {
   image?: string;
   role?: string;
   username?: string;
+  surveys?: IGetSurvey[]
 }

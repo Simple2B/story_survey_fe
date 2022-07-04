@@ -1,12 +1,13 @@
 import { useSession } from "next-auth/react";
 import React, { ReactElement, useEffect, useState } from "react";
 import { clientApi } from "../../../pages/api/backend/userInstance";
+import { IUserResponse } from "../../../redux/types/userTypes";
 
 import styles from "./UsersList.module.css";
 
 const UsersList = (): ReactElement => {
     const {data: session} = useSession();
-    console.log("Setting: session => ", session);
+    const [users, setUsers] = useState<IUserResponse[]>();
 
     useEffect(() => {
           if (session) {
@@ -14,11 +15,16 @@ const UsersList = (): ReactElement => {
             const getUsers = async() => {
               const usersFromDB = await clientApi.getUsers();
               console.log("usersFromDB ", usersFromDB);
+              setUsers(usersFromDB);
             };
             getUsers();
+            
           };
   
-        }, [session])
+        }, [session]);
+
+    console.log("UsersList: users", users);
+    
     
     return  (
         <div className={styles.container}>
@@ -26,29 +32,29 @@ const UsersList = (): ReactElement => {
                 <thead>
                     <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Survey</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td colSpan={2}>Larry the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
+                    {users && users.length > 0 && (
+                        users.map((user, index) => {
+                            return (
+                                <tr key={index}>
+                                    <th scope="row">{index+1}</th>
+                                    <td>{user.email}</td>
+                                    <td>{user.username}</td>
+                                    {user.surveys.length > 0 
+                                    ? <td>{user.surveys.length}</td>
+                                    : <td>0</td>
+                                    }
+                                </tr>
+                            )
+                        })
+                        
+                    )} 
+                    
                 </tbody>
             </table>
         </div>
