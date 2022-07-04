@@ -14,7 +14,8 @@ import iconLink from "../../../styles/icons/icons8-link-64.png";
 const SurveyList = (): ReactElement => {
 
     const {data: session, status} = useSession();
-    const { push } = useRouter();
+    const { push, asPath } = useRouter();
+    const isSurveyList = asPath.includes("surveys_list")
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -79,7 +80,9 @@ const SurveyList = (): ReactElement => {
 
     useEffect(() => {
 
-        if (status === 'authenticated' ) {
+        if (status === 'authenticated') {
+            console.log("isSurveyList ", isSurveyList);
+            
             const email: string= session.user.email;
 
             const getListSurveys = async() => {
@@ -89,7 +92,7 @@ const SurveyList = (): ReactElement => {
 
             getListSurveys();
         }
-    },[session]);
+    },[session, isSurveyList]);
 
     console.log("SurveyList: userSurveys", userSurveys);
 
@@ -305,7 +308,3 @@ const SurveyList = (): ReactElement => {
 };
 
 export default SurveyList;
-function e(e: any) {
-    throw new Error("Function not implemented.");
-}
-

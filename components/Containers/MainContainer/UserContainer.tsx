@@ -83,7 +83,6 @@ export const menuIcons = [
   }
 ];
 
-
 function UserContainer ({children, title, keywords, style, headerName}) {
     const [isActive, setActive] = useState(null);
     const [icons, setMenuIcons] = useState<IMenuIcon[]>(menuIcons);
@@ -111,7 +110,6 @@ function UserContainer ({children, title, keywords, style, headerName}) {
           
           const user: IUserResponse = session.profile;
           
-
           setMenuIcons(icons.map((icon, i) => {
 
             // if ( icon['href'] === '/user_profile/survey/users/users_list' && user && user.role === CLIENT) {
@@ -133,11 +131,12 @@ function UserContainer ({children, title, keywords, style, headerName}) {
               }
               if ( user.role === CLIENT) {
                 console.log("user.role === CLIENT", user.role === CLIENT);
+                
                 push('/user_profile/survey/surveys_list');
               }
             };
 
-            if ( asPath === icon.href && icon.classIcon.length === 0) {
+            if ( asPath.includes(icon.href) && icon.classIcon.length === 0) {
                   icon.classIcon = styles.active;
                   icon.isIconActive = true;
             } else {
@@ -198,8 +197,8 @@ function UserContainer ({children, title, keywords, style, headerName}) {
                             { 
                               isClient && !menu.isAdmin && 
                               <Link href={menu.href} key={index} >
-                                <li className={menu.classIcon}>
-                                    <a>
+                                <li >
+                                    <a className={menu.classIcon}>
                                         <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
                                         <span className={styles.linksName}>{ menu.name }</span>
                                     </a>
@@ -209,8 +208,8 @@ function UserContainer ({children, title, keywords, style, headerName}) {
                             { 
                               isAdmin && 
                               <Link href={menu.href} key={index} >
-                                <li className={menu.classIcon}>
-                                    <a>
+                                <li>
+                                    <a className={menu.classIcon}>
                                         <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
                                         <span className={styles.linksName}>{ menu.name }</span>
                                     </a>

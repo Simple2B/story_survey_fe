@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import Image from "next/image";
+import React from "react";
 import styles from "./UserProfile.module.css";
 import { useRouter } from "next/router";
 import {  useSession } from "next-auth/react";
 import { ADMIN, IUserResponse } from "../../redux/types/userTypes";
-import { Divider } from "@chakra-ui/react";
 
 
 const ProfileNavbar = ({isActive, handleClick, headerName}) => {
