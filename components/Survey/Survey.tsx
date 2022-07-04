@@ -129,7 +129,7 @@ const Survey = ({surveyId}) => {
                                               <div className={styles.questionBlock}>
                                                   <div key={index} className={styles.question}>{index+1}). {item.question}</div>
                                                   <div className={styles.answerContainer}>
-                                                      <textarea placeholder="Put you answer"  
+                                                      <textarea placeholder="Put you answer" value={answer} 
                                                           onChange={(e) => handleChangeAnswer(e, index)} name={item.question} id={item.question} cols={30} rows={10}>
                                                               {answer} 
                                                       </textarea>

@@ -14,6 +14,7 @@ import singOutIcon from "../../../styles/icons/icons8-logout-64.png";
 import usersListIcon from "../../../styles/icons/icons8-conference-64.png";
 import Link from "next/link";
 import { ADMIN, CLIENT, IUserResponse } from "../../../redux/types/userTypes";
+import { clientApi } from "../../../pages/api/backend/userInstance";
 
 const SIGN_OUT = 'sing out';
 
@@ -46,7 +47,7 @@ export const menuIcons = [
   {
     image: usersListIcon,
     name: 'Create survey',
-    href: '/user_profile/survey/users_list',
+    href: '/user_profile/survey/users/users_list',
     classIcon: "",
     isIconActive: false,
     isAdmin: true,
@@ -100,20 +101,20 @@ function UserContainer ({children, title, keywords, style, headerName}) {
       setActive(false);
         if (session) {
 
-          // const getUser = async() => {
-          //   const userFromDB = await clientApi.getUser(session.user.email);
-          //   console.log("userFromDB ", userFromDB);
-          //   setUser(userFromDB);
-          // };
+          const getUser = async() => {
+            const userFromDB = await clientApi.getUser(session.user.email);
+            console.log("userFromDB ", userFromDB);
+            // setUser(userFromDB);
+          };
 
-          // getUser();
+          getUser();
           
           const user: IUserResponse = session.profile;
           
 
           setMenuIcons(icons.map((icon, i) => {
 
-            // if ( icon['href'] === '/user_profile/survey/users_list' && user && user.role === CLIENT) {
+            // if ( icon['href'] === '/user_profile/survey/users/users_list' && user && user.role === CLIENT) {
             //   icons['classIcon'] = styles.hideForClient;
             // };
 
@@ -123,12 +124,12 @@ function UserContainer ({children, title, keywords, style, headerName}) {
               handleSignOut();
             };
           
-            if ( user && asPath === icon.href && icon.href === '/user_profile/survey/users_list' ) { 
+            if ( user && asPath === icon.href && icon.href === '/user_profile/survey/users/users_list' ) { 
               console.log("user.role", user.role);
               if ( user.role === ADMIN){ 
                 console.log("user.role === ADMIN", user.role === ADMIN);
                 
-                push('/user_profile/survey/users_list');
+                push('/user_profile/survey/users/users_list');
               }
               if ( user.role === CLIENT) {
                 console.log("user.role === CLIENT", user.role === CLIENT);
@@ -178,7 +179,7 @@ function UserContainer ({children, title, keywords, style, headerName}) {
                     {icons.map((menu, index) => {
                       const user: IUserResponse = session ? session.profile : null;
 
-                    //   if (menu.href !== undefined && menu.href === '/user_profile/survey/users_list' && user && user.role === ADMIN) {
+                    //   if (menu.href !== undefined && menu.href === '/user_profile/survey/users/users_list' && user && user.role === ADMIN) {
                     //     return (
                     //       <li  key={index} className={style.hideForClient}>
                     //           <a className={menu.classIcon} href={menu.href}>
@@ -238,6 +239,7 @@ function UserContainer ({children, title, keywords, style, headerName}) {
                 <ProfileNavbar isActive={isActive} handleClick={handleClick} headerName={headerName}/>
                 <div className={styles.mainContent}>
                     {menuIcons.map((item, index) => item.isIconActive && <div key={index}>{children}</div> )}
+                    {asPath.includes("users/user/") && children}
                 </div>
             </section>
         </>
