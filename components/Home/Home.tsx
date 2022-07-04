@@ -77,7 +77,6 @@ function Home() {
     const [answerToQuestion, setAnswerToQuestion] = useState([{questionIndex: null, answer: ""}]);
 
 
-    console.log("HOME ===>>> survey ", survey);
     
     useEffect(() => {
         
