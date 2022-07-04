@@ -15,6 +15,7 @@ const Navbar = () => {
 
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
+    const [user, setUser] =useState();
     const isLogin = useTypedSelector((state) => state.auth.loggedIn);
 
     const handleSignIn = () => {
