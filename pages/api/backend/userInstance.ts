@@ -22,4 +22,20 @@ export const clientApi = {
         throw new Error(error.message);
       }
     },
+
+    getUser: async (email: string): Promise<IUserResponse> => {
+      console.log("getUser =>", email);
+      try {
+        const response = await instance().get(`/user/${email}`);
+        
+  
+        const res = response.data;
+        return res;
+      } catch (error: any) {
+        // place to handle errors and rise custom errors
+        console.log(`POST: error message => ${error.message}`);
+        // console.log("error.response.data) => ", error.response.data);
+        throw new Error(error.message);
+      }
+    },
 }

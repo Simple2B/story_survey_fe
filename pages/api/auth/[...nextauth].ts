@@ -8,6 +8,7 @@ import { clientApi } from "../backend/userInstance";
 import { authApi } from "../backend/authApi";
 // import { useActions } from "../../../redux/useActions";
 import { login } from "../../../redux/actions/authActions";
+import { stripeApi } from "../backend/stripeInstance";
 // import TwitterProvider from "next-auth/providers/twitter";
 
 export default NextAuth({
@@ -67,6 +68,7 @@ export default NextAuth({
       const newUser = await clientApi.createUserProvider(userData);
       console.log("createUser: newUser => " , newUser); 
 
+
       // TODO: create API call to get the token
       user.acessToken = 'FAKE-TOKEN'
       user.profile = newUser
@@ -75,6 +77,7 @@ export default NextAuth({
     },
     async jwt({ token, user, account, profile, isNewUser }) {
       if (user) {
+        
         token.acessToken = user.acessToken
         token.profile = user.profile
       }
@@ -82,6 +85,7 @@ export default NextAuth({
     },
 
     async session({ session, token }) {
+      
       session.acessToken = token.acessToken
       session.profile = token.profile
       return session;
