@@ -95,7 +95,7 @@ function Forms() {
 
         // login({username: email, password: password });
 
-        // isLogin && push("/user_profile/user")
+        // isLogin && push("/user_profile/survey/surveys_list")
         
         // const userLogin = async(email: string, password: string) => {
         //     const loginUser = await authApi.login(email, password)

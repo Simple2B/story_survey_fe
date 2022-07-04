@@ -150,7 +150,7 @@ const CreateSurvey = (): ReactElement => {
         };
         saveSurveyToDB(data);
         setIsFormCreateOpen(false);
-        push('/user_profile/user');
+        push('/user_profile/survey/surveys_list');
     };
 
 

@@ -43,7 +43,7 @@ function Home() {
         setTimeout(() => {
             setSuccess(false);
         }, 2500)
-    }
+    };
 
     const [survey, setSurvey] = useState({
         id: 0,

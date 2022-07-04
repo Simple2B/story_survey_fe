@@ -57,11 +57,12 @@
     align-items: center;
   }
 
-  .sidebar .navLinks li a .linksName{
+ .navLinks li a .linksName, .linksName{
     color: #0A2558;
     font-size: 15px;
     font-weight: 400;
     white-space: nowrap;
+    cursor: pointer;
   }
   .sidebar .navLinks .logOut{
     position: absolute;

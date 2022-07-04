@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./UserProfile.module.css";
 import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import {  useSession } from "next-auth/react";
 
 
 const ProfileNavbar = ({isActive, handleClick, headerName}) => {
@@ -10,8 +10,8 @@ const ProfileNavbar = ({isActive, handleClick, headerName}) => {
   const { push } = useRouter();
 
   const getProfile = () => {
-    push(`/user_profile/user`);
-  }
+    push(`/user_profile/survey/surveys_list`);
+  };
 
   return  (
     <nav>

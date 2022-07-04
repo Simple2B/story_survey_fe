@@ -22,17 +22,13 @@ const Navbar = () => {
     };
 
     const getProfile = () => {
-        push(`/user_profile/user`);
+        push(`/user_profile/survey/surveys_list`);
     };
 
     const handleSignOut = async () => {
         const data = await signOut({redirect: false, callbackUrl: '/'});
         push(data.url);
     };
-
-    const handleLogOut = () => {
-
-    }
 
     return (
         <>
