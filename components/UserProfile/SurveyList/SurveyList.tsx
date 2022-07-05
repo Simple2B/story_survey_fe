@@ -209,7 +209,7 @@ const SurveyList = (): ReactElement => {
                                                 <div className={styles.hideContainerQuestion}>
                                                     {   
                                                         item.questions.length > 1 && (
-                                                            item.questions.slice(1).map((item, index) => {
+                                                            item.questions.slice(1, item.questions.length -1).map((item, index) => {
                                                                 return (
                                                                     <div className={styles.containerStep} key={index}>
                                                                         <div className={styles.indicator} key={index}>
@@ -291,10 +291,17 @@ const SurveyList = (): ReactElement => {
                                         />
                                     </div>
                                     {
-                                            questions[0].id > 1 && questions.map((item, index) => {
+                                            questions[0].id > 1 && questions.slice(0, questions.length - 1).map((item, index) => {
                                                 return (
                                                     <div className={styles.titleContainer} key={item.id}>
-                                                        <textarea placeholder="question" value={item.question} onChange={(e) => editQuestions(e, item, index)} className={styles.formControl}  name={item.question} rows={1}>
+                                                        <textarea 
+                                                            placeholder="question" 
+                                                            value={item.question} 
+                                                            onChange={(e) => editQuestions(e, item, index)} 
+                                                            className={styles.formControl}  
+                                                            name={item.question} 
+                                                            rows={1}
+                                                        >
                                                             {/* {item.question} */}
                                                         </textarea>
                                                     </div>
@@ -303,13 +310,29 @@ const SurveyList = (): ReactElement => {
                                     }
 
                                     <div className={styles.titleContainer}>
-                                        <textarea placeholder="description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>
+                                        <textarea 
+                                            placeholder="description" 
+                                            value={description} 
+                                            onChange={handleOnchangeDescription} 
+                                            className={styles.formControl}  
+                                            name="description" 
+                                            id=""  
+                                            rows={2}
+                                        >
                                             {/* {description} */}
                                         </textarea>
                                     </div>
 
                                     <div className={styles.titleContainer}>
-                                        <textarea placeholder="success message" value={successMessage} onChange={handleOnchangeSuccessMessage} className={styles.formControl}  name="successMessage" id=""  rows={1}>
+                                        <textarea 
+                                            placeholder="success message" 
+                                            value={successMessage} 
+                                            onChange={handleOnchangeSuccessMessage} 
+                                            className={styles.formControl}  
+                                            name="successMessage" 
+                                            id=""  
+                                            rows={1}
+                                        >
                                             {/* {successMessage} */}
                                         </textarea>
                                     </div>

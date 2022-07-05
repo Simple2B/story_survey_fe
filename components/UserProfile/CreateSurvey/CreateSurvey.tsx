@@ -88,11 +88,11 @@ const CreateSurvey = (): ReactElement => {
     };
 
     const addQuestion = (question: string) => {
-        if (question.length === 0){
-            setQuestionError("Question is empty");
-        }
+        // if (question.length === 0){
+        //     setQuestionError("Question is empty");
+        // };
         setQuestions([...questions, question]);
-        // setQuestion("");
+        setQuestion("");
     };
 
     const writeQuestion = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -137,7 +137,7 @@ const CreateSurvey = (): ReactElement => {
             "successfulMessage": successfulMessage,
             "user_id": profile.id,
             "email": session.user.email,
-            "questions": questions,
+            "questions": [...questions, ""],
         });
 
         const data: ICreateSurvey = {
@@ -146,7 +146,7 @@ const CreateSurvey = (): ReactElement => {
             "successful_message": successfulMessage,
             "user_id": profile.id,
             "email": session.user.email,
-            "questions": questions,
+            "questions": [...questions, ""],
         }
 
         const saveSurveyToDB = async(data: ICreateSurvey) => {

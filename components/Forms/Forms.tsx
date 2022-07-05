@@ -56,40 +56,44 @@ function Forms() {
         signIn(provider);  
     };
 
+    const handleOnchangeMail = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setEmail(e.target.value);
+    };
+
     const handleOnchange = (e, setFunc, setErr, passValue) => {
         setFunc(e.target.value);
 
         const value = e.target.value;
 
-        let errMsg ="";
+        // let errMsg ="";
 
-        if (value !== undefined) {
-            errMsg=`${passValue} is empty`;
-        }
+        // if (value !== undefined) {
+        //     errMsg=`${passValue} is empty`;
+        // }
 
-        if ( value.length === 0){
-            errMsg=`${passValue} is empty`;
-        }  else {
-            errMsg="";
-        }
+        // if ( value.length === 0){
+        //     errMsg=`${passValue} is empty`;
+        // }  else {
+        //     errMsg="";
+        // }
 
-        if (errMsg.length === 0) {
-            setErr("");
-            setFunc(value);
-        } else {
-            setErr(errMsg);
-        }
+        // if (errMsg.length === 0) {
+        //     setErr("");
+        //     setFunc(value);
+        // } else {
+        //     setErr(errMsg);
+        // }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
+        // e.preventDefault();
         console.log("Forms: handleSubmit => ", {
             'email': email,
         });
 
-        if (email.length === 0) {
-            setEmailErr("Email is empty")
-        };
+        // if (email.length === 0) {
+        //     setEmailErr("Email is empty")
+        // };
 
         signIn('email', {email, redirect: false});
 
@@ -157,28 +161,28 @@ function Forms() {
                         </div>
                         <div className={styles.loginboxOr}>
                             <div className={styles.orLine}></div>
-                            <div className={styles.or}>OR</div>
+                            {/* <div className={styles.or}>OR</div> */}
                         </div>
                         <div className={styles.loginboxTextbox}>
                             {emailError.length > 0 && <div className={styles.errorMessage}>{emailError}</div>}
-                            <input type="text" 
+                            {/* <input type="text" 
                                    className={styles.formControl} 
                                    value={email} 
                                    placeholder="Email"
-                                   onChange={(e) => handleOnchange(e, setEmail, setEmailErr, "Email")}
-                            />
+                                   onChange={ handleOnchangeMail}
+                            /> */}
                         </div>
                         {/* <div className={styles.loginboxForgot}>
                             <a href="">Forgot Password?</a>
                         </div> */}
-                        <div className={styles.loginboxSubmit}>
-                            <input type="submit" 
+                        {/* <div className={styles.loginboxSubmit}>
+                            <button 
+                                    // type="submit" 
                                    className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} 
-                                   value="Login"
                                    onClick={handleSubmit}
                                    disabled={isSubmitLogin}
-                            />
-                        </div>
+                            >Login</button>
+                        </div> */}
                     </div>
                 </div>
             }

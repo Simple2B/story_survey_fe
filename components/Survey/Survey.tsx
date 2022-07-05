@@ -98,7 +98,9 @@ const Survey = ({surveyId}) => {
     const saveQuestion = async(answersInfo: { question: any; answer: any; email: string; }[]) => {
         const questions = await surveyApi.answerTheQuestion(answersInfo);
         console.log("!!!!!!!questions ", questions);
-        setSuccess(!success);
+        if (slide === survey.questions.length - 1){ 
+          setSuccess(!success);
+        };
     }
     saveQuestion(data);
 }
@@ -149,7 +151,12 @@ const Survey = ({surveyId}) => {
                       }
 
               </Swiper>
-          <button className={slide ===  survey.questions.length - 1  ? `nextSwiperSurvey ${styles.disabledNextBtn}`: `nextSwiperSurvey ${styles.nextSwiper}`}>+ answer</button>
+          <button 
+            className={slide ===  survey.questions.length - 1  ? `nextSwiperSurvey ${styles.disabledNextBtn}`: `nextSwiperSurvey ${styles.nextSwiper}`} 
+            onClick={answerTheQuestion}
+            >
+              + answer
+          </button>
           {/* <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button> */}
             {success && (
                     <div className={styles.isSuccess} onClick={() => setSuccess(!success)}>

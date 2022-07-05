@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -11,6 +11,9 @@ import deleteIcon from "../../styles/icons/icons8-cancel-64.png";
 import { Navigation, Pagination} from "swiper";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import iconLink from "../../styles/icons/icons8-link-64.png";
+import { v4 as uuidv4 } from 'uuid';
+import Cookies from 'js-cookie';
+
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -23,9 +26,15 @@ interface IAnswer  {
     email: string
 }
 
+// Cookies.set('session_id', uuidv4());
+// Cookies.set('start_time', new Date().toLocaleString());
+// 42e0173c-7a64-4aec-9413-4b8f643939b5
+// 42e0173c-7a64-4aec-9413-4b8f643939b5
+
 function Home() {
 
-    const swiper = useSwiper();
+    const [sessionId, setSessionId ] = useState();
+    const [startDate, setStartDate ] = useState();
 
     const {data: session } = useSession();
     const { push } = useRouter();
@@ -46,7 +55,14 @@ function Home() {
         email: ""
     });
 
-    const [answers, setAnswers] = useState([{question: null, answer: null, email: ""}]);
+    const [answers, setAnswers] = useState([{
+        question: null, 
+        answer: null, 
+        email: "",
+        session_id: "",
+        start_time: "",
+        // end_time: "",
+    }]);
     const [answer, setAnswer] = useState<string>("");
 
     const [slide, setSlide] = useState(null);
@@ -105,15 +121,48 @@ function Home() {
     },[session]);
 
 
-    const openSurvey = (data: React.SetStateAction<{ id: number; uuid: string; title: string; description: string; successful_message: string; created_at: string; user_id: number; email: string; questions: { question: string; id: number; survey_id: number; }[]; }>, index: number) => {
+    const openSurvey = (
+            data: React.SetStateAction<{ 
+                id: number; 
+                uuid: string; 
+                title: string; 
+                description: string; 
+                successful_message: string; 
+                created_at: string; 
+                user_id: number; 
+                email: string; 
+                questions: { question: string; id: number; survey_id: number; }[]; }>, 
+            index: number
+        ) => {
         setOpenDescription(!isOpenDescription);
         setSurvey(data);
         setIndexSurvey(index);
+
+        // set session_id for answer
+        if (Cookies.get('session_id') === undefined && sessionId === undefined) {
+            Cookies.set('session_id', uuidv4());
+            Cookies.set('start_time', new Date().toLocaleString());
+            setSessionId(Cookies.get('session_id'));
+            setStartDate(Cookies.get('start_time'));
+        } else {
+            setSessionId(Cookies.get('session_id'));
+            setStartDate(Cookies.get('start_time'));
+        };
     };
 
+    console.log("sessionId", sessionId);
+    console.log("startDate", startDate);
+
     const handleChangeAnswer = (e: { target: { value: React.SetStateAction<string>; }; }, ind: number) => {
-        let answer =  e.target.value
-        // setAnswers(answers.map((item, index) => index === ind ? {question: item.question, answer: e.target.value, email: item.email} : item));  
+        // let answer =  e.target.value
+        setAnswers(answers.map((item, index) => index === ind ? {
+            question: item.question, 
+            answer: e.target.value, 
+            email: item.email,
+            session_id: item.session_id,
+            start_time: item.start_time,
+            // end_time?: string,
+        } : item));  
         // setAnswer(answer);
         // const dataSaveToDB = {
         //     question: answers[ind].question, 
@@ -124,19 +173,30 @@ function Home() {
 
     };
 
-    // console.log("answers ", answers);
-
-
     const answerTheQuestion = () => {
         
-        // const data = [...answers];
-        // const saveQuestion = async(answersInfo: { question: any; answer: any; email: string; }[]) => {
-        //     const questions = await surveyApi.answerTheQuestion(answersInfo);
-        //     console.log("questions ", questions);
-        //     setSuccess(!success);
-        // }
-        // saveQuestion(data);
-        // setIsOpen(!isOpen);
+        const data = [...answers];
+        console.log("=== survey.questions length", survey.questions.length - 1 );
+
+        
+        const saveQuestion = async(answersInfo: { 
+            question: any; 
+            answer: any; 
+            email: string; 
+            session_id: string,
+            start_time?: string,
+            end_time?: string,
+        }[]) => {
+            const questionsFromDB = await surveyApi.answerTheQuestion(answersInfo);
+            console.log("questionsFromDB ", questionsFromDB);
+
+            if (slide === survey.questions.length - 1){ 
+                setSuccess(!success);
+                setIsOpen(!isOpen);
+            };
+        }
+        saveQuestion(data);
+       
     };
 
     // TODO: create link for prod
@@ -186,7 +246,7 @@ function Home() {
                                                         <div className={styles.hideContainerQuestion}>
                                                             {   
                                                                 item.questions.length > 1 && (
-                                                                    item.questions.slice(1).map((item, index) => {
+                                                                    item.questions.slice(1,item.questions.length - 1).map((item, index) => {
                                                                         return (
                                                                             <div className={styles.containerStep} key={index}>
                                                                                 <div className={styles.indicator}>
@@ -218,6 +278,7 @@ function Home() {
                                                             type="text"
                                                             ref={refLink}
                                                             value={`${link}/survey/${item.id}`}
+                                                            onChange={() => {}}
                                                         />
                                                     </i>
                                                      <Link href={`/survey/${item.id}`}>
@@ -236,7 +297,14 @@ function Home() {
                                                             questions: item.questions,
                                                             successful_message: item.successful_message,
                                                         }, index)
-                                                        setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: item.email}} ));
+                                                        setAnswers(item.questions.map((question) => {return {
+                                                            question: question, 
+                                                            answer: "", 
+                                                            email: item.email,
+                                                            session_id: sessionId,
+                                                            start_time: startDate,
+                                                            // end_time: "",
+                                                        }} ));
                                                         // setAnswer({question: question, answer: "", email: item.email})
                                                     }}
                                                     >
@@ -279,15 +347,14 @@ function Home() {
                                             navigation={{
                                                 prevEl: '.prev',
                                                 nextEl: '.nextSwiper',
-                                              }}
+                                            }}
                                             onSlideChange={(swiper) => {
                                                 setSlide(swiper.activeIndex);
                                                 console.log("indexSurvey: ", indexSurvey);
                                                 const currentSurvey = userSurveys[indexSurvey];
                                                 const currentQuestion = currentSurvey[swiper.activeIndex];
                                                 console.log("currentQuestion", currentQuestion);
-                                              }
-                                            }
+                                            }}
                                             modules={[Pagination, Navigation]}
                                             className={styles.containerQuestion}
                                         >
@@ -302,18 +369,16 @@ function Home() {
                                                                             <div className={styles.answerContainer}>
                                                                                 <textarea 
                                                                                     placeholder="Put you answer" 
-                                                                                    value={answer} 
+                                                                                    value={answers[index].answer} 
                                                                                     onChange={(e) => handleChangeAnswer(e, index)}
                                                                                     name={item.question} 
                                                                                     id={item.question} 
                                                                                     cols={30} 
                                                                                     rows={10}
                                                                                 >
-                                                                                        {/* {answer} */}
                                                                                 </textarea>
                                                                             </div>
                                                                         </div>
-                                                                        
                                                                     </SwiperSlide>
                                                                 )
                                                         })
@@ -321,7 +386,14 @@ function Home() {
                                                 }
 
                                         </Swiper>
-                                        { <button className={slide ===  survey.questions.length - 1  ? `nextSwiper ${styles.disabledNextBtn}`: `nextSwiper ${styles.nextSwiper}`} onClick={answerTheQuestion}>+ answer</button>}
+                                        { 
+                                            <button 
+                                                className={slide ===  survey.questions.length   ? `nextSwiper ${styles.disabledNextBtn}`: `nextSwiper ${styles.nextSwiper}`} 
+                                                onClick={answerTheQuestion}
+                                            >
+                                                    + answer
+                                            </button>
+                                        }
                                     {/* <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button> */}
                                 </div>
                             </div>
