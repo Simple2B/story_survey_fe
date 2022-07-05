@@ -32,8 +32,8 @@ export const menuIcons = [
     image: surveysIcon,
     name: 'Surveys list',
     href: '/user_profile/survey/surveys_list',
-    classIcon: "",
-    isIconActive: false,
+    classIcon: styles.active,
+    isIconActive: true,
     isAdmin: false,
   },
   {
@@ -139,12 +139,10 @@ function UserContainer ({children, title, keywords, style, headerName, isActive,
         };
 
       }, [session])
-
-    
-    
+  
     const getMainPage = () => {
         push("/");
-    }
+    };
 
     const handleClick = () => {
         setActive(!isActive);

@@ -7,7 +7,8 @@ const SectionDashboard = () => {
   return  (
     <div className={styles.homeContent}>
         <div className={styles.overviewBoxes}>
-            <div className={styles.box}>
+            Dashboards
+            {/* <div className={styles.box}>
                 <div className={styles.rightSide}>
                     <div className={styles.boxTopic}>Total Order</div>
                     <div className={styles.number}>40,876</div>
@@ -17,7 +18,7 @@ const SectionDashboard = () => {
                     </div>
                 </div>
                 <i className={`${styles.bx} ${styles.bxCartAlt} ${styles.cart}`}></i>
-            </div>
+            </div> */}
 
             {/* <div className={styles.box}>
                 <div className={styles.rightSide}>
