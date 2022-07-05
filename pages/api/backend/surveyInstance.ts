@@ -128,4 +128,16 @@ export const surveyApi = {
         throw new Error(error.message);
       }
     },
+
+    getInfoSurvey: async (id: number): Promise<any> => {
+      try {
+        const response = await instance().get(`/survey/get_survey/survey_with_answer/${id}`);
+        const res = response.data;
+        console.log(`getInfoSurvey: response received successfully `, res);
+        return res;
+      } catch (error: any) {
+        console.log(`POST: error message => ${error.message}`);
+        throw new Error(error.message);
+      }
+    },
 }

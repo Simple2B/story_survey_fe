@@ -133,7 +133,10 @@ const SurveyList = (): ReactElement => {
         if (questions)  {
             setQuestion(questions.map((item) => {
                 if (item.id === question.id) {
-                    item = {id: question.id, question: e.target.value, survey_id: question.survey_id}
+                    item = {
+                        id: question.id, 
+                        question: e.target.value, 
+                        survey_id: question.survey_id}
                 }
                 return item;
             }));

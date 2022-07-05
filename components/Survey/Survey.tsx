@@ -84,7 +84,7 @@ const Survey = ({surveyId}) => {
             created_at: surveyFromDB.created_at,
             user_id: surveyFromDB.user_id,
             email: surveyFromDB.email,
-            questions: surveyFromDB.questions, 
+            questions: surveyFromDB.questions,
         }
         setUserSurveys(dataUserSurvey);
         setAnswers(surveyFromDB.questions.map((question) => {return {

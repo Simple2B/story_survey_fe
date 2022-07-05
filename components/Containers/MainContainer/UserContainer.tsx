@@ -228,7 +228,7 @@ function UserContainer ({children, title, keywords, style, headerName, isActive,
                 <ProfileNavbar isActive={isActive} handleClick={handleClick} headerName={headerName}/>
                 <div className={styles.mainContent}>
                     {menuIcons.map((item, index) => item.isIconActive && <div key={index}>{children}</div> )}
-                    {asPath.includes("users/user/") && children}
+                    {asPath.includes("users/user/users_list") && children}
                 </div>
             </section>
         </>

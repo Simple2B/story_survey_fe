@@ -6,3 +6,90 @@
 .tableRow {
     cursor: pointer;
 }
+
+.modalWindow {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--mainOpacity);
+}
+  
+.modal {
+    position: relative;
+    width: 80%;
+    height: 80%;
+    background-color: var(--mainWhite);
+    border-radius: 15px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: scroll;
+    /* height: 100vh; */
+}
+
+.editIcon {
+    cursor: pointer;
+    width: 21px;
+    height: 21px;
+    position: absolute;
+    z-index: 3;
+    right: 8px;
+    top: 8px;
+}
+
+.containerCard {
+    width: 100%
+}
+
+.homeContent .box .titleCard{
+    width: 260px;
+    text-align: justify;
+    align-self: flex-start;
+    /* display: inline-block; */
+    /* font-size: 25px; */
+    /* margin-top: -6px;
+    margin-bottom: 10px; */
+    /* padding: 10px auto; */
+    font-weight: 500;
+    
+
+    cursor: pointer;
+    /* white-space: nowrap; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: overflow .3s ease-in-out;
+}
+  
+.homeContent .box .titleCard:hover {
+    white-space: wrap;
+    overflow: visible;
+    overflow-wrap: break-word;
+}
+
+.questionContainer {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.title {
+    font-size: 22px;
+    padding: 15px 10px;
+}
+
+.question {
+    padding: 3px 5px;
+    display: flex;
+    justify-content: space-between;
+}
