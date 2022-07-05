@@ -82,7 +82,6 @@ const CreateSurvey = (): ReactElement => {
         setSuccessfulMessage(e.target.value);
     };
 
-
     const openCreateSurvey = () => {
         setIsFormCreateOpen(!isFormCreateOpen);
         setQuestion("");
@@ -93,7 +92,7 @@ const CreateSurvey = (): ReactElement => {
             setQuestionError("Question is empty");
         }
         setQuestions([...questions, question]);
-        setQuestion("");
+        // setQuestion("");
     };
 
     const writeQuestion = (e: { target: { value: React.SetStateAction<string>; }; }) => {
