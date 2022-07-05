@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "redux/store.js", "pages/api/checkout.tsx"  ],
+, "redux/store.js", "pages/api/checkout.tsx", "pages/survey/[survey_id].js"  ],
   "exclude": [
     "node_modules"
   ]
