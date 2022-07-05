@@ -14,10 +14,11 @@ export default function App({
   return (
     
       <SessionProvider session={session}>
-        <Provider store={store}>
-          <Component {...pageProps} />
-        </Provider>
-      </SessionProvider>
-    
+        {/* <CookiesProvider> */}
+          <Provider store={store}>
+            <Component {...pageProps} />
+          </Provider>
+        {/* </CookiesProvider> */}
+      </SessionProvider> 
   )
 }
