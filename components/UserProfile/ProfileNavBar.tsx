@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import Image from "next/image";
+import React from "react";
 import styles from "./UserProfile.module.css";
 import { useRouter } from "next/router";
-import { signOut, useSession } from "next-auth/react";
+import {  useSession } from "next-auth/react";
+import { ADMIN, IUserResponse } from "../../redux/types/userTypes";
 
 
 const ProfileNavbar = ({isActive, handleClick, headerName}) => {
@@ -10,8 +10,16 @@ const ProfileNavbar = ({isActive, handleClick, headerName}) => {
   const { push } = useRouter();
 
   const getProfile = () => {
-    push(`/user_profile/user`);
-  }
+    push(`/user_profile/survey/surveys_list`);
+  };
+
+  let isAdmin: boolean;
+
+  if (session) {
+    const user: IUserResponse = session.profile;
+    isAdmin = user && user.role === ADMIN;
+  };
+
 
   return  (
     <nav>
@@ -32,6 +40,7 @@ const ProfileNavbar = ({isActive, handleClick, headerName}) => {
               <div className={styles.imageContainer}>
                   <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
               </div>
+              {isAdmin && <div className={styles.adminIcon}>admin</div>}
           </div>
           )
         }

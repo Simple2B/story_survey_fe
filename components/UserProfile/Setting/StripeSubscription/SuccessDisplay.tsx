@@ -1,23 +1,30 @@
 import { useRouter } from 'next/router';
-import React from 'react';
-import { stripeApi } from '../../../../pages/api/backend/stripeInstance';
+import React, { useEffect, useState } from 'react';
 import styles from "./StripeSubscription.module.css";
 import Logo from './Logo';
 
 const SuccessDisplay = ({ sessionId }) => {
-    const {push} = useRouter();
+    console.log("SuccessDisplay: sessionId ", sessionId);
+    
+    const { push } = useRouter();
 
-    const sendSessionId = () => {
-        const data = {
-            session_id: sessionId
-        };
-        const createPortalSession = async () => {
-            const portalUrl = await stripeApi.createPortalSession(data);
-            console.log("portalUrl ", portalUrl);
-            push(portalUrl);
-        };
-        createPortalSession();
-    };
+    const handlerClick = async() => {
+        
+        console.log("stripeIdSession ", sessionId);
+        const {url} = await fetch('/api/checkout/create_portal_session', {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({ session_id: sessionId })
+        }).then(res => res.json());
+        console.log("url ", url);
+        if (url !== undefined)  {
+            push(url)
+        } else {
+            console.error(" error ", url)
+        }
+    }
 
     return (
         <section>
@@ -28,7 +35,7 @@ const SuccessDisplay = ({ sessionId }) => {
                 </div>
             </div>
             <div>
-                <button id="checkout-and-portal-button" onClick={sendSessionId} className={styles.checkoutBtn}>
+                <button id="checkout-and-portal-button"  className={styles.checkoutBtn} onClick={handlerClick}>
                     Manage your billing information
                 </button>
             </div>

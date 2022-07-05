@@ -41,6 +41,7 @@ const CreateSurvey = (): ReactElement => {
 
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const [description, setDescription] = useState<string>("");
+    const [successfulMessage, setSuccessfulMessage] = useState<string>("");
 
     if (isSuccess === true) {
         setTimeout(() => {
@@ -77,6 +78,9 @@ const CreateSurvey = (): ReactElement => {
         setDescription(e.target.value);
     };
 
+    const handleOnchangeMessageOfSuccess = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSuccessfulMessage(e.target.value);
+    };
 
     const openCreateSurvey = () => {
         setIsFormCreateOpen(!isFormCreateOpen);
@@ -88,7 +92,7 @@ const CreateSurvey = (): ReactElement => {
             setQuestionError("Question is empty");
         }
         setQuestions([...questions, question]);
-        setQuestion("");
+        // setQuestion("");
     };
 
     const writeQuestion = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -130,6 +134,7 @@ const CreateSurvey = (): ReactElement => {
         console.log("survey ", {
             "title": title,
             "description": description,
+            "successfulMessage": successfulMessage,
             "user_id": profile.id,
             "email": session.user.email,
             "questions": questions,
@@ -138,6 +143,7 @@ const CreateSurvey = (): ReactElement => {
         const data: ICreateSurvey = {
             "title": title,
             "description": description,
+            "successful_message": successfulMessage,
             "user_id": profile.id,
             "email": session.user.email,
             "questions": questions,
@@ -150,7 +156,7 @@ const CreateSurvey = (): ReactElement => {
         };
         saveSurveyToDB(data);
         setIsFormCreateOpen(false);
-        push('/user_profile/user');
+        push('/user_profile/survey/surveys_list');
     };
 
 
@@ -182,7 +188,31 @@ const CreateSurvey = (): ReactElement => {
                                 </div>
 
                                 <div className={styles.titleContainer}>
-                                    <textarea placeholder="Description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>{description}</textarea>
+                                    <textarea 
+                                        placeholder="Description" 
+                                        value={description} 
+                                        onChange={handleOnchangeDescription} 
+                                        className={styles.formControl}  
+                                        name="description" 
+                                        id=""  
+                                        rows={2}>
+                                            {/* {description} */}
+                                    </textarea>
+                                </div>
+
+                                {/* text about the successful saving of the survey */}
+
+                                <div className={styles.titleContainer}>
+                                    <textarea 
+                                        placeholder="Successful message" 
+                                        value={successfulMessage} 
+                                        onChange={handleOnchangeMessageOfSuccess} 
+                                        className={styles.formControl}  
+                                        name="successfulMessage" 
+                                        id=""  
+                                        rows={1}>
+                                            {/* {successfulMessage} */}
+                                    </textarea>
                                 </div>
 
                                 <div className={styles.questionContainer}>
@@ -200,7 +230,9 @@ const CreateSurvey = (): ReactElement => {
 
                                 <div className={styles.titleContainer}>
                                     {questionError.length > 0 && <div className={styles.errorMessage}>{questionError}</div>}
-                                    <textarea placeholder="Write your question" value={question} onChange={writeQuestion} className={styles.formControl}  name="addQuestion" id=""  rows={3}>{question}</textarea>
+                                    <textarea placeholder="Write your question" value={question} onChange={writeQuestion} className={styles.formControl}  name="addQuestion" id=""  rows={3}>
+                                        {/* {question} */}
+                                    </textarea>
                                 </div>
                                 <button className={`${styles.position} ${styles.btnAdd}`} disabled={questionError.length > 0} onClick={() => addQuestion(question)}>+ add question</button>
                                 

@@ -1,35 +1,47 @@
+import { loadStripe } from "@stripe/stripe-js";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { stripeApi } from "../../../../pages/api/backend/stripeInstance";
 import Logo from "./Logo";
 import styles from "./StripeSubscription.module.css";
 
 const BasicProductDisplay = () => {
-    const {data: session} = useSession();
-    const {push} = useRouter();
-    const [key, setKey] = useState(null);
-
+    const {data : session } = useSession();
+    const {push, asPath} = useRouter();
+    const [publicKeyStripe, setPublicKeyStripe] = useState("");
     useEffect(() => {
-        if (session) {
-            const getApiKey = async() => {
-                const keyStripe = await stripeApi.getKeyStripe();
-                
-                setKey(keyStripe)
-            }
-            getApiKey();
-        }
-    }, [session]);
+        fetch('/api/keys', {
+            method: 'GET',
+            headers: {'Content-type': 'application/json'},
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setPublicKeyStripe(data.publishableKey)
+            })
+    }, []);
 
-    const handlerClick = () => {
-        const createSession = async() => {
-            if (key && session){
-                const redirectUrl = await stripeApi.createSessionStripe({email: session.user.email, key: key.BASIC_PRICE_LOOKUP_KEY});
-                console.log("sessionStripe ", redirectUrl);
-                push(redirectUrl);
-            };
-        };
-       createSession();
+    if (!publicKeyStripe) {
+        return <div>Loading...</div>
+    };
+
+    const stripePromise = loadStripe(publicKeyStripe);
+    console.log(" stripePromise ", stripePromise);
+    
+
+    const handlerClick = async () => {
+
+        const {sessionId, customer} = await fetch('/api/checkout/session', {
+            method: 'POST',
+            headers: {
+                "content-type": "application/json",
+            },
+            body: JSON.stringify({quantity: 1, email: session ? session.user.email : ""})
+        }).then(res => res.json());
+        
+
+        const stripe = await stripePromise;
+        
+        const { error } = await stripe.redirectToCheckout({sessionId});
     };
 
    return (

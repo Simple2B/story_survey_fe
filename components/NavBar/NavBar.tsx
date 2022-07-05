@@ -15,6 +15,7 @@ const Navbar = () => {
 
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
+    const [user, setUser] =useState();
     const isLogin = useTypedSelector((state) => state.auth.loggedIn);
 
     const handleSignIn = () => {
@@ -22,17 +23,13 @@ const Navbar = () => {
     };
 
     const getProfile = () => {
-        push(`/user_profile/user`);
+        push(`/user_profile/survey/surveys_list`);
     };
 
     const handleSignOut = async () => {
         const data = await signOut({redirect: false, callbackUrl: '/'});
         push(data.url);
     };
-
-    const handleLogOut = () => {
-
-    }
 
     return (
         <>
@@ -48,16 +45,16 @@ const Navbar = () => {
                         </button>
                     </div>
                     <ul className={isOpen ? `{${styles.navLinks} ${styles.showNav}}` : `${styles.navLinks}`}>
-                        <li>
+                        <li key={1}>
                             <CustomLink text={"About"}  href="/about" style={""}/>
                         </li>
-                        <li>
+                        <li key={2}>
                             <CustomLink text={"Surveys"}  href="/" style={""}/>
                         </li>
-                        <li>
+                        <li key={3}>
                             <CustomLink text={"Contact"}  href="/contact" style={""}/>
                         </li>
-                        <li>
+                        <li key={4}>
                             {
                             session ? 
                                 (session && <>

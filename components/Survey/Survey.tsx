@@ -39,6 +39,7 @@ const Survey = ({surveyId}) => {
       uuid: "",
       title: "",
       description: "",
+      successful_message: "",
       created_at: "",
       user_id: 0,
       email: "",
@@ -48,6 +49,7 @@ const Survey = ({surveyId}) => {
   const [userSurveys, setUserSurveys] = useState({
     title: "",
     description: "",
+    successful_message: "",
     created_at: "",
     user_id: 0,
     email: "",
@@ -63,6 +65,7 @@ const Survey = ({surveyId}) => {
             id: surveyFromDB.id,
             uuid: surveyFromDB.uuid,
             description: surveyFromDB.description,
+            successful_message: surveyFromDB.successful_message,
             title: surveyFromDB.title,
             created_at: surveyFromDB.created_at,
             user_id: surveyFromDB.user_id,
@@ -90,7 +93,7 @@ const Survey = ({surveyId}) => {
     
     
     const data = [...answers];
-    console.log("answers data => ", data);
+    // console.log("answers data => ", data);
 
     const saveQuestion = async(answersInfo: { question: any; answer: any; email: string; }[]) => {
         const questions = await surveyApi.answerTheQuestion(answersInfo);
@@ -116,7 +119,10 @@ const Survey = ({surveyId}) => {
 
                   }
                 }
-                  navigation={true}
+                navigation={{
+                  prevEl: '.prev',
+                  nextEl: '.nextSwiperSurvey',
+                }}
                   modules={[Pagination, Navigation]}
                   className={styles.containerQuestion}
               >
@@ -129,9 +135,9 @@ const Survey = ({surveyId}) => {
                                               <div className={styles.questionBlock}>
                                                   <div key={index} className={styles.question}>{index+1}). {item.question}</div>
                                                   <div className={styles.answerContainer}>
-                                                      <textarea placeholder="Put you answer"  
+                                                      <textarea placeholder="Put you answer" value={answer} 
                                                           onChange={(e) => handleChangeAnswer(e, index)} name={item.question} id={item.question} cols={30} rows={10}>
-                                                              {answer} 
+                                                              {/* {answer}  */}
                                                       </textarea>
                                                   </div>
                                               </div>
@@ -143,11 +149,13 @@ const Survey = ({surveyId}) => {
                       }
 
               </Swiper>
-          <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button>
+          <button className={slide ===  survey.questions.length - 1  ? `nextSwiperSurvey ${styles.disabledNextBtn}`: `nextSwiperSurvey ${styles.nextSwiper}`}>+ answer</button>
+          {/* <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button> */}
             {success && (
-                <div className={styles.isSuccess} onClick={() => setSuccess(!success)}>
-                    <div>answers added successfully</div>
-                </div>
+                    <div className={styles.isSuccess} onClick={() => setSuccess(!success)}>
+                        {survey.successful_message.length === 0 && <div>answers added successfully</div>}
+                        {survey.successful_message.length > 0 && <div>{survey.successful_message}</div>}
+                    </div>
             )}
         </div>
         

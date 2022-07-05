@@ -62,7 +62,7 @@ const SectionDashboard = () => {
                         <li className={styles.topic}>Date</li>
                         <li><a href="#">02 Jan 2021</a></li>
                     </ul>
-                    <ul className={styles.details}>
+                     className={styles.details}>
                         <li className={styles.topic}>Customer</li>
                         <li><a href="#">Alex Doe</a></li>
                     </ul>
@@ -70,7 +70,7 @@ const SectionDashboard = () => {
                         <li className={styles.topic}>Sales</li>
                         <li><a href="#">Delivered</a></li>
                     </ul>
-                    <ul className={styles.details}>
+                     className={styles.details}>
                         <li className={styles.topic}>Total</li>
                         <li><a href="#">$204.98</a></li>
                     </ul>

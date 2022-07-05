@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
-import { ICreateSurvey, IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
+import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import styles from "./SurveyList.module.css";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 import iconLink from "../../../styles/icons/icons8-link-64.png";
@@ -14,7 +14,8 @@ import iconLink from "../../../styles/icons/icons8-link-64.png";
 const SurveyList = (): ReactElement => {
 
     const {data: session, status} = useSession();
-    const { push } = useRouter();
+    const { push, asPath } = useRouter();
+    const isSurveyList = asPath.includes("surveys_list")
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -25,6 +26,7 @@ const SurveyList = (): ReactElement => {
     const [title, setTitle] = useState<string>("");
 
     const [description, setDescription] = useState<string>("");
+    const [successMessage, setSuccessMessage] = useState<string>("");
     const [questions, setQuestion] = useState<IQuestion[]>([{
         id: 0,
         question: "",
@@ -36,6 +38,7 @@ const SurveyList = (): ReactElement => {
         uuid: "",
         title: "",
         description: "",
+        successful_message: "",
         created_at: "",
         user_id: 0,
         email: "",
@@ -77,9 +80,15 @@ const SurveyList = (): ReactElement => {
         setDescription(e.target.value);
     };
 
+    const handleOnchangeSuccessMessage = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+        setSuccessMessage(e.target.value);
+    };
+
     useEffect(() => {
 
-        if (status === 'authenticated' ) {
+        if (status === 'authenticated') {
+            console.log("isSurveyList ", isSurveyList);
+            
             const email: string= session.user.email;
 
             const getListSurveys = async() => {
@@ -89,7 +98,7 @@ const SurveyList = (): ReactElement => {
 
             getListSurveys();
         }
-    },[session]);
+    },[session, isSurveyList, asPath]);
 
     console.log("SurveyList: userSurveys", userSurveys);
 
@@ -138,6 +147,7 @@ const SurveyList = (): ReactElement => {
         const editDataSurvey = {
             title: title,
             description: description,
+            successful_message: successMessage,
             email: userEmail,
             questions: questions
         };
@@ -159,7 +169,8 @@ const SurveyList = (): ReactElement => {
 
     // TODO: create link for prod
     // process.env.COPY_LINK
-    const link = 'http://localhost:3000';
+    // const link = 'http://localhost:3000';
+    const link = 'https://survey.simple2b.net';
     
     return  (
         <div className={styles.homeContent}>
@@ -241,6 +252,7 @@ const SurveyList = (): ReactElement => {
                                                 getEditSurvey(item.id, index)
                                                 setEditSurveyID(item.id);
                                                 setDescription(item.description);
+                                                setSuccessMessage(item.successful_message)
                                                 setTitle(item.title);
                                                 setUserEmail(item.email)
                                                 if (item.questions.length > 0 )setQuestion(item.questions.map((q) => {return {id: q.id, question: q.question, survey_id: q.survey_id}}));
@@ -282,14 +294,24 @@ const SurveyList = (): ReactElement => {
                                             questions[0].id > 1 && questions.map((item, index) => {
                                                 return (
                                                     <div className={styles.titleContainer} key={item.id}>
-                                                        <textarea placeholder="question" value={item.question} onChange={(e) => editQuestions(e, item, index)} className={styles.formControl}  name={item.question} rows={1}>{item.question}</textarea>
+                                                        <textarea placeholder="question" value={item.question} onChange={(e) => editQuestions(e, item, index)} className={styles.formControl}  name={item.question} rows={1}>
+                                                            {/* {item.question} */}
+                                                        </textarea>
                                                     </div>
                                                 )
                                             })
                                     }
 
                                     <div className={styles.titleContainer}>
-                                        <textarea placeholder="description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>{description}</textarea>
+                                        <textarea placeholder="description" value={description} onChange={handleOnchangeDescription} className={styles.formControl}  name="description" id=""  rows={2}>
+                                            {/* {description} */}
+                                        </textarea>
+                                    </div>
+
+                                    <div className={styles.titleContainer}>
+                                        <textarea placeholder="success message" value={successMessage} onChange={handleOnchangeSuccessMessage} className={styles.formControl}  name="successMessage" id=""  rows={1}>
+                                            {/* {successMessage} */}
+                                        </textarea>
                                     </div>
 
                                     <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={titleError.length > 0} onClick={editSurvey}>
@@ -305,7 +327,3 @@ const SurveyList = (): ReactElement => {
 };
 
 export default SurveyList;
-function e(e: any) {
-    throw new Error("Function not implemented.");
-}
-

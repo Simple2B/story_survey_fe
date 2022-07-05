@@ -8,7 +8,7 @@ const SurveyPage = () => {
   let modifyPath = asPath.split("/");
   let surveyId = modifyPath[modifyPath.length - 1];
 
-  console.log("SurveyPage: surveyId ", surveyId);
+  // console.log("SurveyPage: surveyId ", surveyId);
  
 
   return  (

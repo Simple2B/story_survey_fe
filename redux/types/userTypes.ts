@@ -1,15 +1,9 @@
-// export interface IUserProvider {
-//     email?: string;
-//     image?: string;
-//     username?: string;
-//     password?: string;
-// }
+import { IGetSurvey } from "./surveyTypes";
 
-// state
-// export interface IUserState {
+export const CLIENT = 'Client';
+export const ADMIN = 'Admin';
 
-// }
-// action types
+
 export enum UserActionTypes {
   SET_CURRENT_USER = "SET_CURRENT_USER",
   GET_CURRENT_USER = "GET_CURRENT_USER",
@@ -43,4 +37,5 @@ export interface IUserResponse {
   image?: string;
   role?: string;
   username?: string;
+  surveys?: IGetSurvey[]
 }
