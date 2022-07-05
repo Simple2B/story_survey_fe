@@ -45,16 +45,16 @@ const Navbar = () => {
                         </button>
                     </div>
                     <ul className={isOpen ? `{${styles.navLinks} ${styles.showNav}}` : `${styles.navLinks}`}>
-                        <li>
+                        <li key={1}>
                             <CustomLink text={"About"}  href="/about" style={""}/>
                         </li>
-                        <li>
+                        <li key={2}>
                             <CustomLink text={"Surveys"}  href="/" style={""}/>
                         </li>
-                        <li>
+                        <li key={3}>
                             <CustomLink text={"Contact"}  href="/contact" style={""}/>
                         </li>
-                        <li>
+                        <li key={4}>
                             {
                             session ? 
                                 (session && <>

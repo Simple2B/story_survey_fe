@@ -83,13 +83,10 @@ export const menuIcons = [
   }
 ];
 
-function UserContainer ({children, title, keywords, style, headerName}) {
-    const [isActive, setActive] = useState(null);
+function UserContainer ({children, title, keywords, style, headerName, isActive, setActive}) {
     const [icons, setMenuIcons] = useState<IMenuIcon[]>(menuIcons);
-    // const [headerName, setHeaderName] = useState("Surveys list");
     const { push, asPath } = useRouter();
     const { data: session} = useSession();
-    // const [user, setUser] = useState(null);
 
     const handleSignOut = async () => {
       const data = await signOut({redirect: false, callbackUrl: '/'});
@@ -117,21 +114,15 @@ function UserContainer ({children, title, keywords, style, headerName}) {
             // };
 
             if (asPath === icon.href && icon.name === SIGN_OUT) {
-              console.log("path sign out ", icon.href);
-              
               handleSignOut();
             };
           
             if ( user && asPath === icon.href && icon.href === '/user_profile/survey/users/users_list' ) { 
               console.log("user.role", user.role);
               if ( user.role === ADMIN){ 
-                console.log("user.role === ADMIN", user.role === ADMIN);
-                
                 push('/user_profile/survey/users/users_list');
               }
               if ( user.role === CLIENT) {
-                console.log("user.role === CLIENT", user.role === CLIENT);
-                
                 push('/user_profile/survey/surveys_list');
               }
             };
@@ -196,8 +187,8 @@ function UserContainer ({children, title, keywords, style, headerName}) {
                           <>
                             { 
                               isClient && !menu.isAdmin && 
-                              <Link href={menu.href} key={index} >
-                                <li >
+                              <Link href={menu.href}  >
+                                <li key={index}>
                                     <a className={menu.classIcon}>
                                         <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
                                         <span className={styles.linksName}>{ menu.name }</span>
@@ -207,8 +198,8 @@ function UserContainer ({children, title, keywords, style, headerName}) {
                             }
                             { 
                               isAdmin && 
-                              <Link href={menu.href} key={index} >
-                                <li>
+                              <Link href={menu.href}  >
+                                <li key={index}>
                                     <a className={menu.classIcon}>
                                         <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
                                         <span className={styles.linksName}>{ menu.name }</span>
