@@ -52,7 +52,7 @@ function Forms() {
     // console.log("isLogin", isLogin)
     
 
-    const handleOAuthSignIn = (provider) => () => {
+    const handleOAuthSignIn = (provider: string) => () => {
         signIn(provider);  
     };
 
@@ -63,7 +63,7 @@ function Forms() {
     const handleOnchange = (e, setFunc, setErr, passValue) => {
         setFunc(e.target.value);
 
-        const value = e.target.value;
+        // const value = e.target.value;
 
         // let errMsg ="";
 
@@ -99,7 +99,7 @@ function Forms() {
 
         // login({username: email, password: password });
 
-        // isLogin && push("/user_profile/survey/surveys_list")
+        // isLogin && push("/user_profile/")
         
         // const userLogin = async(email: string, password: string) => {
         //     const loginUser = await authApi.login(email, password)

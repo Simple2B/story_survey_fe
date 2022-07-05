@@ -32,6 +32,7 @@ interface IAnswer  {
 // 42e0173c-7a64-4aec-9413-4b8f643939b5
 
 function Home() {
+    const router = useRouter()
 
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
@@ -159,8 +160,8 @@ function Home() {
             question: item.question, 
             answer: e.target.value, 
             email: item.email,
-            session_id: item.session_id,
-            start_time: item.start_time,
+            session_id: sessionId,
+            start_time: startDate,
             // end_time?: string,
         } : item));  
         // setAnswer(answer);
@@ -201,8 +202,8 @@ function Home() {
 
     // TODO: create link for prod
     // process.env.COPY_LINK
-    // const link = 'http://localhost:3000';
-    const link = 'https://survey.simple2b.net';
+    const link = 'http://localhost:3000';
+    // const link = 'https://survey.simple2b.net';
 
     
     return (
@@ -216,6 +217,8 @@ function Home() {
                             {(
 
                             userSurveys.map((item, index) => {
+                                console.log("HOME: item.id", item.id);
+                                const survey_id = item.id;
                                 return (
                                     <div className={styles.overviewBoxes} key={index}>
                                         <div className={styles.box}>
@@ -277,12 +280,19 @@ function Home() {
                                                             className={styles.hideContainerLink} 
                                                             type="text"
                                                             ref={refLink}
-                                                            value={`${link}/survey/${item.id}`}
-                                                            onChange={() => {}}
+                                                            value={`${link}/survey/${survey_id}`}
+                                                            // onChange={() => {}}
                                                         />
                                                     </i>
-                                                     <Link href={`/survey/${item.id}`}>
-                                                        <a target="_blank" className="card-link">survey</a>
+                                                     <Link 
+                                                        href={`/survey/${survey_id}`} 
+                                                     >
+                                                        <a 
+                                                        // onClick={() => router.push(`/survey/${survey_id}`)} 
+                                                        target="_blank" 
+                                                        className="card-link">
+                                                            survey
+                                                        </a>
                                                      </Link>
                                                 </div>
                                                 <a href="#" className="card-link" onClick={() => {
@@ -301,8 +311,8 @@ function Home() {
                                                             question: question, 
                                                             answer: "", 
                                                             email: item.email,
-                                                            session_id: sessionId,
-                                                            start_time: startDate,
+                                                            session_id: "",
+                                                            start_time: "",
                                                             // end_time: "",
                                                         }} ));
                                                         // setAnswer({question: question, answer: "", email: item.email})

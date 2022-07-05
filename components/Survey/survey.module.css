@@ -75,10 +75,9 @@
 }
 
 .answerContainer {
-    margin: 0 auto;
+    margin: 35px auto;
     width: 75%;
     height: 70%;
-    margin-top: 35px;
     display: flex;
     justify-content: center;
     align-items: center;

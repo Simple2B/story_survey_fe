@@ -27,63 +27,64 @@ interface IMenuIcon {
     isAdmin?: boolean;
 }
 
-export const menuIcons = [
-  {
-    image: surveysIcon,
-    name: 'Surveys list',
-    href: '/user_profile/survey/surveys_list',
-    classIcon: styles.active,
-    isIconActive: true,
-    isAdmin: false,
-  },
-  {
-    image: surveysCreateIcon,
-    name: 'Create survey',
-    href: '/user_profile/survey/create_survey',
-    classIcon: "",
-    isIconActive: false,
-    isAdmin: false,
-  },
-  {
-    image: usersListIcon,
-    name: 'Create survey',
-    href: '/user_profile/survey/users/users_list',
-    classIcon: "",
-    isIconActive: false,
-    isAdmin: true,
-  },
-  {
-    image: dashboardIcon,
-    name: 'Dashboard',
-    href: '/user_profile/survey/dashboard',
-    classIcon: "",
-    isIconActive: false,
-    isAdmin: false,
-  },
-  {
-    image: messageIcon,
-    name: 'Messages',
-    href: '/user_profile/survey/messages',
-    classIcon: "",
-    isIconActive: false,
-    isAdmin: false,
-  },
-  {
-    image: settingsIcon,
-    name: 'Setting',
-    href: '/user_profile/survey/setting',
-    classIcon: "",
-    isIconActive: false,
-    isAdmin: false,
-  },
-  {
-    image: singOutIcon,
-    name: SIGN_OUT,
-    classIcon: styles.singOutIcon,
-  }
-];
+
 
 function UserContainer ({children, title, keywords, style, headerName, isActive, setActive}) {
+  const menuIcons = [
+      {
+        image: surveysIcon,
+        name: 'Surveys list',
+        href: '/user_profile/survey/surveys_list',
+        classIcon: styles.active,
+        isIconActive: true,
+        isAdmin: false,
+      },
+      {
+        image: surveysCreateIcon,
+        name: 'Create survey',
+        href: '/user_profile/survey/create_survey',
+        classIcon: "",
+        isIconActive: false,
+        isAdmin: false,
+      },
+      {
+        image: usersListIcon,
+        name: 'Create survey',
+        href: '/user_profile/survey/users/users_list',
+        classIcon: "",
+        isIconActive: false,
+        isAdmin: true,
+      },
+      {
+        image: dashboardIcon,
+        name: 'Dashboard',
+        href: '/user_profile/survey/dashboard',
+        classIcon: "",
+        isIconActive: false,
+        isAdmin: false,
+      },
+      {
+        image: messageIcon,
+        name: 'Messages',
+        href: '/user_profile/survey/messages',
+        classIcon: "",
+        isIconActive: false,
+        isAdmin: false,
+      },
+      {
+        image: settingsIcon,
+        name: 'Setting',
+        href: '/user_profile/survey/setting',
+        classIcon: "",
+        isIconActive: false,
+        isAdmin: false,
+      },
+      {
+        image: singOutIcon,
+        name: SIGN_OUT,
+        classIcon: styles.singOutIcon,
+      }
+    ];
     const [icons, setMenuIcons] = useState<IMenuIcon[]>(menuIcons);
     const { push, asPath } = useRouter();
     const { data: session} = useSession();
@@ -127,7 +128,7 @@ function UserContainer ({children, title, keywords, style, headerName, isActive,
               }
             };
 
-            if ( asPath.includes(icon.href) && icon.classIcon.length === 0) {
+            if ( asPath.includes(icon.href) ) {
                   icon.classIcon = styles.active;
                   icon.isIconActive = true;
             } else {
@@ -138,7 +139,7 @@ function UserContainer ({children, title, keywords, style, headerName, isActive,
           }))
         };
 
-      }, [session])
+      }, [session, isActive])
   
     const getMainPage = () => {
         push("/");
