@@ -93,3 +93,16 @@
     display: flex;
     justify-content: space-between;
 }
+
+.emailContainer {
+    position: relative;
+}
+
+.emailContainer .role {
+    position: absolute;
+    top: 0;
+    left: -23px;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--primaryColor);
+}
