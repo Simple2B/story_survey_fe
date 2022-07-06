@@ -25,7 +25,7 @@ const initialStateProfile = {
 
 const CreateSurvey = (): ReactElement => {
 
-    const { data: session} = useSession();
+    const { data: session } = useSession();
 
     const { push } = useRouter();
 
@@ -45,7 +45,7 @@ const CreateSurvey = (): ReactElement => {
 
     if (isSuccess === true) {
         setTimeout(() => {
-            setIsSuccess(false)
+            setIsSuccess(false);
         }, 1500);
     };
     
@@ -154,9 +154,13 @@ const CreateSurvey = (): ReactElement => {
             console.log("newSurvey =>>> ", newSurvey);
             setIsSuccess(true);
         };
+
         saveSurveyToDB(data);
         setIsFormCreateOpen(false);
-        push('/user_profile/survey/surveys_list');
+
+        setTimeout(() => {
+            push('/user_profile/survey/surveys_list');
+        }, 500);
     };
 
 
@@ -178,7 +182,7 @@ const CreateSurvey = (): ReactElement => {
                         <div className={styles.survey}>
                                 <i className={styles.cancelIcon} onClick={openCreateSurvey}><Image src={cancelIcon} height={30} width={30}/></i>
                                 <div className={styles.titleContainer}>
-                                    {titleError.length > 0 && <div className={styles.errorMessage}>{titleError}</div>}
+                                    { titleError.length > 0 && <div className={styles.errorMessage}>{titleError}</div> }
                                     <input type="text" 
                                         className={styles.formControl} 
                                         value={title} 

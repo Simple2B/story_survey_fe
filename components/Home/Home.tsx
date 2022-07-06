@@ -18,6 +18,8 @@ import Cookies from 'js-cookie';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import Banner from "../common/Banner/Banner";
+import { CustomLink } from "../common/CustomLink";
 
 
 interface IAnswer  {
@@ -32,13 +34,12 @@ interface IAnswer  {
 // 42e0173c-7a64-4aec-9413-4b8f643939b5
 
 function Home() {
-    const router = useRouter()
 
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
 
     const {data: session } = useSession();
-    const { push } = useRouter();
+    const { push, asPath } = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([{
         title: "",
@@ -94,7 +95,6 @@ function Home() {
     const [answerToQuestion, setAnswerToQuestion] = useState([{questionIndex: null, answer: ""}]);
 
 
-    
     useEffect(() => {
         
         const getListSurveys = async() => {
@@ -120,7 +120,6 @@ function Home() {
         getListSurveys();
         
     },[session]);
-
 
     const openSurvey = (
             data: React.SetStateAction<{ 
@@ -150,9 +149,6 @@ function Home() {
             setStartDate(Cookies.get('start_time'));
         };
     };
-
-    console.log("sessionId", sessionId);
-    console.log("startDate", startDate);
 
     const handleChangeAnswer = (e: { target: { value: React.SetStateAction<string>; }; }, ind: number) => {
         // let answer =  e.target.value
@@ -206,209 +202,218 @@ function Home() {
     
     return (
         <div className={styles.wrapper}>
-            <Wrapper>
-                {/* <Banner title="Story Survey" subtitle="">
-                    <CustomLink text={"Surveys"}  href="/surveys" style={"btnPrimary"}/>
-                </Banner> */}
-                { userSurveys[0].user_id !== 0 && (
-                        <div className={styles.homeContent}>
-                            {(
+            {
+                userSurveys[0].user_id === 0 ? (
+                   <Wrapper>
+                        <Banner title="Story Survey" subtitle="">
+                            <CustomLink text={"create your survey"}  href={`/auth/signin?callbackUrl=${asPath}`} style={"btnPrimary"}/>
+                        </Banner>
+                    </Wrapper> 
+                ) : (
+                    <Wrapper>
+                        { userSurveys[0].user_id !== 0 && (
+                                <div className={styles.homeContent}>
+                                    {(
 
-                            userSurveys.map((item, index) => {
-                                console.log("HOME: item.id", item.id);
-                                const survey_id = item.id;
-                                return (
-                                    <div className={styles.overviewBoxes} key={index}>
-                                        <div className={styles.box}>
-                                            <div className={styles.rightSide}>
-                                                {/* <i className={styles.editIcon} onClick={deleteSurvey}><Image src={deleteIcon} height={30} width={30}/></i> */}
-                                                    <div className={styles.titleCard}>
-                                                        <div className={styles.title}>{item.title}</div>
-                                                    </div>
-                                                    
-                                                    <div className={styles.containerQuestionList}>
-                                                        
-                                                        {   
-                                                            item.questions.length > 0 && (
-                                                                item.questions.slice(0, 1).map((q, index) => {
-                                                                    return (
-                                                                        <div className={styles.containerStep} key={index}>
-                                                                            {item.questions.length > 1 && <span className={styles.btnShowMore}><i className={`${styles.arrow} ${styles.up}`}></i></span> }
-                                                                            
-                                                                            <div className={styles.indicator}>
-                                                                                <i className={`bx bx-right-arrow-alt`}></i>
-                                                                                <span className={styles.text}>{q.question}</span>
-                                                                            </div>
-                                                                        </div>
+                                    userSurveys.map((item, index) => {
+                                        console.log("HOME: item.id", item.id);
+                                        const survey_id = item.id;
+                                        return (
+                                            <div className={styles.overviewBoxes} key={index}>
+                                                <div className={styles.box}>
+                                                    <div className={styles.rightSide}>
+                                                        {/* <i className={styles.editIcon} onClick={deleteSurvey}><Image src={deleteIcon} height={30} width={30}/></i> */}
+                                                            <div className={styles.titleCard}>
+                                                                <div className={styles.title}>{item.title}</div>
+                                                            </div>
+                                                            
+                                                            <div className={styles.containerQuestionList}>
+                                                                
+                                                                {   
+                                                                    item.questions.length > 0 && (
+                                                                        item.questions.slice(0, 1).map((q, index) => {
+                                                                            return (
+                                                                                <div className={styles.containerStep} key={index}>
+                                                                                    {item.questions.length > 1 && <span className={styles.btnShowMore}><i className={`${styles.arrow} ${styles.up}`}></i></span> }
+                                                                                    
+                                                                                    <div className={styles.indicator}>
+                                                                                        <i className={`bx bx-right-arrow-alt`}></i>
+                                                                                        <span className={styles.text}>{q.question}</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            )
+                                                                        })
                                                                     )
+                                                                }
+                                                                <div className={styles.hideContainerQuestion}>
+                                                                    {   
+                                                                        item.questions.length > 1 && (
+                                                                            item.questions.slice(1, item.questions.length - 1).map((item, index) => {
+                                                                                return (
+                                                                                    <div className={styles.containerStep} key={index}>
+                                                                                        <div className={styles.indicator}>
+                                                                                            <i className={`bx bx-right-arrow-alt`}></i>
+                                                                                            <span className={styles.text}>{item.question}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                )
+                                                                            })
+                                                                        )
+                                                                    }
+                                                                </div> 
+                                                            </div>
+                                                    </div>
+                                                    <div className={styles.containerLink}>
+                                                        <div className={styles.containerIconLink}>
+                                                            <i className={styles.iconLink} title="copy link" onClick={(event) => {
+                                                                    function copyLink() {
+                                                                        const value = refLink.current.value;
+                                                                        navigator.clipboard.writeText(value).then(() => {
+                                                                            alert(`Copied to clipboard, link on ${item.title}`);
+                                                                        });
+                                                                    }
+                                                                    copyLink()
+                                                                }}>
+                                                                <Image src={iconLink} height={30} width={30}/>
+                                                                <input 
+                                                                    className={styles.hideContainerLink} 
+                                                                    type="text"
+                                                                    ref={refLink}
+                                                                    value={`${link}/survey/${survey_id}`}
+                                                                    // onChange={() => {}}
+                                                                />
+                                                            </i>
+                                                            <Link 
+                                                                href={`/survey/${survey_id}`} 
+                                                            >
+                                                                <a 
+                                                                // onClick={() => router.push(`/survey/${survey_id}`)} 
+                                                                target="_blank" 
+                                                                className="card-link">
+                                                                    survey
+                                                                </a>
+                                                            </Link>
+                                                        </div>
+                                                        <a href="#" className="card-link" onClick={() => {
+                                                                openSurvey({
+                                                                    id: item.id,
+                                                                    uuid: item.uuid,
+                                                                    title: item.title,
+                                                                    description: item.description,
+                                                                    created_at: item.created_at,
+                                                                    user_id: item.user_id,
+                                                                    email: item.email,
+                                                                    questions: item.questions,
+                                                                    successful_message: item.successful_message,
+                                                                }, index)
+                                                                setAnswers(item.questions.map((question) => {return {
+                                                                    question: question, 
+                                                                    answer: "", 
+                                                                    email: item.email,
+                                                                    session_id: "",
+                                                                    start_time: "",
+                                                                    // end_time: "",
+                                                                }} ));
+                                                                // setAnswer({question: question, answer: "", email: item.email})
+                                                            }}
+                                                            >
+                                                                show more
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })                
+                                    )} 
+                                </div>
+                            )
+                        }
+                        {
+                            isOpenDescription &&
+                            <div className={styles.modalWindow}>
+                                <div className={styles.modal}>
+                                    <i className={styles.editIcon} onClick={() => setOpenDescription(!isOpenDescription)}><Image src={deleteIcon} height={30} width={30}/></i>
+                                    <div className={styles.title}>{survey.title}</div>
+                                    <div className={styles.title}>{survey.description}</div>
+                                    <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={() => {
+                                            setOpenDescription(!isOpenDescription);
+                                            setIsOpen(!isOpen);
+                                        }}>Answer the {survey.questions.length > 0 ? "questions" : "question"}</button>
+                                </div>
+                            </div>
+
+                        }
+                        { isOpen &&
+                                (
+                                    <div className={styles.modalWindow}>
+                                        <div className={styles.modal}>
+                                            <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}><Image src={deleteIcon} height={30} width={30}/></i>
+                                            <div className={styles.title}>{survey.title}</div>
+                                                <Swiper
+                                                    pagination={{
+                                                    type: "custom",
+                                                    }}
+                                                    navigation={{
+                                                        prevEl: '.prev',
+                                                        nextEl: '.nextSwiper',
+                                                    }}
+                                                    onSlideChange={(swiper) => {
+                                                        setSlide(swiper.activeIndex);
+                                                        console.log("indexSurvey: ", indexSurvey);
+                                                        const currentSurvey = userSurveys[indexSurvey];
+                                                        const currentQuestion = currentSurvey[swiper.activeIndex];
+                                                        console.log("currentQuestion", currentQuestion);
+                                                    }}
+                                                    modules={[Pagination, Navigation]}
+                                                    className={styles.containerQuestion}
+                                                >
+                                                        {
+                                                            survey.questions.length > 0 && (
+                                                                survey.questions.map((item, index) => {
+                                                                        
+                                                                        return (
+                                                                            <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
+                                                                                <div className={styles.questionBlock}>
+                                                                                    <div key={index} className={styles.question}>{index+1}). {item.question}</div>
+                                                                                    <div className={styles.answerContainer}>
+                                                                                        <textarea 
+                                                                                            placeholder="Put you answer" 
+                                                                                            value={answers[index].answer} 
+                                                                                            onChange={(e) => handleChangeAnswer(e, index)}
+                                                                                            name={item.question} 
+                                                                                            id={item.question} 
+                                                                                            cols={30} 
+                                                                                            rows={10}
+                                                                                        >
+                                                                                        </textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </SwiperSlide>
+                                                                        )
                                                                 })
                                                             )
                                                         }
-                                                        <div className={styles.hideContainerQuestion}>
-                                                            {   
-                                                                item.questions.length > 1 && (
-                                                                    item.questions.slice(1).map((item, index) => {
-                                                                        return (
-                                                                            <div className={styles.containerStep} key={index}>
-                                                                                <div className={styles.indicator}>
-                                                                                    <i className={`bx bx-right-arrow-alt`}></i>
-                                                                                    <span className={styles.text}>{item.question}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        )
-                                                                    })
-                                                                )
-                                                            }
-                                                        </div> 
-                                                    </div>
-                                            </div>
-                                            <div className={styles.containerLink}>
-                                                <div className={styles.containerIconLink}>
-                                                    <i className={styles.iconLink} title="copy link" onClick={(event) => {
-                                                            function copyLink() {
-                                                                const value = refLink.current.value;
-                                                                navigator.clipboard.writeText(value).then(() => {
-                                                                    alert(`Copied to clipboard, link on ${item.title}`);
-                                                                });
-                                                            }
-                                                            copyLink()
-                                                        }}>
-                                                        <Image src={iconLink} height={30} width={30}/>
-                                                        <input 
-                                                            className={styles.hideContainerLink} 
-                                                            type="text"
-                                                            ref={refLink}
-                                                            value={`${link}/survey/${survey_id}`}
-                                                            // onChange={() => {}}
-                                                        />
-                                                    </i>
-                                                     <Link 
-                                                        href={`/survey/${survey_id}`} 
-                                                     >
-                                                        <a 
-                                                        // onClick={() => router.push(`/survey/${survey_id}`)} 
-                                                        target="_blank" 
-                                                        className="card-link">
-                                                            survey
-                                                        </a>
-                                                     </Link>
-                                                </div>
-                                                <a href="#" className="card-link" onClick={() => {
-                                                        openSurvey({
-                                                            id: item.id,
-                                                            uuid: item.uuid,
-                                                            title: item.title,
-                                                            description: item.description,
-                                                            created_at: item.created_at,
-                                                            user_id: item.user_id,
-                                                            email: item.email,
-                                                            questions: item.questions,
-                                                            successful_message: item.successful_message,
-                                                        }, index)
-                                                        setAnswers(item.questions.map((question) => {return {
-                                                            question: question, 
-                                                            answer: "", 
-                                                            email: item.email,
-                                                            session_id: "",
-                                                            start_time: "",
-                                                            // end_time: "",
-                                                        }} ));
-                                                        // setAnswer({question: question, answer: "", email: item.email})
-                                                    }}
+
+                                                </Swiper>
+                                                { 
+                                                    <button 
+                                                        // className={slide ===  survey.questions.length   ? `nextSwiper ${styles.disabledNextBtn}`: `nextSwiper ${styles.nextSwiper}`} 
+                                                        className={`nextSwiper ${styles.nextSwiper}`} 
+
+                                                        onClick={answerTheQuestion}
                                                     >
-                                                        show more
-                                                </a>
-                                            </div>
+                                                            + answer
+                                                    </button>
+                                                }
+                                            {/* <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button> */}
                                         </div>
                                     </div>
                                 )
-                            })                
-                            )} 
-                        </div>
-                    )
-                }
-                {
-                    isOpenDescription &&
-                    <div className={styles.modalWindow}>
-                        <div className={styles.modal}>
-                            <i className={styles.editIcon} onClick={() => setOpenDescription(!isOpenDescription)}><Image src={deleteIcon} height={30} width={30}/></i>
-                            <div className={styles.title}>{survey.title}</div>
-                            <div className={styles.title}>{survey.description}</div>
-                            <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={() => {
-                                    setOpenDescription(!isOpenDescription);
-                                    setIsOpen(!isOpen);
-                                }}>Answer the {survey.questions.length > 0 ? "questions" : "question"}</button>
-                        </div>
-                    </div>
+                        }
 
-                }
-                { isOpen &&
-                        (
-                            <div className={styles.modalWindow}>
-                                <div className={styles.modal}>
-                                    <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}><Image src={deleteIcon} height={30} width={30}/></i>
-                                    <div className={styles.title}>{survey.title}</div>
-                                        <Swiper
-                                            pagination={{
-                                            type: "custom",
-                                            }}
-                                            navigation={{
-                                                prevEl: '.prev',
-                                                nextEl: '.nextSwiper',
-                                            }}
-                                            onSlideChange={(swiper) => {
-                                                setSlide(swiper.activeIndex);
-                                                console.log("indexSurvey: ", indexSurvey);
-                                                const currentSurvey = userSurveys[indexSurvey];
-                                                const currentQuestion = currentSurvey[swiper.activeIndex];
-                                                console.log("currentQuestion", currentQuestion);
-                                            }}
-                                            modules={[Pagination, Navigation]}
-                                            className={styles.containerQuestion}
-                                        >
-                                                {
-                                                    survey.questions.length > 0 && (
-                                                        survey.questions.map((item, index) => {
-                                                                
-                                                                return (
-                                                                    <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
-                                                                        <div className={styles.questionBlock}>
-                                                                            <div key={index} className={styles.question}>{index+1}). {item.question}</div>
-                                                                            <div className={styles.answerContainer}>
-                                                                                <textarea 
-                                                                                    placeholder="Put you answer" 
-                                                                                    value={answers[index].answer} 
-                                                                                    onChange={(e) => handleChangeAnswer(e, index)}
-                                                                                    name={item.question} 
-                                                                                    id={item.question} 
-                                                                                    cols={30} 
-                                                                                    rows={10}
-                                                                                >
-                                                                                </textarea>
-                                                                            </div>
-                                                                        </div>
-                                                                    </SwiperSlide>
-                                                                )
-                                                        })
-                                                    )
-                                                }
-
-                                        </Swiper>
-                                        { 
-                                            <button 
-                                                className={slide ===  survey.questions.length   ? `nextSwiper ${styles.disabledNextBtn}`: `nextSwiper ${styles.nextSwiper}`} 
-                                                onClick={answerTheQuestion}
-                                            >
-                                                    + answer
-                                            </button>
-                                        }
-                                    {/* <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button> */}
-                                </div>
-                            </div>
-                        )
-                }
-
-            </Wrapper>
+                    </Wrapper>                    
+                )
+            }
             {success && (
                     <div className={styles.isSuccess} onClick={() => setSuccess(!success)}>
                         {survey.successful_message.length === 0 && <div>answers added successfully</div>}

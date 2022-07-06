@@ -98,7 +98,7 @@ const SurveyList = (): ReactElement => {
 
             getListSurveys();
         }
-    },[session, isSurveyList, asPath]);
+    },[session]);
 
     console.log("SurveyList: userSurveys", userSurveys);
 
