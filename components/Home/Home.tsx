@@ -247,7 +247,7 @@ function Home() {
                                                         <div className={styles.hideContainerQuestion}>
                                                             {   
                                                                 item.questions.length > 1 && (
-                                                                    item.questions.slice(1,item.questions.length - 1).map((item, index) => {
+                                                                    item.questions.slice(1).map((item, index) => {
                                                                         return (
                                                                             <div className={styles.containerStep} key={index}>
                                                                                 <div className={styles.indicator}>

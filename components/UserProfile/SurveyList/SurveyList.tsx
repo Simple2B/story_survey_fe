@@ -212,7 +212,7 @@ const SurveyList = (): ReactElement => {
                                                 <div className={styles.hideContainerQuestion}>
                                                     {   
                                                         item.questions.length > 1 && (
-                                                            item.questions.slice(1, item.questions.length -1).map((item, index) => {
+                                                            item.questions.slice(1).map((item, index) => {
                                                                 return (
                                                                     <div className={styles.containerStep} key={index}>
                                                                         <div className={styles.indicator} key={index}>
@@ -294,7 +294,7 @@ const SurveyList = (): ReactElement => {
                                         />
                                     </div>
                                     {
-                                            questions[0].id > 1 && questions.slice(0, questions.length - 1).map((item, index) => {
+                                            questions[0].id > 1 && questions.map((item, index) => {
                                                 return (
                                                     <div className={styles.titleContainer} key={item.id}>
                                                         <textarea 
