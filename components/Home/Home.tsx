@@ -178,8 +178,6 @@ function Home() {
         
         const data = [...answers];
         console.log("=== survey.questions length", survey.questions.length - 1 );
-
-        
         const saveQuestion = async(answersInfo: { 
             question: any; 
             answer: any; 
@@ -202,8 +200,8 @@ function Home() {
 
     // TODO: create link for prod
     // process.env.COPY_LINK
-    const link = 'http://localhost:3000';
-    // const link = 'https://survey.simple2b.net';
+    // const link = 'http://localhost:3000';
+    const link = 'https://survey.simple2b.net';
 
     
     return (
