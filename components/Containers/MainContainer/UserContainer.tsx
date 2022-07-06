@@ -29,7 +29,7 @@ interface IMenuIcon {
 
 
 
-function UserContainer ({children, title, keywords, style, headerName, isActive, setActive}) {
+function UserContainer ({children, title, keywords, style, headerName }) {
   const menuIcons = [
       {
         image: surveysIcon,
@@ -49,7 +49,7 @@ function UserContainer ({children, title, keywords, style, headerName, isActive,
       },
       {
         image: usersListIcon,
-        name: 'Create survey',
+        name: 'Users list',
         href: '/user_profile/survey/users/users_list',
         classIcon: "",
         isIconActive: false,
@@ -85,6 +85,8 @@ function UserContainer ({children, title, keywords, style, headerName, isActive,
         classIcon: styles.singOutIcon,
       }
     ];
+    const [isActive, setActive] = useState(false);
+
     const [icons, setMenuIcons] = useState<IMenuIcon[]>(menuIcons);
     const { push, asPath } = useRouter();
     const { data: session} = useSession();
@@ -139,7 +141,7 @@ function UserContainer ({children, title, keywords, style, headerName, isActive,
           }))
         };
 
-      }, [session, isActive])
+      }, [session])
   
     const getMainPage = () => {
         push("/");
