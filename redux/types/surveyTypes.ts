@@ -1,5 +1,8 @@
 export interface IQuestion {
-    question: string, id: number, survey_id: number
+    question: string, 
+    id: number, 
+    survey_id: number,
+    answers?: [],
 }
 export interface ICreateSurvey {
     // question: string;

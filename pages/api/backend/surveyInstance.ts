@@ -70,7 +70,14 @@ export const surveyApi = {
       }
     },
 
-    answerTheQuestion: async (data:{answer: string, question: {question: string, id: number, survey_id: number}, email: string }[]): Promise<void> => {
+    answerTheQuestion: async (data:{
+        answer: string, 
+        question: {question: string, id: number, survey_id: number}, 
+        email: string,
+        session_id: string,
+        start_time?: string,
+        end_time?: string,
+      }[]): Promise<void> => {
       try {
         const response = await instance().post('/answer/create_answer', data);
         console.log(`answerTheQuestion: response `, response);
@@ -118,6 +125,18 @@ export const surveyApi = {
         // place to handle errors and rise custom errors
         console.log(`POST: error message => ${error.message}`);
         // console.log("error.response.data) => ", error.response.data);
+        throw new Error(error.message);
+      }
+    },
+
+    getInfoSurvey: async (id: number): Promise<any> => {
+      try {
+        const response = await instance().get(`/survey/get_survey/survey_with_answer/${id}`);
+        const res = response.data;
+        console.log(`getInfoSurvey: response received successfully `, res);
+        return res;
+      } catch (error: any) {
+        console.log(`POST: error message => ${error.message}`);
         throw new Error(error.message);
       }
     },

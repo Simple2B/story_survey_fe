@@ -374,6 +374,13 @@
     text-align: left;
   }
 
+  .containerQuestion div:last-child div .questionBlock{
+    display: none;
+    /* position: relative;
+    z-index: 20000;
+    background-color: black; */
+  }
+
   .questionBlock {
     height: 85%;
     text-align: center;

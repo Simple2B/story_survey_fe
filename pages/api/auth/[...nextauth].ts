@@ -1,35 +1,11 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
-import EmailProvider from "next-auth/providers/email";
-import { IUserProvider } from "../../../redux/types/authTypes";
 import { clientApi } from "../backend/userInstance";
-// import { login } from "../../../redux/actions/authActions";
-import { authApi } from "../backend/authApi";
-// import { useActions } from "../../../redux/useActions";
-import { login } from "../../../redux/actions/authActions";
-import { stripeApi } from "../backend/stripeInstance";
-// import TwitterProvider from "next-auth/providers/twitter";
+
 
 export default NextAuth({
-  // adapter: [
-    
-  // ],
   providers: [
-    // EmailProvider({
-    //   server: {
-    //     host: process.env.EMAIL_SERVER_HOST,
-    //     port: process.env.EMAIL_SERVER_PORT,
-    //     auth: {
-    //       user: process.env.EMAIL_SERVER_USER,
-    //       pass: process.env.EMAIL_SERVER_PASSWORD
-    //     }
-    //   },
-    //   from: process.env.EMAIL_FROM,
-    //   async generateVerificationToken() {
-    //     return "ABC123"
-    //   }
-    // }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET,
@@ -58,6 +34,7 @@ export default NextAuth({
   // },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+      
       const userData = {
         email: user.email,
         image: user.image,

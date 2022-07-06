@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
 import { clientApi } from "../../../pages/api/backend/userInstance";
-import { IUserResponse } from "../../../redux/types/userTypes";
+import { ADMIN, IUserResponse } from "../../../redux/types/userTypes";
 
 import styles from "./UsersList.module.css";
 
@@ -10,6 +10,8 @@ const UsersList = (): ReactElement => {
     const { data: session} = useSession();
     const { push } = useRouter();
     const [ users, setUsers ] = useState<IUserResponse[]>();
+    console.log("UsersList: users ", users);
+    
 
     useEffect(() => {
           if (session) {
@@ -49,7 +51,12 @@ const UsersList = (): ReactElement => {
                             return (
                                 <tr key={index} onClick={() => openUserList(user.id)} className={styles.tableRow}>
                                     <th scope="row">{index+1}</th>
-                                    <td>{user.email}</td>
+                                    <td className={styles.emailContainer}>
+                                        {user.email}
+                                        <span className={styles.role}>
+                                            {user.role === ADMIN ? "admin" : ""}
+                                        </span>
+                                    </td>
                                     <td>{user.username}</td>
                                     {user.surveys.length > 0 
                                         ? <td>{user.surveys.length}</td>

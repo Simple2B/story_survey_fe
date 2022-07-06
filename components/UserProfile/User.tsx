@@ -5,15 +5,15 @@ import UserContainer from "../../components/Containers/MainContainer/UserContain
 
 const User = ({children, title, keywords, style , headerName}) => {
   // const { data: session } = useSession();
-  const [isActive, setActive] = useState(false);
+  // const [isActive, setActive] = useState(false);
   return (
     <UserContainer 
         title={'User Profile'} 
         keywords={""} 
         style={""} 
-        setActive={setActive}
+        // setActive={setActive}
         headerName={headerName} 
-        isActive={isActive}
+        // isActive={isActive}
       >
       {children}
     </UserContainer>
