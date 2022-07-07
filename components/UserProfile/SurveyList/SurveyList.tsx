@@ -258,7 +258,13 @@ const SurveyList = (): ReactElement => {
                                                 setSuccessMessage(item.successful_message)
                                                 setTitle(item.title);
                                                 setUserEmail(item.email)
-                                                if (item.questions.length > 0 )setQuestion(item.questions.map((q) => {return {id: q.id, question: q.question, survey_id: q.survey_id}}));
+                                                if (item.questions.length > 0 )setQuestion(item.questions.map((q) => {
+                                                    return {
+                                                        id: q.id, 
+                                                        question: q.question, 
+                                                        survey_id: q.survey_id,
+                                                    }
+                                                }));
                                                 // setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: session? session.user.email : ""}} ));
                                             }}
                                             >

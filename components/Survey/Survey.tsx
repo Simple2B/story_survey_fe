@@ -212,7 +212,7 @@ const Survey = ({surveyId}) => {
           </button>
           {/* <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button> */}
             {success && (
-                    <div className={styles.isSuccess} onClick={() => setSuccess(!success)}>
+                    <div className={styles.isSuccess}>
                         {survey.successful_message.length === 0 && <div>answers added successfully</div>}
                         {survey.successful_message.length > 0 && <div>{survey.successful_message}</div>}
                     </div>
