@@ -180,6 +180,8 @@ const SurveyList = (): ReactElement => {
                     {userSurveys.length > 0 && (
 
                     userSurveys.map((item, index) => {
+                        console.log("========item.questions", item.questions);
+                        
                         return (
                             <div className={styles.overviewBoxes} key={index}>
                                 <div className={styles.box}>

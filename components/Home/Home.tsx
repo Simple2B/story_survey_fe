@@ -213,6 +213,7 @@ function Home() {
                                     userSurveys.map((item, index) => {
                                         console.log("HOME: item.id", item.id);
                                         const survey_id = item.id;
+                                        
                                         return (
                                             <div className={styles.overviewBoxes} key={index}>
                                                 <div className={styles.box}>
