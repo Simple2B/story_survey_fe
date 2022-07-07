@@ -26,12 +26,7 @@ interface IAnswer  {
     question: string, 
     answer: string, 
     email: string
-}
-
-// Cookies.set('session_id', uuidv4());
-// Cookies.set('start_time', new Date().toLocaleString());
-// 42e0173c-7a64-4aec-9413-4b8f643939b5
-// 42e0173c-7a64-4aec-9413-4b8f643939b5
+};
 
 function Home() {
 
@@ -141,7 +136,7 @@ function Home() {
         // set session_id for answer
         if (Cookies.get('session_id') === undefined && sessionId === undefined) {
             Cookies.set('session_id', uuidv4());
-            Cookies.set('start_time', new Date().toLocaleString());
+            Cookies.set('start_time', new Date().toISOString());
             setSessionId(Cookies.get('session_id'));
             setStartDate(Cookies.get('start_time'));
         } else {

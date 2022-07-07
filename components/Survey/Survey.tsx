@@ -114,7 +114,7 @@ const Survey = ({surveyId}) => {
     // set session_id for answer
     if (Cookies.get('session_id') === undefined && sessionId === undefined) {
         Cookies.set('session_id', uuidv4());
-        Cookies.set('start_time', new Date().toLocaleString());
+        Cookies.set('start_time', new Date().toISOString());
         setSessionId(Cookies.get('session_id'));
         setStartDate(Cookies.get('start_time'));
     } else {
