@@ -143,17 +143,19 @@ const UserList = (): ReactElement => {
                                     {
                                         survey.questions
                                             && (
-                                                survey.questions.map((questionInfo, item) => {
+                                                survey.questions.slice(0).map((questionInfo, item) => {
                                                     return (
                                                         <div>
-                                                            <div key={item} className={styles.question}>
-                                                                <div>
-                                                                    {questionInfo.question} 
+                                                            {
+                                                                questionInfo.question !== "" && (
+                                                                <div key={item} className={styles.question}>
+                                                                    <div>
+                                                                        {questionInfo.question} 
+                                                                    </div>
+                                                                    <div>{questionInfo.answers.length > 0 ? "answers" : "answer"}   </div>
+                                                                    <div>{questionInfo.answers.length}</div>
                                                                 </div>
-                                                                <div>{questionInfo.answers.length > 0 ? "answers" : "answer"}   </div>
-                                                                <div>{questionInfo.answers.length}</div>
-                                                            </div>
-
+                                                            )}
                                                             {/* <div key={item} className={styles.question}>
                                                                     {questionInfo.answers.map((answerInfo, index) => {
                                                                         return (
