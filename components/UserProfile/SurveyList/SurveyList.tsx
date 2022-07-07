@@ -214,7 +214,7 @@ const SurveyList = (): ReactElement => {
                                                 <div className={styles.hideContainerQuestion}>
                                                     {   
                                                         item.questions.length > 1 && (
-                                                            item.questions.slice(1).map((item, index) => {
+                                                            item.questions.slice(1, item.questions.length - 1).map((item, index) => {
                                                                 return (
                                                                     <div className={styles.containerStep} key={index}>
                                                                         <div className={styles.indicator} key={index}>
@@ -260,7 +260,7 @@ const SurveyList = (): ReactElement => {
                                                 setSuccessMessage(item.successful_message)
                                                 setTitle(item.title);
                                                 setUserEmail(item.email)
-                                                if (item.questions.length > 0 )setQuestion(item.questions.map((q) => {
+                                                if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
                                                     return {
                                                         id: q.id, 
                                                         question: q.question, 
@@ -302,7 +302,7 @@ const SurveyList = (): ReactElement => {
                                         />
                                     </div>
                                     {
-                                            questions[0].id > 1 && questions.map((item, index) => {
+                                            questions[0].id !== 0 && questions.map((item, index) => {
                                                 return (
                                                     <div className={styles.titleContainer} key={item.id}>
                                                         <textarea 
