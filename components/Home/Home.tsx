@@ -87,7 +87,7 @@ function Home() {
 
     const [isOpenDescription, setOpenDescription] = useState(false);
 
-    const [answerToQuestion, setAnswerToQuestion] = useState([{questionIndex: null, answer: ""}]);
+    // const [answerToQuestion, setAnswerToQuestion] = useState([{questionIndex: null, answer: ""}]);
 
 
     useEffect(() => {
