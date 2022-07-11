@@ -396,6 +396,7 @@
 }
 
 .titleContainer {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -563,6 +564,45 @@
   background-color: var(--mainWhite);
   color: var(--primaryColor);
   transition: all .5s ease-out;
+}
+
+/* edit container styles */ 
+.deleteIcon {
+  position: absolute;
+  top: -16px;
+  right: -10px;
+  width: 15px;
+  height: 15px;
+  transform: rotate(18deg);
+}
+
+.deleteIcon:hover {
+  transform: rotate(0);
+  width: 18px;
+  height: 18px;
+}
+
+.titleContainerPosition {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.btnAdd {
+  position: absolute;
+  bottom: -20px;
+  width: 100%;
+  text-align: right;
+  color: var(--mainBlack);
+  cursor: pointer;
+  font-size: 16px;
+  transition: font-size .3s ease-out;
+}
+
+.btnAdd:hover {
+  color: var(--primaryColor);
+  font-size: 16.5px;
+  transition: font-size .3s ease-out;
 }
 
 /* Responsive Media Query */

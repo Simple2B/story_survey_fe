@@ -34,6 +34,10 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
         survey_id: 0,
     }]);
 
+    const [questionsDeleted, setQuestionDeleted] = useState<IQuestion[]>([]);
+
+    const [createQuestion, setCreateQuestion] = useState<string[]>([]);
+
     const [isDelete, setDelete] = useState<boolean>(false);
     const [indexDelete, setIndexDelete] = useState<number>(null);
     const [nameDelete, setNameDelete] = useState<string>("");
@@ -121,11 +125,14 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
     const editSurvey = () => {
         console.log("survey id ", editSurveyId);
         const editDataSurvey = {
+            id: editSurveyId,
             title: title,
             description: description,
             successful_message: successMessage,
             email: userEmail,
-            questions: questions
+            questions: questions,
+            questions_deleted: questionsDeleted,
+            create_question: createQuestion,
         };
         console.log("=>>> editDataSurvey ", editDataSurvey);
         const editSurvey = async(data: IGetSurvey, id: any) => {
@@ -142,6 +149,9 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
         };
         editSurvey(editDataSurvey, editSurveyId);
         setIsOpen(!isOpen);
+
+        
+
     };
 
 
@@ -170,7 +180,9 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                                                         item.questions.slice(0, 1).map((q, index) => {
                                                             return (
                                                                 <div className={styles.containerStep} key={index}>
-                                                                    {item.questions.length > 1 && <span className={styles.btnShowMore}><i className={`${styles.arrow} ${styles.up}`}></i></span> }
+                                                                    {item.questions.length > 2 && <span className={styles.btnShowMore}>
+                                                                        <i className={`${styles.arrow} ${styles.up}`}>
+                                                                        </i></span> }
 
                                                                     <div className={styles.indicator} key={index}>
                                                                         <i className={`bx bx-right-arrow-alt`}></i>
@@ -216,13 +228,15 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                                                 setEditSurveyID(item.id);
                                                 setDescription(item.description);
                                                 setSuccessMessage(item.successful_message)
+                                                setQuestionDeleted([]);
+                                                setCreateQuestion([]);
                                                 setTitle(item.title);
                                                 setUserEmail(item.email)
                                                 if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
                                                     return {
                                                         id: q.id, 
                                                         question: q.question, 
-                                                        survey_id: q.survey_id,
+                                                        survey_id: item.id,
                                                     }
                                                 }));
                                                 // setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: session? session.user.email : ""}} ));
@@ -253,12 +267,19 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                             title={title} 
                             handleOnchange={handleOnchange} 
                             questions={questions} 
+                            setQuestion={setQuestion}
                             editQuestions={editQuestions} 
                             description={description} 
                             handleOnchangeDescription={handleOnchangeDescription} 
                             successMessage={successMessage} 
                             handleOnchangeSuccessMessage={handleOnchangeSuccessMessage} 
                             editSurvey={editSurvey}
+                            userEmail={userEmail}
+                            editSurveyId={editSurveyId}
+                            questionsDeleted={questionsDeleted}
+                            setQuestionDeleted={setQuestionDeleted}
+                            createQuestion={createQuestion}
+                            setCreateQuestion={setCreateQuestion}
                         />
                     }
                 </div>
