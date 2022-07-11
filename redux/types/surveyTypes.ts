@@ -27,6 +27,8 @@ export interface IGetSurvey {
         user_id?: number,
         email?: string,
         questions: IQuestion[],
+        questions_deleted?: IQuestion[],
+        create_question?: string[],
 }
 
 // User list 
