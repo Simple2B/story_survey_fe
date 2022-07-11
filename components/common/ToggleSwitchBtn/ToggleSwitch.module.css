@@ -1,0 +1,100 @@
+.toggleSwitchContainer {
+    width: 94%;
+    margin-bottom: 3%;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.toggleSwitch {
+    position: relative;
+    width: 85px;
+    display: inline-block;
+    vertical-align: middle;
+    /* -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none; */
+    text-align: left;
+}
+
+.toggleSwitchCheckbox {
+    display: none;
+}
+
+.toggleSwitchLabel {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 0 solid var(--mainWhite);
+    border-radius: 20px;
+    margin: 0;
+}
+
+.toggleSwitchInner {
+    display: block;
+    width: 200%;
+    margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+
+.toggleSwitchInner:before, .toggleSwitchInner:after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 34px;
+    padding: 0;
+    line-height: 34px;
+    font-size: 14px;
+    color: var(--mainWhite);
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+.toggleSwitchInner:before {
+    content: "Table";
+    /* text-transform: uppercase; */
+    padding-left: 10px;
+    background-color: var(--lightBlue);
+    color: var(--mainWhite);
+}
+
+.toggleSwitch[disabled] {
+    background-color: var(--mainWhite);
+    cursor: not-allowed;
+}
+
+.toggleSwitch[disabled]:before {
+    background-color: var(--mainWhite);
+    cursor: not-allowed;
+}
+    
+.toggleSwitchInner:after {
+      content: "List";
+      /* text-transform: uppercase; */
+      padding-right: 10px;
+      background-color: var(--mainBackground);
+      letter-spacing: 1px;
+      color: var(--mainWhite);
+      text-align: right;
+}
+.toggleSwitchSwitch {
+      display: block;
+      width: 24px;
+      margin: 5px;
+      background: var(--mainWhite);
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 48px;
+      border: 0 solid var(--mainWhite);
+      border-radius: 20px;
+      transition: all 0.3s ease-in 0s;
+}
+
+.toggleSwitchCheckbox:checked + .toggleSwitchLabel .toggleSwitchInner {
+    margin-left: 0;
+}
+
+.toggleSwitchCheckbox:checked + .toggleSwitchLabel .toggleSwitchSwitch {
+    right: 0px;
+}
