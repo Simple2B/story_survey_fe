@@ -31,8 +31,8 @@ const ProfileSurveyLists = () => {
 
   // TODO: create link for prod
   // process.env.COPY_LINK
-  const link = 'http://localhost:3000';
-  // const link = 'https://survey.simple2b.net';
+  // const link = 'http://localhost:3000';
+  const link = 'https://survey.simple2b.net';
   const [isCopied, setCopied] = useState<boolean>(false);
 
   const copyLink = (survey_id: number, title?: string) => {
