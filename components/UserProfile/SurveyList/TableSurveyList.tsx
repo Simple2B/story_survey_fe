@@ -120,6 +120,9 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
         setEditSurveyID(id);
     };
 
+    console.log("TableSurveyList: userSurveys ", userSurveys);
+    
+
     
     return  (
         <div className={styles.tableListContainer}>
@@ -143,7 +146,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
                                     <th scope="row">{index+1}</th>
                                     <td>{survey.title}</td>
                                     <td>{survey.description}</td>
-                                    <td>{survey.questions.length}</td>
+                                    <td>{survey.questions.length - 1}</td>
                                     <td className={styles.linkRow} onClick={() => copyLink(survey.id, survey.title)}>
                                         <span className={styles.copyLinkTitle}>copy link</span>
                                         <span className={styles.copyLink}>
