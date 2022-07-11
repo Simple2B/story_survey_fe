@@ -11,7 +11,7 @@ import iconLink from "../../../styles/icons/icons8-link-64.png";
 
 
 
-const SurveyList = (): ReactElement => {
+const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement => {
 
     const {data: session, status} = useSession();
     const { push, asPath } = useRouter();
@@ -31,18 +31,6 @@ const SurveyList = (): ReactElement => {
         id: 0,
         question: "",
         survey_id: 0,
-    }]);
-
-    const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([{
-        id: 0,
-        uuid: "",
-        title: "",
-        description: "",
-        successful_message: "",
-        created_at: "",
-        user_id: 0,
-        email: "",
-        questions: [],
     }]);
 
     const [isDelete, setDelete] = useState<boolean>(false);
@@ -83,22 +71,6 @@ const SurveyList = (): ReactElement => {
     const handleOnchangeSuccessMessage = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setSuccessMessage(e.target.value);
     };
-
-    useEffect(() => {
-
-        if (status === 'authenticated') {
-            console.log("isSurveyList ", isSurveyList);
-            
-            const email: string= session.user.email;
-
-            const getListSurveys = async() => {
-                const list = await surveyApi.getUserSurveys(email);
-                setUserSurveys(list);
-            }
-
-            getListSurveys();
-        }
-    },[session]);
 
     console.log("SurveyList: userSurveys", userSurveys);
 
@@ -170,11 +142,7 @@ const SurveyList = (): ReactElement => {
         setIsOpen(!isOpen);
     };
 
-    // TODO: create link for prod
-    // process.env.COPY_LINK
-    // const link = 'http://localhost:3000';
-    const link = 'https://survey.simple2b.net';
-    
+
     return  (
         <div className={styles.homeContent}>
                     {userSurveys.length > 0 && (
@@ -231,22 +199,10 @@ const SurveyList = (): ReactElement => {
                                     </div>
                                     <div className={styles.linkContainer}>
                                         <div className={styles.containerIconLink}>
-                                            <i className={styles.iconLink} title="copy link" onClick={(event) => {
-                                                    function copyLink() {
-                                                        const value = refLinkCopy.current.value;
-                                                        navigator.clipboard.writeText(value).then(() => {
-                                                            alert(`Copied to clipboard link on ${item.title}`);
-                                                        });
-                                                    }
-                                                    copyLink()
+                                            <i className={styles.iconLink} title="copy link" onClick={() => {
+                                                    copyLink(item.id, item.title)
                                                 }}>
                                                 <Image src={iconLink} height={30} width={30}/>
-                                                <input 
-                                                    className={styles.hideContainerLink} 
-                                                    type="text"
-                                                    ref={refLinkCopy}
-                                                    value={`${link}/survey/${item.id}`}
-                                                />
                                             </i>
                                             <Link href={`/survey/${item.id}`}>
                                                 <a target="_blank" className="card-link">survey</a>

@@ -508,6 +508,32 @@
   background-color: var(--mainBackground);
 }
 
+.linkRow {
+  cursor: pointer;
+  position: relative;
+}
+
+.linkRow .copyLinkTitle {
+  content: "copy link";
+  position: absolute;
+  top: -10px;
+  right: 50%;
+  font-size: 13px;
+  padding: 2px 7px;
+  background-color: var(--mainOpacity);
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom-left-radius: 0;
+  visibility: hidden;
+}
+
+
+.linkRow:hover .copyLinkTitle {
+  visibility: visible;
+  transition: all .5s ease-in-out;
+}
+
 /* Responsive Media Query */
 @media (max-width: 1150px) {
   .homeContent {

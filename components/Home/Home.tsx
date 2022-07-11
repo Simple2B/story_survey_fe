@@ -191,10 +191,20 @@ function Home() {
 
     // TODO: create link for prod
     // process.env.COPY_LINK
-    // const link = 'http://localhost:3000';
-    const link = 'https://survey.simple2b.net';
+    const link = 'http://localhost:3000';
+    // const link = 'https://survey.simple2b.net';
 
-    
+    const [isCopied, setCopied] = useState<boolean>(false);
+
+    const copyLink = (survey_id: number, title: string) => {
+        console.log("COPY  survey id", survey_id);
+        const value = `${link}/survey/${survey_id}`
+        navigator.clipboard.writeText(value).then(() => {
+            alert(`Copied to clipboard link on ${title}`);
+            setCopied(true);
+        });
+    };
+
     return (
         <div className={styles.wrapper}>
             {
@@ -263,23 +273,11 @@ function Home() {
                                                     </div>
                                                     <div className={styles.containerLink}>
                                                         <div className={styles.containerIconLink}>
-                                                            <i className={styles.iconLink} title="copy link" onClick={(event) => {
-                                                                    function copyLink() {
-                                                                        const value = refLink.current.value;
-                                                                        navigator.clipboard.writeText(value).then(() => {
-                                                                            alert(`Copied to clipboard, link on ${item.title}`);
-                                                                        });
-                                                                    }
-                                                                    copyLink()
-                                                                }}>
+                                                            <i className={styles.iconLink} 
+                                                                title="copy link" 
+                                                                onClick={() => {copyLink(survey_id, item.title)}}
+                                                            >
                                                                 <Image src={iconLink} height={30} width={30}/>
-                                                                <input 
-                                                                    className={styles.hideContainerLink} 
-                                                                    type="text"
-                                                                    ref={refLink}
-                                                                    value={`${link}/survey/${survey_id}`}
-                                                                    // onChange={() => {}}
-                                                                />
                                                             </i>
                                                             <Link 
                                                                 href={`/survey/${survey_id}`} 
