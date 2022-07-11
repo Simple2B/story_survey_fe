@@ -40,7 +40,7 @@ const EditContainer = ({
     const [writeQuestion, setWriteQuestion] = useState<string>("");
 
     const deleteQuestion = async (questionId: number, surveyId: number) => {
-        if (questions.length < 1 || createQuestion.length < 1) {
+        if (questions.length < 1 || createQuestion.length < 0) {
             console.log("EditContainer: questions.length ", questions.length);
             alert("The survey must contain at least one question ")
             return; 
