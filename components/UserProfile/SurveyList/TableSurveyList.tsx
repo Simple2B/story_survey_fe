@@ -16,6 +16,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
 
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
+
     const [titleError, setTitleError] = useState<string>("");
     const [title, setTitle] = useState<string>("");
     const [questions, setQuestion] = useState<IQuestion[]>([{
@@ -23,6 +24,10 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
         question: "",
         survey_id: 0,
     }]);
+
+    const [createQuestion, setCreateQuestion] = useState<string[]>([]);
+
+    const [questionsDeleted, setQuestionDeleted] = useState<IQuestion[]>([]);
     const [description, setDescription] = useState<string>("");
 
     const [successMessage, setSuccessMessage] = useState<string>("");
@@ -55,9 +60,11 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
     };
 
     const editQuestions = (e: { 
-        target: { value: any; }; }, 
-        question: { id: number; survey_id: any; }, 
-        index: any) => {
+            target: { value: any; }; }, 
+            question: { id: number; survey_id: any; 
+        }, 
+        index: any
+        ) => {
         if (questions)  {
             setQuestion(questions.map((item) => {
                 if (item.id === question.id) {
@@ -82,11 +89,14 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
     const editSurvey = () => {
         console.log("survey id ", editSurveyId);
         const editDataSurvey = {
+            id: editSurveyId,
             title: title,
             description: description,
             successful_message: successMessage,
             email: userEmail,
-            questions: questions
+            questions: questions,
+            questions_deleted: questionsDeleted,
+            create_question: createQuestion,
         };
         console.log("=>>> editDataSurvey ", editDataSurvey);
         const editSurvey = async(data: IGetSurvey, id: any) => {
@@ -148,6 +158,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
                                                 setDescription(survey.description);
                                                 setSuccessMessage(survey.successful_message)
                                                 setTitle(survey.title);
+                                                setQuestionDeleted([]);
+                                                setCreateQuestion([]);
                                                 setUserEmail(survey.email)
                                                 if (survey.questions.length > 0 )setQuestion(survey.questions.slice(0, survey.questions.length - 1).map((q) => {
                                                     return {
@@ -176,13 +188,20 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
                     titleError={titleError} 
                     title={title} 
                     handleOnchange={handleOnchange} 
-                    questions={questions} 
+                    questions={questions}
+                    setQuestion={setQuestion}
                     editQuestions={editQuestions} 
                     description={description} 
                     handleOnchangeDescription={handleOnchangeDescription} 
                     successMessage={successMessage} 
                     handleOnchangeSuccessMessage={handleOnchangeSuccessMessage} 
                     editSurvey={editSurvey}
+                    userEmail={userEmail}
+                    editSurveyId={editSurveyId}
+                    questionsDeleted={questionsDeleted}
+                    setQuestionDeleted={setQuestionDeleted}
+                    createQuestion={createQuestion}
+                    setCreateQuestion={setCreateQuestion}
                 />
             }          
         </div>
