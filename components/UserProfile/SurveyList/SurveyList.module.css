@@ -508,6 +508,8 @@
   background-color: var(--mainBackground);
 }
 
+/* table survey list */
+
 .linkRow {
   cursor: pointer;
   position: relative;
@@ -532,6 +534,35 @@
 .linkRow:hover .copyLinkTitle {
   visibility: visible;
   transition: all .5s ease-in-out;
+}
+
+.btnEditContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.btnEdit {
+  position: absolute;
+  top: 45%;
+  cursor: pointer;
+  padding: 3px 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: .5px;
+  background-color: var(--mainBackground);
+  border-radius: 5px;
+  transition: all .3s ease-in;
+}
+
+.btnEdit:hover {
+  top: 44%;
+  padding: 4px 11px;
+  background-color: var(--mainWhite);
+  color: var(--primaryColor);
+  transition: all .5s ease-out;
 }
 
 /* Responsive Media Query */

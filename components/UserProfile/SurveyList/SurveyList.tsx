@@ -8,6 +8,7 @@ import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import styles from "./SurveyList.module.css";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 import iconLink from "../../../styles/icons/icons8-link-64.png";
+import EditContainer from "./EditContainer";
 
 
 
@@ -37,7 +38,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
     const [indexDelete, setIndexDelete] = useState<number>(null);
     const [nameDelete, setNameDelete] = useState<string>("");
 
-    const refLinkCopy = useRef(null);
+    // const refLinkCopy = useRef(null);
 
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
@@ -130,12 +131,13 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
         const editSurvey = async(data: IGetSurvey, id: any) => {
             const editDataSurvey: IGetSurvey = await surveyApi.editSurvey(data, id);
             console.log(" editDataSurvey ", editDataSurvey);
-            setUserSurveys(userSurveys.map((survey) => {
-                if (survey.id === editDataSurvey.id) {
-                    survey = {...editDataSurvey}
-                }
-                return survey;
-            }))
+
+            const getListSurveys = async() => {
+                const list = await surveyApi.getUserSurveys(session.user.email);
+                setUserSurveys(list);
+            }
+    
+            getListSurveys();
             
         };
         editSurvey(editDataSurvey, editSurveyId);
@@ -244,73 +246,20 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                             </div>
                                 )}
                     {isOpen &&
-                        (
-                            <div className={styles.modalWindow}>
-                                <div className={styles.modal}>
-                                    <i className={styles.editIcon} onClick={() => setIsOpen(!isOpen)}><Image src={deleteIcon} height={30} width={30}/></i>
-                                    <div className={styles.titleContainer}>
-                                        {titleError.length > 0 && <div className={styles.errorMessage}>{titleError}</div>}
-                                        <input type="text" 
-                                            className={styles.formControl} 
-                                            value={title} 
-                                            placeholder="Title"
-                                            onChange={handleOnchange}
-                                        />
-                                    </div>
-                                    {
-                                            questions[0].id !== 0 && questions.map((item, index) => {
-                                                return (
-                                                    <div className={styles.titleContainer} key={item.id}>
-                                                        <textarea 
-                                                            placeholder="question" 
-                                                            value={item.question} 
-                                                            onChange={(e) => editQuestions(e, item, index)} 
-                                                            className={styles.formControl}  
-                                                            name={item.question} 
-                                                            rows={1}
-                                                        >
-                                                            {/* {item.question} */}
-                                                        </textarea>
-                                                    </div>
-                                                )
-                                            })
-                                    }
-
-                                    <div className={styles.titleContainer}>
-                                        <textarea 
-                                            placeholder="description" 
-                                            value={description} 
-                                            onChange={handleOnchangeDescription} 
-                                            className={styles.formControl}  
-                                            name="description" 
-                                            id=""  
-                                            rows={2}
-                                        >
-                                            {/* {description} */}
-                                        </textarea>
-                                    </div>
-
-                                    <div className={styles.titleContainer}>
-                                        <textarea 
-                                            placeholder="success message" 
-                                            value={successMessage} 
-                                            onChange={handleOnchangeSuccessMessage} 
-                                            className={styles.formControl}  
-                                            name="successMessage" 
-                                            id=""  
-                                            rows={1}
-                                        >
-                                            {/* {successMessage} */}
-                                        </textarea>
-                                    </div>
-
-                                    <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={titleError.length > 0} onClick={editSurvey}>
-                                        Edit survey
-                                    </button>
-                                </div>
-                            </div>
-
-                        )
+                        <EditContainer 
+                            isOpen={isOpen} 
+                            setIsOpen={setIsOpen} 
+                            titleError={titleError} 
+                            title={title} 
+                            handleOnchange={handleOnchange} 
+                            questions={questions} 
+                            editQuestions={editQuestions} 
+                            description={description} 
+                            handleOnchangeDescription={handleOnchangeDescription} 
+                            successMessage={successMessage} 
+                            handleOnchangeSuccessMessage={handleOnchangeSuccessMessage} 
+                            editSurvey={editSurvey}
+                        />
                     }
                 </div>
     );

@@ -9,7 +9,7 @@ import { IGetSurvey } from "../../../redux/types/surveyTypes";
 import { surveyApi } from "../../api/backend/surveyInstance";
 
 
-const ProfileSurveyLists = ({headerName}) => {
+const ProfileSurveyLists = () => {
   const {data: session, status} = useSession();
   const [checked, setChecked] = useState(false);
   
@@ -29,20 +29,20 @@ const ProfileSurveyLists = ({headerName}) => {
       questions: [],
   }]);
 
-    // TODO: create link for prod
-    // process.env.COPY_LINK
-    const link = 'http://localhost:3000';
-    // const link = 'https://survey.simple2b.net';
-    const [isCopied, setCopied] = useState<boolean>(false);
+  // TODO: create link for prod
+  // process.env.COPY_LINK
+  const link = 'http://localhost:3000';
+  // const link = 'https://survey.simple2b.net';
+  const [isCopied, setCopied] = useState<boolean>(false);
 
-    const copyLink = (survey_id: number, title?: string) => {
-        console.log("COPY  survey id", survey_id);
-        const value = `${link}/survey/${survey_id}`
-        navigator.clipboard.writeText(value).then(() => {
-            alert(`Copied to clipboard link on ${title}`);
-            setCopied(true);
-        });
-    };
+  const copyLink = (survey_id: number, title?: string) => {
+      console.log("COPY  survey id", survey_id);
+      const value = `${link}/survey/${survey_id}`
+      navigator.clipboard.writeText(value).then(() => {
+          alert(`Copied to clipboard link on ${title}`);
+          setCopied(true);
+      });
+  };
 
     
 
@@ -61,19 +61,29 @@ const ProfileSurveyLists = ({headerName}) => {
     }
   },[session]);
 
-console.log(" ==>> ProfileSurveyLists: userSurveys", userSurveys);
-console.log("ProfileSurveyLists: COPY_LINK =>", process.env.COPY_LINK);
-
-
   return (
     <User title={'Survey List'} keywords={""} style={""} headerName={'Survey List'}>
       <div className="surveyListContainer">
-        <ToggleSwitch checked={ checked } onChange={ handleChangeChecked } id={"SurveyList"}/>
+        <ToggleSwitch 
+          checked={ checked } 
+          onChange={ handleChangeChecked } 
+          id={"SurveyList"}
+        />
         {
           !checked ? 
-            <SurveyList userSurveys={userSurveys} setUserSurveys={setUserSurveys} copyLink={copyLink} link={link}/>
+            <SurveyList 
+              userSurveys={userSurveys} 
+              setUserSurveys={setUserSurveys} 
+              copyLink={copyLink} 
+              link={link}
+            />
             :
-            <TableSurveyList userSurveys={userSurveys} setUserSurveys={setUserSurveys} copyLink={copyLink} link={link}/>
+            <TableSurveyList 
+              userSurveys={userSurveys} 
+              setUserSurveys={setUserSurveys} 
+              copyLink={copyLink} 
+              link={link}
+            />
         }
       </div>
     </User>
