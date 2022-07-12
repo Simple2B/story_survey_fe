@@ -70,7 +70,7 @@ function Home() {
     if (success === true) {
         setTimeout(() => {
             setSuccess(false);
-        }, 2500)
+        }, 1000)
     };
 
     const [survey, setSurvey] = useState({

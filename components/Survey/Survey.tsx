@@ -45,7 +45,7 @@ const Survey = ({surveyId}) => {
         setTimeout(() => {
             setSuccess(false);
             push('/');
-        }, 2500)
+        }, 1000)
     };
 
   const [survey, setSurvey] = useState({

@@ -86,7 +86,7 @@ const StripeSubscription = (): ReactElement => {
       setTimeout(() => {
         setSuccess(false);
         setMessage("")
-      }, 2500)
+      }, 1000)
     };
 
     console.log(" sessionId && message === '' && !sessionId ", session && !success && message === '' && (sessionId !== '' || !sessionId));

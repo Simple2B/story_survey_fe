@@ -143,15 +143,10 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                 const list = await surveyApi.getUserSurveys(session.user.email);
                 setUserSurveys(list);
             }
-    
             getListSurveys();
-            
         };
         editSurvey(editDataSurvey, editSurveyId);
         setIsOpen(!isOpen);
-
-        
-
     };
 
 
