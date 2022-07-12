@@ -149,7 +149,11 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
                                     </td>
                                     <td>{survey.description}</td>
                                     <td>{survey.questions.length - 1}</td>
-                                    <td className={styles.linkRow} onClick={() => copyLink(survey.id, survey.title)}>
+                                    <td 
+                                        className={styles.linkRow} 
+                                        onClick={() => copyLink(survey.published ? survey.id : survey.uuid, survey.title)}
+                                        // survey_id?: number, survey_uuid?: string, title?: string
+                                    >  
                                         <span className={styles.copyLinkTitle}>copy link</span>
                                         <span className={styles.copyLink}>
                                             {

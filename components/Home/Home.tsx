@@ -214,7 +214,7 @@ function Home() {
     const copyLink = (survey_id: number | string, title: string) => {
         console.log("COPY  survey id", survey_id);
         let value = `${link}/survey/${survey_id}`;
-        if (survey_id === survey.uuid) {
+        if (typeof(survey_id) === "string") {
             value = `${link}/survey/not_public/${survey_id}`;
         }
         
@@ -399,7 +399,9 @@ function Home() {
                                     <button 
                                         className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} 
                                         onClick={() => {
-                                            
+                                            if (!survey.published && !isPublic) {
+                                                return push(`/auth/signin?callbackUrl=${asPath}`);
+                                            }
                                             setOpenDescription(!isOpenDescription);
                                             setIsOpen(!isOpen);
                                         }}
