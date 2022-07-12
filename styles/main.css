@@ -11,6 +11,7 @@
     --success: green;
     --successShadow: 2px 5px 3px 0px green;
     --mainBlack: rgb(26, 59, 114);
+    --lightBlue: #007bff;
     --mainBackground: rgba(26, 59, 114, .3);
     --mainGrey: #ececec;
     --darkGrey: #cfcfcf;
@@ -86,4 +87,12 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* survey list page  */
+
+.surveyListContainer {
+    position: relative;
+    width: 100%;
+    height: 100vh;
 }

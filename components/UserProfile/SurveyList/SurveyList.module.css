@@ -396,6 +396,7 @@
 }
 
 .titleContainer {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -506,6 +507,102 @@
 
 .deleteBtn div:hover {
   background-color: var(--mainBackground);
+}
+
+/* table survey list */
+
+.linkRow {
+  cursor: pointer;
+  position: relative;
+}
+
+.linkRow .copyLinkTitle {
+  content: "copy link";
+  position: absolute;
+  top: -10px;
+  right: 50%;
+  font-size: 13px;
+  padding: 2px 7px;
+  background-color: var(--mainOpacity);
+  border-radius: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom-left-radius: 0;
+  visibility: hidden;
+}
+
+
+.linkRow:hover .copyLinkTitle {
+  visibility: visible;
+  transition: all .5s ease-in-out;
+}
+
+.btnEditContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.btnEdit {
+  position: absolute;
+  top: 45%;
+  cursor: pointer;
+  padding: 3px 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: .5px;
+  background-color: var(--mainBackground);
+  border-radius: 5px;
+  transition: all .3s ease-in;
+}
+
+.btnEdit:hover {
+  top: 44%;
+  padding: 4px 11px;
+  background-color: var(--mainWhite);
+  color: var(--primaryColor);
+  transition: all .5s ease-out;
+}
+
+/* edit container styles */ 
+.deleteIcon {
+  position: absolute;
+  top: -16px;
+  right: -10px;
+  width: 15px;
+  height: 15px;
+  transform: rotate(18deg);
+}
+
+.deleteIcon:hover {
+  transform: rotate(0);
+  width: 18px;
+  height: 18px;
+}
+
+.titleContainerPosition {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.btnAdd {
+  position: absolute;
+  bottom: -20px;
+  width: 100%;
+  text-align: right;
+  color: var(--mainBlack);
+  cursor: pointer;
+  font-size: 16px;
+  transition: font-size .3s ease-out;
+}
+
+.btnAdd:hover {
+  color: var(--primaryColor);
+  font-size: 16.5px;
+  transition: font-size .3s ease-out;
 }
 
 /* Responsive Media Query */

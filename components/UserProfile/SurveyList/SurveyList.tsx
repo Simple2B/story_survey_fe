@@ -8,10 +8,11 @@ import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import styles from "./SurveyList.module.css";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 import iconLink from "../../../styles/icons/icons8-link-64.png";
+import EditContainer from "./EditContainer";
 
 
 
-const SurveyList = (): ReactElement => {
+const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement => {
 
     const {data: session, status} = useSession();
     const { push, asPath } = useRouter();
@@ -33,23 +34,15 @@ const SurveyList = (): ReactElement => {
         survey_id: 0,
     }]);
 
-    const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([{
-        id: 0,
-        uuid: "",
-        title: "",
-        description: "",
-        successful_message: "",
-        created_at: "",
-        user_id: 0,
-        email: "",
-        questions: [],
-    }]);
+    const [questionsDeleted, setQuestionDeleted] = useState<IQuestion[]>([]);
+
+    const [createQuestion, setCreateQuestion] = useState<string[]>([]);
 
     const [isDelete, setDelete] = useState<boolean>(false);
     const [indexDelete, setIndexDelete] = useState<number>(null);
     const [nameDelete, setNameDelete] = useState<string>("");
 
-    const refLinkCopy = useRef(null);
+    // const refLinkCopy = useRef(null);
 
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
@@ -83,22 +76,6 @@ const SurveyList = (): ReactElement => {
     const handleOnchangeSuccessMessage = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setSuccessMessage(e.target.value);
     };
-
-    useEffect(() => {
-
-        if (status === 'authenticated') {
-            console.log("isSurveyList ", isSurveyList);
-            
-            const email: string= session.user.email;
-
-            const getListSurveys = async() => {
-                const list = await surveyApi.getUserSurveys(email);
-                setUserSurveys(list);
-            }
-
-            getListSurveys();
-        }
-    },[session]);
 
     console.log("SurveyList: userSurveys", userSurveys);
 
@@ -148,33 +125,36 @@ const SurveyList = (): ReactElement => {
     const editSurvey = () => {
         console.log("survey id ", editSurveyId);
         const editDataSurvey = {
+            id: editSurveyId,
             title: title,
             description: description,
             successful_message: successMessage,
             email: userEmail,
-            questions: questions
+            questions: questions,
+            questions_deleted: questionsDeleted,
+            create_question: createQuestion,
         };
         console.log("=>>> editDataSurvey ", editDataSurvey);
         const editSurvey = async(data: IGetSurvey, id: any) => {
             const editDataSurvey: IGetSurvey = await surveyApi.editSurvey(data, id);
             console.log(" editDataSurvey ", editDataSurvey);
-            setUserSurveys(userSurveys.map((survey) => {
-                if (survey.id === editDataSurvey.id) {
-                    survey = {...editDataSurvey}
-                }
-                return survey;
-            }))
+
+            const getListSurveys = async() => {
+                const list = await surveyApi.getUserSurveys(session.user.email);
+                setUserSurveys(list);
+            }
+    
+            getListSurveys();
             
         };
         editSurvey(editDataSurvey, editSurveyId);
         setIsOpen(!isOpen);
+
+        
+
     };
 
-    // TODO: create link for prod
-    // process.env.COPY_LINK
-    // const link = 'http://localhost:3000';
-    const link = 'https://survey.simple2b.net';
-    
+
     return  (
         <div className={styles.homeContent}>
                     {userSurveys.length > 0 && (
@@ -200,7 +180,9 @@ const SurveyList = (): ReactElement => {
                                                         item.questions.slice(0, 1).map((q, index) => {
                                                             return (
                                                                 <div className={styles.containerStep} key={index}>
-                                                                    {item.questions.length > 1 && <span className={styles.btnShowMore}><i className={`${styles.arrow} ${styles.up}`}></i></span> }
+                                                                    {item.questions.length > 2 && <span className={styles.btnShowMore}>
+                                                                        <i className={`${styles.arrow} ${styles.up}`}>
+                                                                        </i></span> }
 
                                                                     <div className={styles.indicator} key={index}>
                                                                         <i className={`bx bx-right-arrow-alt`}></i>
@@ -231,22 +213,10 @@ const SurveyList = (): ReactElement => {
                                     </div>
                                     <div className={styles.linkContainer}>
                                         <div className={styles.containerIconLink}>
-                                            <i className={styles.iconLink} title="copy link" onClick={(event) => {
-                                                    function copyLink() {
-                                                        const value = refLinkCopy.current.value;
-                                                        navigator.clipboard.writeText(value).then(() => {
-                                                            alert(`Copied to clipboard link on ${item.title}`);
-                                                        });
-                                                    }
-                                                    copyLink()
+                                            <i className={styles.iconLink} title="copy link" onClick={() => {
+                                                    copyLink(item.id, item.title)
                                                 }}>
                                                 <Image src={iconLink} height={30} width={30}/>
-                                                <input 
-                                                    className={styles.hideContainerLink} 
-                                                    type="text"
-                                                    ref={refLinkCopy}
-                                                    value={`${link}/survey/${item.id}`}
-                                                />
                                             </i>
                                             <Link href={`/survey/${item.id}`}>
                                                 <a target="_blank" className="card-link">survey</a>
@@ -258,13 +228,15 @@ const SurveyList = (): ReactElement => {
                                                 setEditSurveyID(item.id);
                                                 setDescription(item.description);
                                                 setSuccessMessage(item.successful_message)
+                                                setQuestionDeleted([]);
+                                                setCreateQuestion([]);
                                                 setTitle(item.title);
                                                 setUserEmail(item.email)
                                                 if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
                                                     return {
                                                         id: q.id, 
                                                         question: q.question, 
-                                                        survey_id: q.survey_id,
+                                                        survey_id: item.id,
                                                     }
                                                 }));
                                                 // setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: session? session.user.email : ""}} ));
@@ -288,73 +260,27 @@ const SurveyList = (): ReactElement => {
                             </div>
                                 )}
                     {isOpen &&
-                        (
-                            <div className={styles.modalWindow}>
-                                <div className={styles.modal}>
-                                    <i className={styles.editIcon} onClick={() => setIsOpen(!isOpen)}><Image src={deleteIcon} height={30} width={30}/></i>
-                                    <div className={styles.titleContainer}>
-                                        {titleError.length > 0 && <div className={styles.errorMessage}>{titleError}</div>}
-                                        <input type="text" 
-                                            className={styles.formControl} 
-                                            value={title} 
-                                            placeholder="Title"
-                                            onChange={handleOnchange}
-                                        />
-                                    </div>
-                                    {
-                                            questions[0].id !== 0 && questions.map((item, index) => {
-                                                return (
-                                                    <div className={styles.titleContainer} key={item.id}>
-                                                        <textarea 
-                                                            placeholder="question" 
-                                                            value={item.question} 
-                                                            onChange={(e) => editQuestions(e, item, index)} 
-                                                            className={styles.formControl}  
-                                                            name={item.question} 
-                                                            rows={1}
-                                                        >
-                                                            {/* {item.question} */}
-                                                        </textarea>
-                                                    </div>
-                                                )
-                                            })
-                                    }
-
-                                    <div className={styles.titleContainer}>
-                                        <textarea 
-                                            placeholder="description" 
-                                            value={description} 
-                                            onChange={handleOnchangeDescription} 
-                                            className={styles.formControl}  
-                                            name="description" 
-                                            id=""  
-                                            rows={2}
-                                        >
-                                            {/* {description} */}
-                                        </textarea>
-                                    </div>
-
-                                    <div className={styles.titleContainer}>
-                                        <textarea 
-                                            placeholder="success message" 
-                                            value={successMessage} 
-                                            onChange={handleOnchangeSuccessMessage} 
-                                            className={styles.formControl}  
-                                            name="successMessage" 
-                                            id=""  
-                                            rows={1}
-                                        >
-                                            {/* {successMessage} */}
-                                        </textarea>
-                                    </div>
-
-                                    <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={titleError.length > 0} onClick={editSurvey}>
-                                        Edit survey
-                                    </button>
-                                </div>
-                            </div>
-
-                        )
+                        <EditContainer 
+                            isOpen={isOpen} 
+                            setIsOpen={setIsOpen} 
+                            titleError={titleError} 
+                            title={title} 
+                            handleOnchange={handleOnchange} 
+                            questions={questions} 
+                            setQuestion={setQuestion}
+                            editQuestions={editQuestions} 
+                            description={description} 
+                            handleOnchangeDescription={handleOnchangeDescription} 
+                            successMessage={successMessage} 
+                            handleOnchangeSuccessMessage={handleOnchangeSuccessMessage} 
+                            editSurvey={editSurvey}
+                            userEmail={userEmail}
+                            editSurveyId={editSurveyId}
+                            questionsDeleted={questionsDeleted}
+                            setQuestionDeleted={setQuestionDeleted}
+                            createQuestion={createQuestion}
+                            setCreateQuestion={setCreateQuestion}
+                        />
                     }
                 </div>
     );

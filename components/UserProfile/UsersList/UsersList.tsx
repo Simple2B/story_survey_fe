@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
 import { clientApi } from "../../../pages/api/backend/userInstance";
 import { ADMIN, IUserResponse } from "../../../redux/types/userTypes";
-
 import styles from "./UsersList.module.css";
 
 const UsersList = (): ReactElement => {

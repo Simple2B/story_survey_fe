@@ -234,11 +234,24 @@ const CreateSurvey = (): ReactElement => {
 
                                 <div className={styles.titleContainer}>
                                     {questionError.length > 0 && <div className={styles.errorMessage}>{questionError}</div>}
-                                    <textarea placeholder="Write your question" value={question} onChange={writeQuestion} className={styles.formControl}  name="addQuestion" id=""  rows={3}>
+                                    <textarea 
+                                        placeholder="Write your question" 
+                                        value={question} 
+                                        onChange={writeQuestion} 
+                                        className={styles.formControl}  
+                                        name="addQuestion" 
+                                        id=""  
+                                        rows={3}
+                                    >
                                         {/* {question} */}
                                     </textarea>
                                 </div>
-                                <button className={`${styles.position} ${styles.btnAdd}`} disabled={questionError.length > 0} onClick={() => addQuestion(question)}>+ add question</button>
+                                <button 
+                                    className={`${styles.position} ${styles.btnAdd}`} 
+                                    disabled={questionError.length > 0} 
+                                    onClick={() => addQuestion(question)}>
+                                        + add question
+                                </button>
                                 
 
                                 <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={titleError.length > 0} onClick={createSurvey}>Create survey</button>

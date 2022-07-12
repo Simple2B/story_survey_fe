@@ -8,34 +8,8 @@ import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 
 import styles from "./UsersList.module.css";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
+import { ISurveyInfo } from "../../../redux/types/surveyTypes";
 
-interface IAnswerInfo {
-    answer: string,
-    created_at: string,
-    id: number,
-    question_id: number,
-    session_id?: number,
-}
-
-interface IQuestionInfo {
-    id: string,
-    question: string,
-    survey_id: number,
-    survey: string,
-    answers: IAnswerInfo[],
-}
-
-interface ISurveyInfo {
-    id: string,
-    uuid: string,
-    title: string,
-    description: string,
-    successful_message: string,
-    created_at: string,
-    user_id: number,
-    email: string,
-    questions:  IQuestionInfo[],
-}
 
 const UserList = (): ReactElement => {
     const {data: session} = useSession();
