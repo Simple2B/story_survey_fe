@@ -1,7 +1,6 @@
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import ToggleSwitch from "../../../components/common/ToggleSwitchBtn/ToggleSwitchBtn";
-import UserContainer from "../../../components/Containers/MainContainer/UserContainer";
 import SurveyList from "../../../components/UserProfile/SurveyList/SurveyList";
 import TableSurveyList from "../../../components/UserProfile/SurveyList/TableSurveyList";
 import User from "../../../components/UserProfile/User";

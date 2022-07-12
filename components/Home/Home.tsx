@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -20,6 +20,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import Banner from "../common/Banner/Banner";
 import { CustomLink } from "../common/CustomLink";
+import { ADMIN, CLIENT } from "../../redux/types/userTypes";
 
 
 interface IAnswer  {
@@ -33,9 +34,12 @@ function Home() {
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
 
+    const [isPublic, setIsPublic] = useState(false);
+
     const {data: session } = useSession();
     const { push, asPath } = useRouter();
     const [isOpen, setIsOpen] = useState(false);
+
     const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([{
         title: "",
         description: "",
@@ -44,6 +48,7 @@ function Home() {
         email: "",
         questions: [],
         successful_message: "",
+        published: true,
     }]);
 
     const [answerInfo, setAnswerInfo] = useState<IAnswer>({
@@ -83,12 +88,12 @@ function Home() {
         user_id: 0,
         email: "",
         questions: [{question: "", id: 0, survey_id: 0}],
+        published: true,
     });
 
     const [isOpenDescription, setOpenDescription] = useState(false);
 
     // const [answerToQuestion, setAnswerToQuestion] = useState([{questionIndex: null, answer: ""}]);
-
 
     useEffect(() => {
         
@@ -105,6 +110,7 @@ function Home() {
                     email: l.email,
                     questions: l.questions,
                     successful_message: l.successful_message,
+                    published: l.published,
                 }}) 
                 setUserSurveys(listUserSurvey);
                 console.log("list", list);
@@ -113,6 +119,13 @@ function Home() {
             
         }
         getListSurveys();
+
+        if (session) {
+            const profile: any = session.profile;
+            setIsPublic((profile.role === ADMIN || profile.role === CLIENT));
+        } else {
+            setIsPublic(false);
+        };
         
     },[session]);
 
@@ -126,7 +139,10 @@ function Home() {
                 created_at: string; 
                 user_id: number; 
                 email: string; 
-                questions: { question: string; id: number; survey_id: number; }[]; }>, 
+                questions: { question: string; id: number; survey_id: number; }[];
+                published: boolean,
+             }>, 
+                
             index: number
         ) => {
         setOpenDescription(!isOpenDescription);
@@ -162,7 +178,6 @@ function Home() {
         //     email: answers[ind].email 
         // }
         // setAnswerInfo(dataSaveToDB);
-
     };
 
     const answerTheQuestion = () => {
@@ -196,15 +211,23 @@ function Home() {
 
     const [isCopied, setCopied] = useState<boolean>(false);
 
-    const copyLink = (survey_id: number, title: string) => {
+    const copyLink = (survey_id: number | string, title: string) => {
         console.log("COPY  survey id", survey_id);
-        const value = `${link}/survey/${survey_id}`
+        let value = `${link}/survey/${survey_id}`;
+        if (survey_id === survey.uuid) {
+            value = `${link}/survey/not_public/${survey_id}`;
+        }
+        
         navigator.clipboard.writeText(value).then(() => {
             alert(`Copied to clipboard link on ${title}`);
             setCopied(true);
         });
     };
 
+    console.log("HOME: userSurveys => ", userSurveys);
+    console.log("HOME: isPublic => ", isPublic);
+    
+    // const isPublish = 
     return (
         <div className={styles.wrapper}>
             {
@@ -221,10 +244,9 @@ function Home() {
                                     {(
 
                                     userSurveys.map((item, index) => {
-                                        console.log("HOME: item.id", item.id);
                                         const survey_id = item.id;
-                                        console.log("HOME ==== item.questions ", item.questions);
-                                        
+                                        const not_public_survey_id = item.uuid;
+                                        console.log("not_public_survey_id => ", not_public_survey_id);
                                         
                                         return (
                                             <div className={styles.overviewBoxes} key={index}>
@@ -232,6 +254,9 @@ function Home() {
                                                     <div className={styles.rightSide}>
                                                         {/* <i className={styles.editIcon} onClick={deleteSurvey}><Image src={deleteIcon} height={30} width={30}/></i> */}
                                                             <div className={styles.titleCard}>
+                                                                <div className={styles.titlePublic}>
+                                                                    {!item.published? "not public": ""}
+                                                                </div>
                                                                 <div className={styles.title}>{item.title}</div>
                                                             </div>
                                                             
@@ -272,25 +297,64 @@ function Home() {
                                                             </div>
                                                     </div>
                                                     <div className={styles.containerLink}>
-                                                        <div className={styles.containerIconLink}>
-                                                            <i className={styles.iconLink} 
-                                                                title="copy link" 
-                                                                onClick={() => {copyLink(survey_id, item.title)}}
-                                                            >
-                                                                <Image src={iconLink} height={30} width={30}/>
-                                                            </i>
-                                                            <Link 
-                                                                href={`/survey/${survey_id}`} 
-                                                            >
-                                                                <a 
-                                                                // onClick={() => router.push(`/survey/${survey_id}`)} 
-                                                                target="_blank" 
-                                                                className="card-link">
-                                                                    survey
-                                                                </a>
-                                                            </Link>
-                                                        </div>
-                                                        <a href="#" className="card-link" onClick={() => {
+                                                        {
+                                                            ((!isPublic || isPublic) && item.published) && (
+                                                                <div className={styles.containerIconLink}>
+                                                                    <i 
+                                                                        className={styles.iconLink} 
+                                                                        title="copy link" 
+                                                                        onClick={() => {copyLink(survey_id, item.title)}}
+                                                                    >
+                                                                        <Image src={iconLink} height={30} width={30}/>
+                                                                    </i>
+        
+                                                                    <Link 
+                                                                        href={`/survey/${survey_id}`} 
+                                                                    >
+                                                                        <a 
+                                                                        // onClick={() => router.push(`/survey/${survey_id}`)} 
+                                                                        target="_blank" 
+                                                                        className="card-link">
+                                                                            survey
+                                                                        </a>
+                                                                    </Link>
+                                                                </div>
+                                                            )
+                                                        }
+                                                        { !item.published &&
+                                                            (
+                                                                <div></div>
+                                                            )
+                                                        }
+
+                                                        { !item.published && isPublic &&
+                                                            (
+                                                                <div className={styles.containerIconLink}>
+                                                                    <i 
+                                                                        className={styles.iconLink} 
+                                                                        title="copy link" 
+                                                                        onClick={() => {copyLink(not_public_survey_id, item.title)}}
+                                                                    >
+                                                                        <Image src={iconLink} height={30} width={30}/>
+                                                                    </i>
+        
+                                                                    <Link 
+                                                                        href={`/survey/not_public/${not_public_survey_id}`} 
+                                                                    >
+                                                                        <a 
+                                                                        // onClick={() => router.push(`/survey/${survey_id}`)} 
+                                                                        target="_blank" 
+                                                                        className="card-link">
+                                                                            survey
+                                                                        </a>
+                                                                    </Link>
+                                                                </div>
+                                                            )
+                                                        }
+                                                        
+                                                        <a href="#" 
+                                                            className={`${styles.link} card-link`}
+                                                            onClick={() => {
                                                                 openSurvey({
                                                                     id: item.id,
                                                                     uuid: item.uuid,
@@ -301,6 +365,7 @@ function Home() {
                                                                     email: item.email,
                                                                     questions: item.questions,
                                                                     successful_message: item.successful_message,
+                                                                    published: item.published,
                                                                 }, index)
                                                                 setAnswers(item.questions.map((question) => {return {
                                                                     question: question, 
@@ -331,10 +396,16 @@ function Home() {
                                     <i className={styles.editIcon} onClick={() => setOpenDescription(!isOpenDescription)}><Image src={deleteIcon} height={30} width={30}/></i>
                                     <div className={styles.title}>{survey.title}</div>
                                     <div className={styles.title}>{survey.description}</div>
-                                    <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={() => {
+                                    <button 
+                                        className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} 
+                                        onClick={() => {
+                                            
                                             setOpenDescription(!isOpenDescription);
                                             setIsOpen(!isOpen);
-                                        }}>Answer the {survey.questions.length > 0 ? "questions" : "question"}</button>
+                                        }}
+                                    >
+                                            Answer the {survey.questions.length > 0 ? "questions" : "question"}
+                                    </button>
                                 </div>
                             </div>
 

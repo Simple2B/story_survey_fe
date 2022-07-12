@@ -9,14 +9,16 @@ import styles from "./SurveyList.module.css";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 import iconLink from "../../../styles/icons/icons8-link-64.png";
 import EditContainer from "./EditContainer";
-
+import { ADMIN, CLIENT } from "../../../redux/types/userTypes";
 
 
 const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement => {
 
     const {data: session, status} = useSession();
     const { push, asPath } = useRouter();
-    const isSurveyList = asPath.includes("surveys_list")
+    const isSurveyList = asPath.includes("surveys_list");
+
+    const [isPublic, setIsPublic] = useState(false);
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -43,6 +45,16 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
     const [nameDelete, setNameDelete] = useState<string>("");
 
     // const refLinkCopy = useRef(null);
+
+    useEffect(() => {
+        if (session) {
+            const profile: any = session.profile;
+            setIsPublic((profile.role === ADMIN || profile.role === CLIENT));
+        } else {
+            setIsPublic(false);
+        };
+        
+    },[session]);
 
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
@@ -156,7 +168,8 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
 
                     userSurveys.map((item, index) => {
                         console.log("========item.questions", item.questions);
-                        
+                        const survey_id = item.id;
+                        const not_public_survey_id = item.uuid;
                         return (
                             <div className={styles.overviewBoxes} key={index}>
                                 <div className={styles.box}>
@@ -167,6 +180,9 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                                                 setNameDelete(item.title);
                                             }}><Image src={deleteIcon} height={30} width={30}/></i>
                                             <div className={styles.titleCard}>
+                                                <div className={styles.titlePublic}>
+                                                    {!item.published? "not public": ""}
+                                                </div>
                                                 <div className={styles.title}>{item.title}</div>
                                             </div>
                                             <div className={styles.containerQuestionList}>
@@ -207,17 +223,73 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                                             </div>
                                     </div>
                                     <div className={styles.linkContainer}>
-                                        <div className={styles.containerIconLink}>
-                                            <i className={styles.iconLink} title="copy link" onClick={() => {
-                                                    copyLink(item.id, item.title)
-                                                }}>
+                                    {
+                                        ((!isPublic || isPublic) && item.published) && (
+                                            <div className={styles.containerIconLink}>
+                                                <i 
+                                                    className={styles.iconLink} 
+                                                    title="copy link" 
+                                                    onClick={() => {copyLink(survey_id, item.title)}}
+                                                >
+                                                    <Image src={iconLink} height={30} width={30}/>
+                                                </i>
+
+                                                <Link 
+                                                    href={`/survey/${survey_id}`} 
+                                                >
+                                                    <a 
+                                                    // onClick={() => router.push(`/survey/${survey_id}`)} 
+                                                    target="_blank" 
+                                                    className="card-link">
+                                                        survey
+                                                    </a>
+                                                </Link>
+                                            </div>
+                                        )
+                                    }
+                                    { !item.published &&
+                                        (
+                                            <div></div>
+                                        )
+                                    }
+                                    { !item.published && isPublic &&
+                                        (
+                                            <div className={styles.containerIconLink}>
+                                                <i 
+                                                    className={styles.iconLink} 
+                                                    title="copy link" 
+                                                    onClick={() => {copyLink(not_public_survey_id, item.title)}}
+                                                >
+                                                    <Image src={iconLink} height={30} width={30}/>
+                                                </i>
+
+                                                <Link 
+                                                    href={`/survey/not_public/${not_public_survey_id}`} 
+                                                >
+                                                    <a 
+                                                    // onClick={() => router.push(`/survey/${survey_id}`)} 
+                                                    target="_blank" 
+                                                    className="card-link">
+                                                        survey
+                                                    </a>
+                                                </Link>
+                                            </div>
+                                        )
+                                    }
+                                        {/* <div className={styles.containerIconLink}>
+                                            <i 
+                                                className={styles.iconLink} 
+                                                title="copy link" 
+                                                onClick={() => copyLink(item.id, item.title)}
+                                            >
                                                 <Image src={iconLink} height={30} width={30}/>
                                             </i>
                                             <Link href={`/survey/${item.id}`}>
                                                 <a target="_blank" className="card-link">survey</a>
                                             </Link>
-                                        </div>
-                                        <a href="#" className="card-link" 
+                                        </div> */}
+                                        <a href="#" 
+                                            className={`${styles.link} card-link`}
                                             onClick={() => {
                                                 getEditSurvey(item.id, index)
                                                 setEditSurveyID(item.id);

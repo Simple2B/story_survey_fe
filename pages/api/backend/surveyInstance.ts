@@ -116,10 +116,26 @@ export const surveyApi = {
     getSurveyFromDB: async (id: string): Promise<any> => {
       try {
         const response = await instance().get(`/survey/get_survey/${id}`);
-        console.log(`getSurvey: response `, response);
+        console.log(`getSurveyFromDB: response `, response);
   
         const res = response.data;
-        console.log(`getSurvey: response received successfully `, res);
+        console.log(`getSurveyFromDB: response received successfully `, res);
+        return res;
+      } catch (error: any) {
+        // place to handle errors and rise custom errors
+        console.log(`POST: error message => ${error.message}`);
+        // console.log("error.response.data) => ", error.response.data);
+        throw new Error(error.message);
+      }
+    },
+
+    getSurveyFromDBWithUUID: async (uuid: string): Promise<any> => {
+      try {
+        const response = await instance().get(`/survey/get_not_public_survey/${uuid}`);
+        console.log(`getSurveyFromDBWithUUID: response `, response);
+  
+        const res = response.data;
+        console.log(`getSurveyFromDBWithUUID: response received successfully `, res);
         return res;
       } catch (error: any) {
         // place to handle errors and rise custom errors
