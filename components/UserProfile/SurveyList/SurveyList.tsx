@@ -183,7 +183,9 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                                                 <div className={styles.titlePublic}>
                                                     {!item.published? "not public": ""}
                                                 </div>
-                                                <div className={styles.title}>{item.title}</div>
+                                                <div className={styles.title}>
+                                                    {item.title}
+                                                </div>
                                             </div>
                                             <div className={styles.containerQuestionList}>
                                                 {   

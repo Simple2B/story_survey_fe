@@ -327,7 +327,18 @@
 
 .title {
   font-size: 22px;
-  /* align-self: flex-start; */
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  width: 160px; 
+  white-space: nowrap;
+}
+
+.title:hover {
+  text-overflow: unset;
+  overflow: show; 
+  width: 100%; 
+  height: unset; 
+  white-space: wrap;
 }
 
 .containerQuestion {
