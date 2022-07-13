@@ -28,12 +28,14 @@ const Survey = ({surveyUUID}): ReactElement => {
     }]);
     const [slide, setSlide] = useState(null);
     const [success, setSuccess] = useState(false);
+
     if (success === true) {
         setTimeout(() => {
-            setSuccess(false);
             push('/');
-        }, 1000)
+            // setSuccess(false);
+        }, 2000);
     };
+
     const [survey, setSurvey] = useState({
         id: 0,
         uuid: "",

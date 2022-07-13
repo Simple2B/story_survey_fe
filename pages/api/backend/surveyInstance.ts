@@ -87,7 +87,7 @@ export const surveyApi = {
     },
     getSurveyFromDBWithUUID: async (uuid: string): Promise<any> => {
       try {
-          const response = await instance().get(`/survey/get_not_public_survey/${uuid}`);
+          const response = await instance().get(`/survey/get_survey_with_uuid/${uuid}`);
           const res = response.data;
           return res;
       } catch (error: any) {

@@ -109,7 +109,7 @@
 
 .isSuccess {
     margin: 0 auto;
-    height: 60vh;
+    height: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -123,19 +123,17 @@
   
 .isSuccess div {
     cursor: pointer;
-    text-transform: uppercase;
+    position: relative;
+    width: 90%;
+    height: 90%;
+    background-color: var(--offWhite);
+    box-shadow: -10px 0px 13px -7px var(--mainOpacity), 10px 0px 13px -7px var(--mainOpacity), 5px 5px 15px 5px var(--mainOpacity);
     word-spacing: 5px;
     letter-spacing: 2px;
-    font-weight: bold;
-    width: 70vw;
-    height: 200px;
+    border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: var(--mainWhite) 1px solid;
-    box-shadow: -10px 0px 13px -7px var(--mainOpacity), 10px 0px 13px -7px var(--mainOpacity), 5px 5px 15px 5px var(--mainOpacity);
-    border-radius: 10px;
-    background-color: var(--offWhite);
 }
 
 .nextSwiper, .disabledNextBtn {
@@ -146,7 +144,7 @@
     position: absolute;
     right: 15px;
     top: 48%;
-    z-index: 10010;
+    z-index: 1000;
     color: var(--mainBlack);
     font-size: 18px;
     font-weight: bold;

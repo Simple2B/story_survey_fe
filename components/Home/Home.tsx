@@ -29,13 +29,10 @@ interface IAnswer  {
 const Home = (): ReactElement => {
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
-
     const [isPublic, setIsPublic] = useState(false);
-
     const {data: session } = useSession();
     const { push, asPath } = useRouter();
     const [isOpen, setIsOpen] = useState(false);
-
     const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([{
         title: "",
         description: "",
@@ -46,13 +43,11 @@ const Home = (): ReactElement => {
         successful_message: "",
         published: true,
     }]);
-
     const [answerInfo, setAnswerInfo] = useState<IAnswer>({
         question: "", 
         answer: "", 
         email: ""
     });
-
     const [answers, setAnswers] = useState([{
         question: null, 
         answer: null, 
@@ -62,16 +57,14 @@ const Home = (): ReactElement => {
         // end_time: "",
     }]);
     const [answer, setAnswer] = useState<string>("");
-
     const [slide, setSlide] = useState(null);
     const [indexSurvey, setIndexSurvey] = useState(null);
     const [success, setSuccess] = useState(false);
-    const refLink = useRef(null);
 
     if (success === true) {
         setTimeout(() => {
             setSuccess(false);
-        }, 1000)
+        }, 1500)
     };
 
     const [survey, setSurvey] = useState({
@@ -89,10 +82,7 @@ const Home = (): ReactElement => {
 
     const [isOpenDescription, setOpenDescription] = useState(false);
 
-    // const [answerToQuestion, setAnswerToQuestion] = useState([{questionIndex: null, answer: ""}]);
-
     useEffect(() => {
-        
         const getListSurveys = async() => {
             const list = await surveyApi.getSurveys();
             if (list.length > 0 ) {
@@ -109,20 +99,15 @@ const Home = (): ReactElement => {
                     published: l.published,
                 }}) 
                 setUserSurveys(listUserSurvey);
-                console.log("list", list);
-            }
-            
-            
-        }
+            };
+        };
         getListSurveys();
-
         if (session) {
             const profile: any = session.profile;
             setIsPublic((profile.role === ADMIN || profile.role === CLIENT));
         } else {
             setIsPublic(false);
         };
-        
     },[session]);
 
     const openSurvey = (
@@ -158,28 +143,17 @@ const Home = (): ReactElement => {
     };
 
     const handleChangeAnswer = (e: { target: { value: React.SetStateAction<string>; }; }, ind: number) => {
-        // let answer =  e.target.value
         setAnswers(answers.map((item, index) => index === ind ? {
             question: item.question, 
             answer: e.target.value, 
             email: item.email,
             session_id: sessionId,
             start_time: startDate,
-            // end_time?: string,
         } : item));  
-        // setAnswer(answer);
-        // const dataSaveToDB = {
-        //     question: answers[ind].question, 
-        //     answer: answer, 
-        //     email: answers[ind].email 
-        // }
-        // setAnswerInfo(dataSaveToDB);
     };
 
     const answerTheQuestion = () => {
-        
         const data = [...answers];
-        console.log("=== survey.questions length", survey.questions.length - 1 );
         const saveQuestion = async(answersInfo: { 
             question: any; 
             answer: any; 
@@ -190,14 +164,12 @@ const Home = (): ReactElement => {
         }[]) => {
             const questionsFromDB = await surveyApi.answerTheQuestion(answersInfo);
             console.log("questionsFromDB ", questionsFromDB);
-
             if (slide === survey.questions.length - 1){ 
                 setSuccess(!success);
                 setIsOpen(!isOpen);
             };
         }
         saveQuestion(data);
-       
     };
 
     // TODO: create link for prod
@@ -244,7 +216,11 @@ const Home = (): ReactElement => {
                 userSurveys[0].user_id === 0 ? (
                    <Wrapper>
                         <Banner title="Story Survey" subtitle="">
-                            <CustomLink text={"create your survey"}  href={`/auth/signin?callbackUrl=${asPath}`} style={"btnPrimary"}/>
+                            <CustomLink 
+                                text={"create your survey"}  
+                                href={`/auth/signin?callbackUrl=${asPath}`} 
+                                style={"btnPrimary"}
+                            />
                         </Banner>
                     </Wrapper> 
                 ) : (
@@ -252,14 +228,12 @@ const Home = (): ReactElement => {
                         { userSurveys[0].user_id !== 0 && (
                                 <div className={styles.homeContent}>
                                     {(
-
                                     userSurveys.map((item, index) => {
                                         const uuid = item.uuid;
                                         return (
                                             <div className={styles.overviewBoxes} key={index}>
                                                 <div className={styles.box}>
                                                     <div className={styles.rightSide}>
-                                                        {/* <i className={styles.editIcon} onClick={deleteSurvey}><Image src={deleteIcon} height={30} width={30}/></i> */}
                                                             <div className={styles.titleCard}>
                                                                 <div className={styles.titlePublic}>
                                                                     {!item.published? "not public": ""}
@@ -324,25 +298,15 @@ const Home = (): ReactElement => {
                                                                         </div>
                                                                         )
                                                                     }
-                                                                    <Link 
-                                                                        href={`/survey/${uuid}`} 
-                                                                    >
-                                                                        <a 
-                                                                        // onClick={() => router.push(`/survey/${survey_id}`)} 
-                                                                        target="_blank" 
-                                                                        className="card-link">
+                                                                    <Link href={`/survey/${uuid}`}>
+                                                                        <a target="_blank" className="card-link">
                                                                             survey
                                                                         </a>
                                                                     </Link>
                                                                 </div>
                                                             )
                                                         }
-                                                        { !item.published &&
-                                                            (
-                                                                <div></div>
-                                                            )
-                                                        }
-
+                                                        { !item.published && <div></div> }
                                                         { !item.published && isPublic &&
                                                             (
                                                                 <div className={styles.containerIconLink}>
@@ -365,7 +329,6 @@ const Home = (): ReactElement => {
                                                                         href={`/survey/not_public/${uuid}`} 
                                                                     >
                                                                         <a 
-                                                                        // onClick={() => router.push(`/survey/${survey_id}`)} 
                                                                         target="_blank" 
                                                                         className="card-link">
                                                                             survey
@@ -414,7 +377,9 @@ const Home = (): ReactElement => {
                             isOpenDescription &&
                             <div className={styles.modalWindow}>
                                 <div className={styles.modal}>
-                                    <i className={styles.editIcon} onClick={() => setOpenDescription(!isOpenDescription)}><Image src={deleteIcon} height={30} width={30}/></i>
+                                    <i className={styles.editIcon} onClick={() => setOpenDescription(!isOpenDescription)}>
+                                        <Image src={deleteIcon} height={30} width={30}/>
+                                    </i>
                                     <div className={styles.titleShowMore}>
                                         {survey.title}
                                     </div>
@@ -491,7 +456,6 @@ const Home = (): ReactElement => {
                                                 </Swiper>
                                                 { 
                                                     <button 
-                                                        // className={slide ===  survey.questions.length   ? `nextSwiper ${styles.disabledNextBtn}`: `nextSwiper ${styles.nextSwiper}`} 
                                                         className={`nextSwiper ${styles.nextSwiper}`} 
 
                                                         onClick={answerTheQuestion}
@@ -499,7 +463,6 @@ const Home = (): ReactElement => {
                                                             + answer
                                                     </button>
                                                 }
-                                            {/* <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} onClick={answerTheQuestion}>Save answer the {survey.questions.length > 0 ? "questions" : "question"}</button> */}
                                         </div>
                                     </div>
                                 )
