@@ -32,6 +32,7 @@ export type UserAction = ISetUserAction | IGetUserAction;
 // object types
 export interface IUserResponse {
   id?: number;
+  uuid?: string;
   created_at?: string;
   email?: string;
   image?: string;

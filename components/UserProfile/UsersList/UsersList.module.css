@@ -7,6 +7,16 @@
     cursor: pointer;
 }
 
+.rowTitle {
+    position: relative;
+}
+
+.description .descriptionContent, .rowTitle .titleContent{
+    padding-bottom: 5px;
+    overflow-y: scroll;
+    height: 50px;
+}
+
 .modalWindow {
     width: 100vw;
     height: 100vh;
@@ -105,4 +115,34 @@
     font-size: 13px;
     font-style: italic;
     color: var(--primaryColor);
+}
+
+.btnOpenContainer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+}
+
+.btnOpen {
+    position: absolute;
+    top: 45%;
+    cursor: pointer;
+    padding: 3px 10px;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: .5px;
+    background-color: var(--mainBackground);
+    border-radius: 5px;
+    transition: all .3s ease-in;
+}
+
+.btnOpen:hover {
+    top: 44%;
+    padding: 4px 11px;
+    background-color: var(--mainWhite);
+    color: var(--primaryColor);
+    transition: all .5s ease-out;
 }

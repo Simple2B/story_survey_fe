@@ -15,7 +15,7 @@ const UserList = (): ReactElement => {
     const {asPath} = useRouter();
     const [user, setUser] = useState<IUserResponse>();
     const pathInfo = asPath.split("/");
-    const userId = Number(pathInfo[pathInfo.length - 1]);
+    const userId = pathInfo[pathInfo.length - 1];
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [survey, setSurvey] = useState<ISurveyInfo>({
         id: "",
@@ -38,7 +38,7 @@ const UserList = (): ReactElement => {
     useEffect(() => {
           if (session && asPath) {
             const getUser = async() => {
-              const usersFromDB = await clientApi.getUserByID(userId);
+              const usersFromDB = await clientApi.getUserByUUID(userId);
               console.log("usersFromDB ", usersFromDB);
               setUser(usersFromDB);
             };
@@ -48,21 +48,22 @@ const UserList = (): ReactElement => {
 
     return  (
       <div className={styles.container}>
-          <table className="table table-hover" id="userList">
-              <thead>
-                  <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Title</th>
-                  <th scope="col">Description</th>
-                  <th scope="col">Create</th>
-                  <th scope="col">Questions</th>
-                  </tr>
-              </thead> 
-              <tbody>
-                  {user && user.surveys.length > 0 && (
-                      user.surveys.map((survey, index) => {
-                          return (
-                              <tr 
+            <div>Back</div>
+            <table className="table table-hover" id="userList">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Create</th>
+                    <th scope="col">Questions</th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {user && user.surveys.length > 0 && (
+                        user.surveys.map((survey, index) => {
+                            return (
+                                <tr 
                                     key={index} 
                                     onClick={() => {
                                         setIsOpen(!isOpen);
@@ -75,18 +76,26 @@ const UserList = (): ReactElement => {
                                     }} 
                                     className={styles.tableRow}
                                 >
-                                  <th scope="row">{index+1}</th>
-                                  <td>{survey.title}</td>
-                                  <td>{survey.description}</td>
-                                  <td>{survey.created_at}</td>
-                                  <td>{survey.questions.length}</td>
-                              </tr>
-                          )
-                      })
-                  )} 
-              </tbody>
-          </table>
-          {isOpen && (
+                                    <th scope="row">{index+1}</th>
+                                    <td className={styles.rowTitle}>
+                                        <div className={styles.titleContent}>
+                                            {survey.title}
+                                        </div>
+                                    </td>
+                                    <td className={styles.description}>
+                                        <div className={styles.descriptionContent}>
+                                            {survey.description}
+                                        </div>
+                                    </td>
+                                    <td>{survey.created_at}</td>
+                                    <td>{survey.questions.length}</td>
+                                </tr>
+                            )
+                        })
+                    )} 
+                </tbody>
+            </table>
+            {isOpen && (
             <div className={styles.modalWindow}>
                 <div className={styles.modal}>
                     <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}>
@@ -126,7 +135,7 @@ const UserList = (): ReactElement => {
                     )}
                 </div>
             </div>
-          )}
+            )}
       </div>
     );
 };

@@ -20,12 +20,13 @@ const UsersList = (): ReactElement => {
           };
     }, [session]);
 
-    const openUserList = (id: number) => {
-        push(`/user_profile/survey/users/user/${id}`);
+    const openUserList = (user_uuid: string) => {
+        push(`/user_profile/survey/users/user/${user_uuid}`);
     };
     
     return  (
         <div className={styles.container}>
+            
             <table className="table table-hover">
                 <thead>
                     <tr>
@@ -33,13 +34,14 @@ const UsersList = (): ReactElement => {
                     <th scope="col">Email</th>
                     <th scope="col">Username</th>
                     <th scope="col">Survey</th>
+                    <th scope="col">Info</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users && users.length > 0 && (
                         users.map((user, index) => {
                             return (
-                                <tr key={index} onClick={() => openUserList(user.id)} className={styles.tableRow}>
+                                <tr key={index} className={styles.tableRow}>
                                     <th scope="row">{index+1}</th>
                                     <td className={styles.emailContainer}>
                                         {user.email}
@@ -52,6 +54,12 @@ const UsersList = (): ReactElement => {
                                         ? <td>{user.surveys.length}</td>
                                         : <td>0</td>
                                     }
+                                    <td className={styles.btnOpenContainer}>
+                                        <span className={styles.btnOpen} 
+                                                onClick={() => openUserList(user.uuid)}>
+                                            open
+                                        </span>
+                                    </td>
                                 </tr>
                             )
                         })

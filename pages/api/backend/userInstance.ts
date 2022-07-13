@@ -12,7 +12,7 @@ export const clientApi = {
           const res = response.data;
           return res;
       } catch (error: any) {
-          console.log(`POST: error message => ${error.message}`);
+          console.log(`POST createUserProvider: error message => ${error.message}`);
           throw error;
       }
     },
@@ -22,7 +22,7 @@ export const clientApi = {
           const res = response.data;
           return res;
       } catch (error: any) {
-          console.log(`POST: error message => ${error.message}`);
+          console.log(`POST getUser: error message => ${error.message}`);
           throw error;
       }
     },
@@ -32,7 +32,17 @@ export const clientApi = {
           const res = response.data;
           return res;
       } catch (error: any) {
-          console.log(`POST: error message => ${error.message}`);
+          console.log(`POST getUserByID: error message => ${error.message}`);
+          throw error;
+      }
+    },
+    getUserByUUID: async (uuid: string): Promise<IUserResponse> => {
+      try {
+          const response = await instance().get(`/user/uuid/${uuid}`);
+          const res = response.data;
+          return res;
+      } catch (error: any) {
+          console.log(`POST getUserByUUID: error message => ${error.message}`);
           throw error;
       }
     },
@@ -42,7 +52,7 @@ export const clientApi = {
           const res = response.data;
           return res;
       } catch (error: any) {
-          console.log(`POST: error message => ${error.message}`);
+          console.log(`POST getUsers: error message => ${error.message}`);
           throw error;
       }
     },
