@@ -61,4 +61,5 @@ export interface ISurveyInfo {
     user_id: number,
     email: string,
     questions:  IQuestionInfo[],
+    published?: boolean
 }

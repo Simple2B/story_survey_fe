@@ -34,6 +34,7 @@ const UserList = (): ReactElement => {
             survey: "",
             answers: [],
         }],
+        published: false,
     });
 
     useEffect(() => {
@@ -70,6 +71,8 @@ const UserList = (): ReactElement => {
                 <tbody>
                     {user && user.surveys.length > 0 && (
                         user.surveys.map((survey, index) => {
+                            console.log(" survey.published ", survey.published);
+                            
                             return (
                                 <tr 
                                     key={index} 
@@ -78,6 +81,7 @@ const UserList = (): ReactElement => {
                                 >
                                     <th scope="row">{index+1}</th>
                                     <td className={`${styles.rowTitle} ${styles.commonRowStyle}`}>
+                                        <div className={styles.status}>{survey.published ? "" : "not public"}</div>
                                         <div className={styles.titleContent}>
                                             {survey.title}
                                         </div>
@@ -122,29 +126,33 @@ const UserList = (): ReactElement => {
                                 <div className={styles.title}>{survey.title}</div>
                             </div>
                             <div className={styles.questionContainer}>
+                            <table className="table table-hover" id="userList">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Question</th>
+                                        <th scope="col">Answers</th>
+                                    </tr>
+                                </thead> 
+                                <tbody>
                                 {survey.questions
                                     && (
-                                    survey.questions.slice(0).map((questionInfo, item) => {
+                                    survey.questions.slice(0, survey.questions.length - 1).map((questionInfo, item) => {
                                         return (
-                                            <div>
-                                                {
-                                                questionInfo.question !== "" && (
-                                                <div key={item} className={styles.question}>
-                                                    <div>
-                                                        {questionInfo.question} 
-                                                    </div>
-                                                    <div>
-                                                        {questionInfo.answers.length > 0 ? "answers" : "answer"}
-                                                    </div>
-                                                    <div>
-                                                        {questionInfo.answers.length}
-                                                    </div>
-                                                </div>
-                                                )}
-                                            </div>
+                                            <tr key={item} className={styles.tableRow}>
+                                                <th scope="row">{item+1}</th>
+                                                <td>
+                                                    {questionInfo.question.length > 0 && questionInfo.question} 
+                                                </td>
+                                                <td className={styles.commonRowStyle}>
+                                                    {questionInfo.answers.length}
+                                                </td>
+                                            </tr>
                                         )
                                     })
                                 )}
+                                </tbody>
+                            </table>
                             </div>
                         </div>
                     )}

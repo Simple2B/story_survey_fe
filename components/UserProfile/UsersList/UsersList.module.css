@@ -53,6 +53,15 @@
     position: relative;
 }
 
+.status {
+    position: absolute;
+    top: 0;
+    left: -23px;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--primaryColor);
+}
+
 
 .description .descriptionContent, .rowTitle .titleContent{
     padding-bottom: 5px;
