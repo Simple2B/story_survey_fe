@@ -1,46 +1,41 @@
-// import { AxiosError, AxiosResponse } from "axios";
-// import { ILoginResponse } from "../../redux/types/authTypes";
 import { authInstance } from "./axiosInstance";
 
 const formatRequestBody = (email: string, password: string) => {
-  const formData = new FormData();
-  formData.append("grant_type", "");
-  formData.append("username", email);
-  formData.append("password", password);
-  formData.append("scope", "");
-  formData.append("client_id", ""); 
-  formData.append("client_secret", ""); 
-  
-  
-  return formData;
+    const formData = new FormData();
+    formData.append("grant_type", "");
+    formData.append("username", email);
+    formData.append("password", password);
+    formData.append("scope", "");
+    formData.append("client_id", ""); 
+    formData.append("client_secret", ""); 
+    return formData;
 };
 
 const formatRequestBodyApiKey = (password: string, api_key: string) => {
-  const params = {
-    password: password,
-    api_key: api_key,
-  };
-  return params;
+    const params = {
+        password: password,
+        api_key: api_key,
+    };
+    return params;
 };
 
 export const authApi = {
-  login: async (
-    email: string,
-    password: string
-  ): Promise<any> => {
-    try {
-      const response = await authInstance.post(
-        "/user/sign_in",
-        {email, password}
-      );
-      console.log("POST [/sign_in] response received successfully");
-      return response.data;
-    } catch (error: any) {
-      // place to handle errors and rise custom errors
-      // console.log(`POST [/auth/sign_in] error message: ${error.message}`);
-      throw new Error(error.message);
-    }
-  },
+    login: async (
+        email: string,
+        password: string
+    ): Promise<any> => {
+      try {
+        const response = await authInstance.post(
+          "/user/sign_in",
+          {email, password}
+        );
+        console.log("POST [/sign_in] response received successfully");
+        return response.data;
+      } catch (error: any) {
+        console.log(`POST [/auth/sign_in] error message: ${error.message}`);
+        throw error;
+      }
+},
 
   setPassword: async (password: string, api_key: string): Promise<void> => {
     try {
@@ -53,11 +48,10 @@ export const authApi = {
       );
       return response.data;
     } catch (error: any) {
-      // place to handle errors and rise custom errors
       console.log(
         `POST [/sing_up/${api_key}] error message: ${error.message}`
       );
-      throw new Error(error.message);
+      throw error;
     }
   },
 };
