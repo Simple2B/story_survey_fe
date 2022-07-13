@@ -8,9 +8,6 @@ const SurveyPage = () => {
   let modifyPath = asPath.split("/");
   let surveyUUID = modifyPath[modifyPath.length - 1];
 
-  // console.log("SurveyPage: surveyId ", surveyId);
- 
-
   return  (
       <Survey surveyUUID={surveyUUID}></Survey>
   );

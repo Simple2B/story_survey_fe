@@ -11,12 +11,18 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    /* height: 100vh; */
 }
   
 .title {
-    font-size: 22px;
-    /* align-self: flex-start; */
+    margin: 0 auto;
+    position: relative;
+    width: 80%;
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 18px;
 }
 
 .description {
@@ -25,7 +31,6 @@
     text-align: justify;
     text-indent: 30px;
 }
-
 
 .containerQuestion {
     position: relative;
@@ -66,7 +71,7 @@
     background-color: var(--mainBlack);
     border-color: var(--mainBlack);
     margin: 30px auto;
-  }
+}
 
 .btn:hover {
     color: var(--primaryColor);
@@ -81,7 +86,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
 
 .answerContainer textarea {
     width: 100%;
@@ -92,6 +97,14 @@
 .answerContainer textarea[placeholder] {
     padding: 15px 14px;
     outline-color: var(--mainOpacity);
+}
+
+.textareaInput {
+    outline: none !important;
+    border: 1px solid ;
+    box-shadow: 0 0 1px #719ECE;
+    border-radius: 5px;
+    font-size: 18px;
 }
 
 .isSuccess {
@@ -135,9 +148,25 @@
     top: 48%;
     z-index: 10010;
     color: var(--mainBlack);
+    font-size: 18px;
     font-weight: bold;
-  }
+}
 
-  .disabledNextBtn {
+.disabledNextBtn {
     color: var(--mainOpacity);
-  }
+}
+
+@media (max-width: 700px) {
+    .nextSwiper {
+        font-size: 14px;
+    }
+   
+}
+
+@media (max-width: 500px) {
+    .nextSwiper {
+        font-size: 14px;
+        right: 15px;
+        top: 18%;
+    }
+}

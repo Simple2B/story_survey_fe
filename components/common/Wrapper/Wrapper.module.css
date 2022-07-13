@@ -2,7 +2,7 @@
 .roomsWrapper {
   padding-top: 100px;
   width: 100%;
-  min-height: calc(100vh - 66px);
+  min-height: calc(100vh);
   background: var(--mainBackground) center/cover no-repeat;
   /* display: flex; */
   align-self: center;
