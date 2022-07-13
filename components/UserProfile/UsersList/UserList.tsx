@@ -49,7 +49,7 @@ const UserList = (): ReactElement => {
 
     const handlerClickBack = () => {
         push("/user_profile/survey/users/users_list")
-    }
+    };
 
     return  (
       <div className={styles.container}>
@@ -59,11 +59,12 @@ const UserList = (): ReactElement => {
             <table className="table table-hover" id="userList">
                 <thead>
                     <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Create</th>
-                    <th scope="col">Questions</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Create</th>
+                        <th scope="col">Questions</th>
+                        <th scope="col">Info</th>
                     </tr>
                 </thead> 
                 <tbody>
@@ -72,30 +73,37 @@ const UserList = (): ReactElement => {
                             return (
                                 <tr 
                                     key={index} 
-                                    onClick={() => {
-                                        setIsOpen(!isOpen);
-                                        const surveyId = user.surveys[index].id;
-                                        const getInfoSurvey = async() => {
-                                            const infoSurvey = await surveyApi.getInfoSurvey(surveyId);
-                                            setSurvey(infoSurvey);
-                                        };
-                                        getInfoSurvey();
-                                    }} 
+                                    
                                     className={styles.tableRow}
                                 >
                                     <th scope="row">{index+1}</th>
-                                    <td className={styles.rowTitle}>
+                                    <td className={`${styles.rowTitle} ${styles.commonRowStyle}`}>
                                         <div className={styles.titleContent}>
                                             {survey.title}
                                         </div>
                                     </td>
-                                    <td className={styles.description}>
+                                    <td className={`${styles.description} ${styles.commonRowStyle}`}>
                                         <div className={styles.descriptionContent}>
                                             {survey.description}
                                         </div>
                                     </td>
-                                    <td>{survey.created_at}</td>
-                                    <td>{survey.questions.length}</td>
+                                    <td className={styles.commonRowStyle}>{survey.created_at}</td>
+                                    <td className={styles.commonRowStyle}>{survey.questions.length}</td>
+                                    <td className={`${styles.btnOpenContainer} ${styles.commonRowStyle}`}>
+                                        <span className={styles.btnOpen} 
+                                            onClick={() => {
+                                                setIsOpen(!isOpen);
+                                                const surveyId = user.surveys[index].id;
+                                                const getInfoSurvey = async() => {
+                                                    const infoSurvey = await surveyApi.getInfoSurvey(surveyId);
+                                                    setSurvey(infoSurvey);
+                                                };
+                                                getInfoSurvey();
+                                            }} 
+                                        >
+                                            open
+                                        </span>
+                                    </td>
                                 </tr>
                             )
                         })
