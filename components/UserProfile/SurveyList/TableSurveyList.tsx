@@ -5,7 +5,7 @@ import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import EditContainer from "./EditContainer";
 import styles from "./SurveyList.module.css";
 
-const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement => {
+const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
     const { data: session} = useSession();
 
     const [isCopied, setCopied] = useState<boolean>(false);
@@ -141,17 +141,23 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
                         userSurveys.map((survey, index) => {
                             
                             return (
-                                <tr key={index}>
+                                <tr key={index} className={styles.rowTable}>
                                     <th scope="row">{index+1}</th>
                                     <td className={styles.rowTitle}>
                                         <span  className={styles.statusSurvey}>{!survey.published? "not public": ""}</span>
-                                        <span>{survey.title}</span>
+                                        <div className={styles.titleContent}>
+                                            {survey.title}
+                                        </div>
                                     </td>
-                                    <td>{survey.description}</td>
+                                    <td className={styles.description}>
+                                        <div className={styles.descriptionContent}>
+                                            {survey.description}
+                                        </div>
+                                    </td>
                                     <td>{survey.questions.length - 1}</td>
                                     <td 
                                         className={styles.linkRow} 
-                                        onClick={() => copyLink(survey.published ? survey.id : survey.uuid, survey.title)}
+                                        onClick={() => copyLink(survey.uuid, survey.title, survey.published)}
                                         // survey_id?: number, survey_uuid?: string, title?: string
                                     >  
                                         <span className={styles.copyLinkTitle}>copy link</span>
@@ -159,7 +165,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
                                             {
                                                 survey.published 
 
-                                                ? `${link}/survey/${survey.id}` 
+                                                ? `${link}/survey/${survey.uuid}` 
 
                                                 : `${link}/survey/not_public/${survey.uuid}`
                                             }
