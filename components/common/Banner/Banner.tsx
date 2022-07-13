@@ -1,7 +1,7 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import styles from "./Banner.module.css";
 
-function Banner({children, title, subtitle}) {
+const Banner = ({children, title, subtitle}): ReactElement => {
     return (
         <div className={styles.banner}>
             <h1>{title}</h1>

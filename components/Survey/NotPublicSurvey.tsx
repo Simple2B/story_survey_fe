@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import styles from "./survey.module.css";
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'js-cookie';
@@ -13,7 +13,7 @@ import "swiper/css/navigation";
 
 
 
-const NotPublicSurvey = ({surveyUUID}) => {
+const NotPublicSurvey = ({surveyUUID}): ReactElement => {
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
     const {push} = useRouter();

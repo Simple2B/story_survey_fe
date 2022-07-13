@@ -13,7 +13,6 @@ import { ADMIN, CLIENT } from "../../../redux/types/userTypes";
 
 
 const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
-
     const {data: session, status} = useSession();
     const { push, asPath } = useRouter();
     const isSurveyList = asPath.includes("surveys_list");

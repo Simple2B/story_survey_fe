@@ -1,9 +1,9 @@
 import Head from "next/head";
-import React from "react";
+import React, { ReactElement } from "react";
 import Navbar from "../../NavBar/NavBar";
 
 
-function ClientContainer ({children, title, keywords, style}) {
+const ClientContainer = ({children, title, keywords, style}): ReactElement => {
     return (
         <>
             <Head>
@@ -19,7 +19,3 @@ function ClientContainer ({children, title, keywords, style}) {
 }
 
 export default ClientContainer;
-
-// MainContainer.defaultProps = {
-//     style: `${styles.defaultWrapper}`
-// }

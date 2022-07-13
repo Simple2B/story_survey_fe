@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { ReactElement } from "react";
 import styles from  "./Checkbox.module.css";
 
-const Checkbox = ({children, value, id, isChecked, handleOnChange}) => {
 
-  console.log("isChecked ", isChecked);
-  
+const Checkbox = ({children, value, id, isChecked, handleOnChange}): ReactElement => {
 
   return (
     <label className={styles.container}>

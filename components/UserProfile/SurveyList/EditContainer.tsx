@@ -50,22 +50,14 @@ const EditContainer = ({
 
     };
 
-    console.log("EditContainer: questions ", questions);
-
-    console.log("EditContainer: questionsDeleted ", questionsDeleted);
-
     const handleWriteQuestion = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setWriteQuestion(e.target.value);
     };
 
     const addQuestion = (question: string) => {
-        // if (question.length === 0){
-        //     setQuestionError("Question is empty");
-        // };
         setCreateQuestion(prev => [...prev, question]);
         setWriteQuestion("");
     };
-
     
     const deleteWriteQuestion = (index: number) => {
         setCreateQuestion(prev => prev.filter((_, i) => index !== i));
@@ -79,9 +71,6 @@ const EditContainer = ({
             return question;
         }));
     }
-
-    console.log("EDIT === createQuestion ===", createQuestion);
-
 
     return  (
         (

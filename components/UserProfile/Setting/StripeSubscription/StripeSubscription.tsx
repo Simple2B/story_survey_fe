@@ -91,8 +91,6 @@ const StripeSubscription = (): ReactElement => {
 
     console.log(" sessionId && message === '' && !sessionId ", session && !success && message === '' && (sessionId !== '' || !sessionId));
     
-    
-    
     if (!success && message === '' ||  !sessionId) {
         console.log("success", success);
         console.log("message", message);

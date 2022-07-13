@@ -1,6 +1,6 @@
 // const { useSession } from 'next-auth/client';
 import { signIn, useSession } from "next-auth/react";
-import React, {useState} from "react";
+import React, {ReactElement, useState} from "react";
 import { clientApi } from "../../pages/api/backend/userInstance";
 import { authApi } from "../../pages/api/backend/authApi";
 import { useActions } from "../../redux/useActions";
@@ -26,7 +26,7 @@ const providers = [
     },
 ];
 
-function Forms() {
+const Forms = (): ReactElement => {
     const { login } = useActions();
     const [form, setForm] = useState("SignIn");
 

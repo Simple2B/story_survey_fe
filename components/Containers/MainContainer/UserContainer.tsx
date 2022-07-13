@@ -2,7 +2,7 @@ import { signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image, { StaticImageData } from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import ProfileNavbar from "../../UserProfile/ProfileNavBar";
 import styles from "../../UserProfile/UserProfile.module.css";
 import settingsIcon from "../../../styles/icons/icons8-settings-64.png";
@@ -27,121 +27,105 @@ interface IMenuIcon {
     isAdmin?: boolean;
 }
 
-
-
-function UserContainer ({children, title, keywords, style, headerName }) {
-  const menuIcons = [
-      {
-        image: surveysIcon,
-        name: 'Surveys list',
-        href: '/user_profile/survey/surveys_list',
-        classIcon: styles.active,
-        isIconActive: true,
-        isAdmin: false,
-      },
-      {
-        image: surveysCreateIcon,
-        name: 'Create survey',
-        href: '/user_profile/survey/create_survey',
-        classIcon: "",
-        isIconActive: false,
-        isAdmin: false,
-      },
-      {
-        image: usersListIcon,
-        name: 'Users list',
-        href: '/user_profile/survey/users/users_list',
-        classIcon: "",
-        isIconActive: false,
-        isAdmin: true,
-      },
-      {
-        image: dashboardIcon,
-        name: 'Dashboard',
-        href: '/user_profile/survey/dashboard',
-        classIcon: "",
-        isIconActive: false,
-        isAdmin: false,
-      },
-      {
-        image: messageIcon,
-        name: 'Messages',
-        href: '/user_profile/survey/messages',
-        classIcon: "",
-        isIconActive: false,
-        isAdmin: false,
-      },
-      {
-        image: settingsIcon,
-        name: 'Setting',
-        href: '/user_profile/survey/setting',
-        classIcon: "",
-        isIconActive: false,
-        isAdmin: false,
-      },
-      {
-        image: singOutIcon,
-        name: SIGN_OUT,
-        classIcon: styles.singOutIcon,
-      }
+const UserContainer = ({children, title, keywords, style, headerName }): ReactElement => {
+    const menuIcons = [
+        {
+          image: surveysIcon,
+          name: 'Surveys list',
+          href: '/user_profile/survey/surveys_list',
+          classIcon: styles.active,
+          isIconActive: true,
+          isAdmin: false,
+        },
+        {
+          image: surveysCreateIcon,
+          name: 'Create survey',
+          href: '/user_profile/survey/create_survey',
+          classIcon: "",
+          isIconActive: false,
+          isAdmin: false,
+        },
+        {
+          image: usersListIcon,
+          name: 'Users list',
+          href: '/user_profile/survey/users/users_list',
+          classIcon: "",
+          isIconActive: false,
+          isAdmin: true,
+        },
+        {
+          image: dashboardIcon,
+          name: 'Dashboard',
+          href: '/user_profile/survey/dashboard',
+          classIcon: "",
+          isIconActive: false,
+          isAdmin: false,
+        },
+        {
+          image: messageIcon,
+          name: 'Messages',
+          href: '/user_profile/survey/messages',
+          classIcon: "",
+          isIconActive: false,
+          isAdmin: false,
+        },
+        {
+          image: settingsIcon,
+          name: 'Setting',
+          href: '/user_profile/survey/setting',
+          classIcon: "",
+          isIconActive: false,
+          isAdmin: false,
+        },
+        {
+          image: singOutIcon,
+          name: SIGN_OUT,
+          classIcon: styles.singOutIcon,
+        }
     ];
     const [isActive, setActive] = useState(false);
-
     const [icons, setMenuIcons] = useState<IMenuIcon[]>(menuIcons);
     const { push, asPath } = useRouter();
     const { data: session} = useSession();
-
     const handleSignOut = async () => {
-      const data = await signOut({redirect: false, callbackUrl: '/'});
-      push(data.url);
+        const data = await signOut({redirect: false, callbackUrl: '/'});
+        push(data.url);
     };
-
     useEffect(() => {
       setActive(false);
-        if (session) {
+          if (session) {
+            const getUser = async() => {
+              const userFromDB = await clientApi.getUser(session.user.email);
+              console.log("userFromDB ", userFromDB);
+            };
 
-          const getUser = async() => {
-            const userFromDB = await clientApi.getUser(session.user.email);
-            console.log("userFromDB ", userFromDB);
-            // setUser(userFromDB);
+            getUser();
+            
+            const user: IUserResponse = session.profile;
+            
+            setMenuIcons(icons.map((icon, i) => {
+              if (asPath === icon.href && icon.name === SIGN_OUT) {
+                  handleSignOut();
+              };
+              if ( user && asPath === icon.href && icon.href === '/user_profile/survey/users/users_list' ) { 
+                  if ( user.role === ADMIN){ 
+                      push('/user_profile/survey/users/users_list');
+                  }
+                  if ( user.role === CLIENT) {
+                      push('/user_profile/survey/surveys_list');
+                  }
+              };
+              if ( asPath.includes(icon.href) ) {
+                    icon.classIcon = styles.active;
+                    icon.isIconActive = true;
+              } else {
+                    icon.classIcon = "";
+                    icon.isIconActive = false;
+              };
+              return icon;
+            }))
           };
-
-          getUser();
-          
-          const user: IUserResponse = session.profile;
-          
-          setMenuIcons(icons.map((icon, i) => {
-
-            // if ( icon['href'] === '/user_profile/survey/users/users_list' && user && user.role === CLIENT) {
-            //   icons['classIcon'] = styles.hideForClient;
-            // };
-
-            if (asPath === icon.href && icon.name === SIGN_OUT) {
-              handleSignOut();
-            };
-          
-            if ( user && asPath === icon.href && icon.href === '/user_profile/survey/users/users_list' ) { 
-              console.log("user.role", user.role);
-              if ( user.role === ADMIN){ 
-                push('/user_profile/survey/users/users_list');
-              }
-              if ( user.role === CLIENT) {
-                push('/user_profile/survey/surveys_list');
-              }
-            };
-
-            if ( asPath.includes(icon.href) ) {
-                  icon.classIcon = styles.active;
-                  icon.isIconActive = true;
-            } else {
-                  icon.classIcon = "";
-                  icon.isIconActive = false;
-            };
-            return icon;
-          }))
-        };
-
-      }, [session])
+    }, [session])
   
     const getMainPage = () => {
         push("/");
@@ -151,7 +135,6 @@ function UserContainer ({children, title, keywords, style, headerName }) {
         setActive(!isActive);
     };
     
-
     return (
         <>
             <Head>
@@ -167,65 +150,53 @@ function UserContainer ({children, title, keywords, style, headerName }) {
                 </div>
                 
                 <ul className={styles.navLinks}>
-                    {icons.map((menu, index) => {
-                      const user: IUserResponse = session ? session.profile : null;
-
-                    //   if (menu.href !== undefined && menu.href === '/user_profile/survey/users/users_list' && user && user.role === ADMIN) {
-                    //     return (
-                    //       <li  key={index} className={style.hideForClient}>
-                    //           <a className={menu.classIcon} href={menu.href}>
-                    //               <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
-                    //               <span className={styles.linksName}>{ menu.name }</span>
-                    //           </a>
-                    //       </li>
-                    //     )
-                    //   }
-                    //  else 
-                     if  (menu.href !== undefined ) {
-                        const isClient = user && user.role === CLIENT;
-                        const isAdmin = user && user.role === ADMIN;
-                        return (
-                          <>
-                            { 
-                              isClient && !menu.isAdmin && 
-                              <Link href={menu.href}  >
-                                <li key={index}>
-                                    <a className={menu.classIcon}>
+                    {
+                      icons.map((menu, index) => {
+                        const user: IUserResponse = session ? session.profile : null;
+                        if  (menu.href !== undefined ) {
+                            const isClient = user && user.role === CLIENT;
+                            const isAdmin = user && user.role === ADMIN;
+                            return (
+                              <>
+                                  { 
+                                    isClient && !menu.isAdmin && 
+                                    <Link href={menu.href}  >
+                                      <li key={index}>
+                                          <a className={menu.classIcon}>
+                                              <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
+                                              <span className={styles.linksName}>{ menu.name }</span>
+                                          </a>
+                                      </li>
+                                    </Link>
+                                  }
+                                  { 
+                                    isAdmin && 
+                                    <Link href={menu.href}  >
+                                      <li key={index}>
+                                          <a className={menu.classIcon}>
+                                              <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
+                                              <span className={styles.linksName}>{ menu.name }</span>
+                                          </a>
+                                      </li>
+                                    </Link>
+                                  }
+                              </>
+                            )
+                        } 
+                        else {
+                              return (
+                                <li  key={index} onClick={handleSignOut}>
+                                    <a className={menu.classIcon} href={menu.href}>
                                         <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
                                         <span className={styles.linksName}>{ menu.name }</span>
                                     </a>
                                 </li>
-                              </Link>
-                            }
-                            { 
-                              isAdmin && 
-                              <Link href={menu.href}  >
-                                <li key={index}>
-                                    <a className={menu.classIcon}>
-                                        <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
-                                        <span className={styles.linksName}>{ menu.name }</span>
-                                    </a>
-                                </li>
-                              </Link>
-                            }
-                          </>
-                        )
-                      } 
-                      else {
-                          return (
-                            <li  key={index} onClick={handleSignOut}>
-                                <a className={menu.classIcon} href={menu.href}>
-                                    <i><Image className={styles.icon} src={menu.image} height={30} width={30}/></i>
-                                    <span className={styles.linksName}>{ menu.name }</span>
-                                </a>
-                            </li>
-                          )
-                      }
-                    })
+                              )
+                          }
+                        })
                     }
                 </ul>
             </div>
-
             <section className={styles.homeSection}>
                 <ProfileNavbar isActive={isActive} handleClick={handleClick} headerName={headerName}/>
                 <div className={styles.mainContent}>
@@ -235,6 +206,6 @@ function UserContainer ({children, title, keywords, style, headerName }) {
             </section>
         </>
     )
-}
+};
 
 export default UserContainer;

@@ -1,11 +1,11 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import Logo from "./Logo";
 import styles from "./StripeSubscription.module.css";
 
-const BasicProductDisplay = () => {
+const BasicProductDisplay = (): ReactElement => {
     const {data : session } = useSession();
     const {push, asPath} = useRouter();
     const [publicKeyStripe, setPublicKeyStripe] = useState("");

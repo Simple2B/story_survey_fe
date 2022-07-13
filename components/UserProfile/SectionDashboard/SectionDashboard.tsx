@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { ReactElement } from "react";
 import styles from "./SectionDashboard.module.css";
 
 
-const SectionDashboard = () => {
+const SectionDashboard = (): ReactElement => {
 
   return  (
     <div className={styles.homeContent}>

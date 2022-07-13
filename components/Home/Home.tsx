@@ -1,27 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { ReactElement, useEffect, useRef, useState } from "react";
+import Wrapper from "../common/Wrapper/Wrapper";
+import Banner from "../common/Banner/Banner";
+import { CustomLink } from "../common/CustomLink";
+import { ADMIN, CLIENT } from "../../redux/types/userTypes";
+import styles from "./Home.module.css";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
 import { surveyApi } from "../../pages/api/backend/surveyInstance";
 import { IGetSurvey } from "../../redux/types/surveyTypes";
-import Wrapper from "../common/Wrapper/Wrapper";
-import styles from "./Home.module.css";
 import deleteIcon from "../../styles/icons/icons8-cancel-64.png";
 import { Navigation, Pagination} from "swiper";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import iconLink from "../../styles/icons/icons8-link-64.png";
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'js-cookie';
-
-
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import Banner from "../common/Banner/Banner";
-import { CustomLink } from "../common/CustomLink";
-import { ADMIN, CLIENT } from "../../redux/types/userTypes";
-
 
 interface IAnswer  {
     question: string, 
@@ -29,8 +26,7 @@ interface IAnswer  {
     email: string
 };
 
-function Home() {
-
+const Home = (): ReactElement => {
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
 

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {ReactElement, useState} from "react";
 import styles from "./Navbar.module.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import singOutIcon from "../../styles/icons/icons8-logout-64 (1).png";
 import { useTypedSelector } from "../../redux/useTypeSelector";
 
 
-const Navbar = () => {
+const Navbar = (): ReactElement => {
     const [isOpen, setIsOpen] = useState(false);
     const handleToggle = () => setIsOpen(!isOpen);
 

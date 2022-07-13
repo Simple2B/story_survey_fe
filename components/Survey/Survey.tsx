@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'js-cookie';
 import styles from "./survey.module.css";
@@ -15,7 +15,7 @@ import { useState } from "react";
 import { surveyApi } from "../../pages/api/backend/surveyInstance";
 
 
-const Survey = ({surveyUUID}) => {
+const Survey = ({surveyUUID}): ReactElement => {
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
     const {push} = useRouter();
