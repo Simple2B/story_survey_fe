@@ -3,7 +3,6 @@ import styles from "./SurveyList.module.css";
 import Image from "next/image";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 import deleteIcon2 from "../../../styles/icons/icons8-multiply-64.png";
-import { IQuestion } from "../../../redux/types/surveyTypes";
 
 
 const EditContainer = ({
@@ -28,26 +27,21 @@ const EditContainer = ({
         setCreateQuestion
     }): ReactElement => {
 
-    const [delQuestions, setDelQuestions] = useState<IQuestion[]>([{
-        id: 0,
-        question: "",
-        survey_id: 0,
-    }]);
-
+    // const [delQuestions, setDelQuestions] = useState<IQuestion[]>([{
+    //     id: 0,
+    //     question: "",
+    //     survey_id: 0,
+    // }]);
     const [writeQuestion, setWriteQuestion] = useState<string>("");
-
     const deleteQuestion = async (questionId: number, surveyId: number) => {
         if (questions.length < 1 || createQuestion.length < 0) {
             console.log("EditContainer: questions.length ", questions.length);
             alert("The survey must contain at least one question ")
             return; 
         };
-
         const delQuestion = questions.filter((question: { id: number; }) => question.id === questionId);
-
         setQuestionDeleted(prev => [...prev, delQuestion[0]]);
         setQuestion((prevQuestions) => prevQuestions.filter((question: { id: number; }) => question.id != questionId));
-
     };
 
     const handleWriteQuestion = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -88,59 +82,56 @@ const EditContainer = ({
                             onChange={handleOnchange}
                         />
                     </div>
-
                     {
-                            ( questions.length > 0)  && questions.map((item, index) => {
-                                return (
-                                    <div className={styles.titleContainer} key={item.id}>
-                                        <i 
-                                            className={styles.deleteIcon} 
-                                            onClick={() => deleteQuestion(item.id, editSurveyId)}
-                                            title={'delete question'}
-                                        >
-                                            <Image src={deleteIcon2} height={30} width={30}/>
-                                        </i>
-                                        <textarea 
-                                            placeholder="question" 
-                                            value={item.question} 
-                                            onChange={(e) => editQuestions(e, item, index)} 
-                                            className={styles.formControl}  
-                                            name={item.question} 
-                                            rows={1}
-                                        >
-                                            {/* {item.question} */}
-                                        </textarea>
-                                    </div>
-                                )
-                            })
+                        ( questions.length > 0)  && questions.map((item, index) => {
+                            return (
+                                <div className={styles.titleContainer} key={item.id}>
+                                    <i 
+                                        className={styles.deleteIcon} 
+                                        onClick={() => deleteQuestion(item.id, editSurveyId)}
+                                        title={'delete question'}
+                                    >
+                                        <Image src={deleteIcon2} height={30} width={30}/>
+                                    </i>
+                                    <textarea 
+                                        placeholder="question" 
+                                        value={item.question} 
+                                        onChange={(e) => editQuestions(e, item, index)} 
+                                        className={styles.formControl}  
+                                        name={item.question} 
+                                        rows={1}
+                                    >
+                                        {/* {item.question} */}
+                                    </textarea>
+                                </div>
+                            )
+                        })
                     }
-
                     {
-                            createQuestion.length > 0 && createQuestion.map((item: string, index: number) => {
-                                return (
-                                    <div className={styles.titleContainer} key={index}>
-                                        <i 
-                                            className={styles.deleteIcon} 
-                                            onClick={() => deleteWriteQuestion(index)}
-                                            title={'delete question'}
-                                        >
-                                            <Image src={deleteIcon2} height={30} width={30}/>
-                                        </i>
-                                        <textarea 
-                                            placeholder="question" 
-                                            value={item} 
-                                            onChange={(e) => editWriteQuestion(e, index)} 
-                                            className={styles.formControl}  
-                                            name={item} 
-                                            rows={1}
-                                        >
-                                            {/* {item.question} */}
-                                        </textarea>
-                                    </div>
-                                )
-                            })
+                        createQuestion.length > 0 && createQuestion.map((item: string, index: number) => {
+                            return (
+                                <div className={styles.titleContainer} key={index}>
+                                    <i 
+                                        className={styles.deleteIcon} 
+                                        onClick={() => deleteWriteQuestion(index)}
+                                        title={'delete question'}
+                                    >
+                                        <Image src={deleteIcon2} height={30} width={30}/>
+                                    </i>
+                                    <textarea 
+                                        placeholder="question" 
+                                        value={item} 
+                                        onChange={(e) => editWriteQuestion(e, index)} 
+                                        className={styles.formControl}  
+                                        name={item} 
+                                        rows={1}
+                                    >
+                                        {/* {item.question} */}
+                                    </textarea>
+                                </div>
+                            )
+                        })
                     }
-
                     <div className={`${styles.titleContainer} ${styles.titleContainerPosition}`}>
                         <textarea 
                             placeholder="add question" 
@@ -155,7 +146,6 @@ const EditContainer = ({
                         </textarea>
                         <div
                             className={`${styles.position} ${styles.btnAdd}`} 
-                            // disabled={questionError.length > 0} 
                             onClick={() => addQuestion(writeQuestion)}
                         >
                                 + add question
@@ -198,7 +188,6 @@ const EditContainer = ({
                     </button>
                 </div>
             </div>
-
         )
     );
 };

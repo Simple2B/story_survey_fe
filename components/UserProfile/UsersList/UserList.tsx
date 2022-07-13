@@ -5,7 +5,6 @@ import React, { ReactElement, useEffect, useState } from "react";
 import { clientApi } from "../../../pages/api/backend/userInstance";
 import { IUserResponse } from "../../../redux/types/userTypes";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
-
 import styles from "./UsersList.module.css";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { ISurveyInfo } from "../../../redux/types/surveyTypes";
@@ -15,10 +14,8 @@ const UserList = (): ReactElement => {
     const {data: session} = useSession();
     const {asPath} = useRouter();
     const [user, setUser] = useState<IUserResponse>();
-
     const pathInfo = asPath.split("/");
     const userId = Number(pathInfo[pathInfo.length - 1]);
-
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [survey, setSurvey] = useState<ISurveyInfo>({
         id: "",
@@ -46,18 +43,9 @@ const UserList = (): ReactElement => {
               setUser(usersFromDB);
             };
             getUser();
-            
           };
-  
         }, [session]);
 
-    const handleOpenInfoSurvey = () => {
-        setIsOpen(!isOpen);
-    };
-
-    console.log("UserList: survey =>", survey);
-    
-    
     return  (
       <div className={styles.container}>
           <table className="table table-hover" id="userList">
@@ -73,8 +61,6 @@ const UserList = (): ReactElement => {
               <tbody>
                   {user && user.surveys.length > 0 && (
                       user.surveys.map((survey, index) => {
-                            console.log("USERLIST: => user.surveys", user.surveys);
-                            
                           return (
                               <tr 
                                     key={index} 
@@ -106,49 +92,38 @@ const UserList = (): ReactElement => {
                     <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}>
                         <Image src={deleteIcon} height={30} width={30}/>
                     </i>
-                    {
-                        survey && (
-                            <div className={styles.containerCard}>
-                                <div className={styles.titleCard}>
-                                    <div className={styles.title}>{survey.title}</div>
-                                </div>
-
-                                <div className={styles.questionContainer}>
-                                    {
-                                        survey.questions
-                                            && (
-                                                survey.questions.slice(0).map((questionInfo, item) => {
-                                                    return (
-                                                        <div>
-                                                            {
-                                                                questionInfo.question !== "" && (
-                                                                <div key={item} className={styles.question}>
-                                                                    <div>
-                                                                        {questionInfo.question} 
-                                                                    </div>
-                                                                    <div>{questionInfo.answers.length > 0 ? "answers" : "answer"}   </div>
-                                                                    <div>{questionInfo.answers.length}</div>
-                                                                </div>
-                                                            )}
-                                                            {/* <div key={item} className={styles.question}>
-                                                                    {questionInfo.answers.map((answerInfo, index) => {
-                                                                        return (
-                                                                            <div key={index}>
-                                                                                {answerInfo.answer}
-                                                                            </div>
-                                                                        )
-                                                                    })}
-                                                            </div> */}
-                                                        </div>
-                                                        
-                                                    )
-                                                })
-                                            )
-                                    }
-                                </div>
+                    {survey && (
+                        <div className={styles.containerCard}>
+                            <div className={styles.titleCard}>
+                                <div className={styles.title}>{survey.title}</div>
                             </div>
-                        )
-                    }
+                            <div className={styles.questionContainer}>
+                                {survey.questions
+                                    && (
+                                    survey.questions.slice(0).map((questionInfo, item) => {
+                                        return (
+                                            <div>
+                                                {
+                                                questionInfo.question !== "" && (
+                                                <div key={item} className={styles.question}>
+                                                    <div>
+                                                        {questionInfo.question} 
+                                                    </div>
+                                                    <div>
+                                                        {questionInfo.answers.length > 0 ? "answers" : "answer"}
+                                                    </div>
+                                                    <div>
+                                                        {questionInfo.answers.length}
+                                                    </div>
+                                                </div>
+                                                )}
+                                            </div>
+                                        )
+                                    })
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
           )}

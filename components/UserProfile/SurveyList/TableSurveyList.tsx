@@ -7,15 +7,9 @@ import styles from "./SurveyList.module.css";
 
 const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
     const { data: session} = useSession();
-
-    const [isCopied, setCopied] = useState<boolean>(false);
-
     const [editSurveyId, setEditSurveyID] = useState<number | null>(null);
     const [userEmail, setUserEmail] = useState<string>("");
-
-
     const [isOpen, setIsOpen] = useState<boolean>(false);
-
     const [titleError, setTitleError] = useState<string>("");
     const [title, setTitle] = useState<string>("");
     const [questions, setQuestion] = useState<IQuestion[]>([{
@@ -23,16 +17,10 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
         question: "",
         survey_id: 0,
     }]);
-
     const [createQuestion, setCreateQuestion] = useState<string[]>([]);
-
     const [questionsDeleted, setQuestionDeleted] = useState<IQuestion[]>([]);
     const [description, setDescription] = useState<string>("");
-
     const [successMessage, setSuccessMessage] = useState<string>("");
-
-
-
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
 
@@ -57,13 +45,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             setTitleError(errMsg);
         }
     };
-
-    const editQuestions = (e: { 
-            target: { value: any; }; }, 
-            question: { id: number; survey_id: any; 
-        }, 
-        index: any
-        ) => {
+    const editQuestions = (e: {target: { value: any; }}, question: { id: number; survey_id: any}, index: any) => {
         if (questions)  {
             setQuestion(questions.map((item) => {
                 if (item.id === question.id) {
@@ -77,11 +59,11 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
         };
     };
 
-    const handleOnchangeDescription = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    const handleOnchangeDescription = (e: { target: { value: React.SetStateAction<string>; }}) => {
         setDescription(e.target.value);
     };
 
-    const handleOnchangeSuccessMessage = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    const handleOnchangeSuccessMessage = (e: { target: { value: React.SetStateAction<string> } }) => {
         setSuccessMessage(e.target.value);
     };
 
@@ -97,18 +79,14 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             questions_deleted: questionsDeleted,
             create_question: createQuestion,
         };
-        console.log("=>>> editDataSurvey ", editDataSurvey);
         const editSurvey = async(data: IGetSurvey, id: any) => {
             const editDataSurvey: IGetSurvey = await surveyApi.editSurvey(data, id);
             console.log(" editDataSurvey ", editDataSurvey);
-
             const getListSurveys = async() => {
                 const list = await surveyApi.getUserSurveys(session.user.email);
                 setUserSurveys(list);
             }
-    
             getListSurveys();
-            
         };
         editSurvey(editDataSurvey, editSurveyId);
         setIsOpen(!isOpen);
@@ -119,10 +97,6 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
         setEditSurveyID(id);
     };
 
-    console.log("TableSurveyList: userSurveys ", userSurveys);
-    
-
-    
     return  (
         <div className={styles.tableListContainer}>
             <table className="table table-hover">
@@ -139,7 +113,6 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                 <tbody>
                     {userSurveys && userSurveys.length > 0 && (
                         userSurveys.map((survey, index) => {
-                            
                             return (
                                 <tr key={index} className={styles.rowTable}>
                                     <th scope="row">{index+1}</th>
@@ -158,17 +131,10 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                     <td 
                                         className={styles.linkRow} 
                                         onClick={() => copyLink(survey.uuid, survey.title, survey.published)}
-                                        // survey_id?: number, survey_uuid?: string, title?: string
                                     >  
                                         <span className={styles.copyLinkTitle}>copy link</span>
                                         <span className={styles.copyLink}>
-                                            {
-                                                survey.published 
-
-                                                ? `${link}/survey/${survey.uuid}` 
-
-                                                : `${link}/survey/not_public/${survey.uuid}`
-                                            }
+                                            {survey.published ? `${link}/survey/${survey.uuid}`:`${link}/survey/not_public/${survey.uuid}`}
                                         </span>
                                     </td>
                                     <td className={styles.btnEditContainer}>

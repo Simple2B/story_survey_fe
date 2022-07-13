@@ -9,29 +9,20 @@ const UsersList = (): ReactElement => {
     const { data: session} = useSession();
     const { push } = useRouter();
     const [ users, setUsers ] = useState<IUserResponse[]>();
-    console.log("UsersList: users ", users);
     
-
     useEffect(() => {
           if (session) {
-
             const getUsers = async() => {
               const usersFromDB = await clientApi.getUsers();
-              console.log("usersFromDB ", usersFromDB);
               setUsers(usersFromDB);
             };
             getUsers();
-            
           };
-  
-        }, [session]);
-
-    console.log("UsersList: users", users);
+    }, [session]);
 
     const openUserList = (id: number) => {
         push(`/user_profile/survey/users/user/${id}`);
-    }
-    
+    };
     
     return  (
         <div className={styles.container}>
@@ -64,9 +55,7 @@ const UsersList = (): ReactElement => {
                                 </tr>
                             )
                         })
-                        
                     )} 
-                    
                 </tbody>
             </table>
         </div>
