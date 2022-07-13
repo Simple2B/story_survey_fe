@@ -32,18 +32,32 @@ const ProfileSurveyLists = () => {
   // process.env.COPY_LINK
   // const link = 'http://localhost:3000';
   const link = 'https://survey.simple2b.net';
-  const [isCopied, setCopied] = useState<boolean>(false);
+  const [isCopiedLink, setCopiedLink] = useState({
+    isCopied: false,
+    surveyUUID: "",
+  });
 
-  const copyLink = (survey_id?: number | string, title?: string) => {
+  if (isCopiedLink.isCopied) {
+      setTimeout(() => {
+          setCopiedLink({
+              isCopied: false,
+              surveyUUID: "",
+          });
+      }, 500);
+  };
+
+  const copyLink = (survey_id?: string, title?: string, isPublic?: boolean) => {
       console.log("COPY  survey id", survey_id);
       let value = `${link}/survey/${survey_id}`;
-        if (typeof(survey_id) === 'string') {
+        if (!isCopiedLink) {
             value = `${link}/survey/not_public/${survey_id}`;
         }
       navigator.clipboard.writeText(value).then(() => {
-          alert(`Copied to clipboard link on ${title}`);
-          setCopied(true);
+        setCopiedLink({
+          isCopied: true,
+          surveyUUID: survey_id,
       });
+    });
   };
 
     
@@ -77,6 +91,7 @@ const ProfileSurveyLists = () => {
               userSurveys={userSurveys} 
               setUserSurveys={setUserSurveys} 
               copyLink={copyLink} 
+              isCopiedLink={isCopiedLink}
               link={link}
             />
             :
@@ -84,6 +99,7 @@ const ProfileSurveyLists = () => {
               userSurveys={userSurveys} 
               setUserSurveys={setUserSurveys} 
               copyLink={copyLink} 
+              isCopiedLink={isCopiedLink}
               link={link}
             />
         }

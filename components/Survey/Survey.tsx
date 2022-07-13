@@ -15,7 +15,7 @@ import { useState } from "react";
 import { surveyApi } from "../../pages/api/backend/surveyInstance";
 
 
-const Survey = ({surveyId}) => {
+const Survey = ({surveyUUID}) => {
   // const { asPath } = useRouter();
   // let modifyPath = asPath.split("/");
   // let surveyIdFromPath = modifyPath[modifyPath.length - 1];
@@ -23,7 +23,7 @@ const Survey = ({surveyId}) => {
   const [sessionId, setSessionId ] = useState();
   const [startDate, setStartDate ] = useState();
 
-  console.log("=>>> Survey: surveyId ", surveyId);
+  console.log("=>>> Survey: surveyId ", surveyUUID);
   // console.log("=>>> Survey: surveyIdFromPath ", surveyIdFromPath);
   
   const {push} = useRouter();
@@ -71,8 +71,8 @@ const Survey = ({surveyId}) => {
 });
 
   useEffect(() => {
-    const getSurvey = async(id: string) => {
-      const surveyFromDB = await surveyApi.getSurveyFromDB(id);
+    const getSurvey = async(uuid: string) => {
+      const surveyFromDB = await surveyApi.getSurveyFromDBWithUUID(uuid);
       setSurvey(surveyFromDB);
       console.log("=> surveyFromDB ", surveyFromDB);
       const dataUserSurvey = {
@@ -96,10 +96,10 @@ const Survey = ({surveyId}) => {
           // end_time: "",
         }} ));
     }
-    if(surveyId !== "[id]") getSurvey(surveyId);
+    if(surveyUUID !== "[uuid]") getSurvey(surveyUUID);
 
 
-  }, [surveyId]);
+  }, [surveyUUID]);
 
   const handleChangeAnswer = (e: React.ChangeEvent<HTMLTextAreaElement>, ind: number) => {
     setAnswers(answers.map((item, index) => index === ind ? {

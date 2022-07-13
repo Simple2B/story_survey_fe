@@ -12,7 +12,7 @@ import EditContainer from "./EditContainer";
 import { ADMIN, CLIENT } from "../../../redux/types/userTypes";
 
 
-const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement => {
+const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
 
     const {data: session, status} = useSession();
     const { push, asPath } = useRouter();
@@ -168,8 +168,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
 
                     userSurveys.map((item, index) => {
                         console.log("========item.questions", item.questions);
-                        const survey_id = item.id;
-                        const not_public_survey_id = item.uuid;
+                        const uuid = item.uuid;
                         return (
                             <div className={styles.overviewBoxes} key={index}>
                                 <div className={styles.box}>
@@ -231,13 +230,21 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                                                 <i 
                                                     className={styles.iconLink} 
                                                     title="copy link" 
-                                                    onClick={() => {copyLink(survey_id, item.title)}}
+                                                    onClick={() => {copyLink(uuid, item.title, item.published)}}
                                                 >
                                                     <Image src={iconLink} height={30} width={30}/>
                                                 </i>
 
+                                                {
+                                                    isCopiedLink.surveyUUID === uuid && (
+                                                    <div className={styles.linkCopied}>
+                                                        copied
+                                                    </div>
+                                                    )
+                                                }
+
                                                 <Link 
-                                                    href={`/survey/${survey_id}`} 
+                                                    href={`/survey/${uuid}`} 
                                                 >
                                                     <a 
                                                     // onClick={() => router.push(`/survey/${survey_id}`)} 
@@ -260,13 +267,21 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement
                                                 <i 
                                                     className={styles.iconLink} 
                                                     title="copy link" 
-                                                    onClick={() => {copyLink(not_public_survey_id, item.title)}}
+                                                    onClick={() => {copyLink(uuid, item.title)}}
                                                 >
                                                     <Image src={iconLink} height={30} width={30}/>
                                                 </i>
 
+                                                {
+                                                    isCopiedLink.surveyUUID === uuid && (
+                                                    <div className={styles.linkCopied}>
+                                                        copied
+                                                    </div>
+                                                    )
+                                                }
+
                                                 <Link 
-                                                    href={`/survey/not_public/${not_public_survey_id}`} 
+                                                    href={`/survey/not_public/${uuid}`} 
                                                 >
                                                     <a 
                                                     // onClick={() => router.push(`/survey/${survey_id}`)} 

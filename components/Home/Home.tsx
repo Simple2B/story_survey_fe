@@ -209,18 +209,32 @@ function Home() {
     // const link = 'http://localhost:3000';
     const link = 'https://survey.simple2b.net';
 
-    const [isCopied, setCopied] = useState<boolean>(false);
+    const [isCopiedLink, setCopiedLink] = useState({
+        isCopied: false,
+        surveyUUID: "",
+    });
 
-    const copyLink = (survey_id: number | string, title: string) => {
-        console.log("COPY  survey id", survey_id);
-        let value = `${link}/survey/${survey_id}`;
-        if (typeof(survey_id) === "string") {
-            value = `${link}/survey/not_public/${survey_id}`;
+    if (isCopiedLink.isCopied) {
+        setTimeout(() => {
+            setCopiedLink({
+                isCopied: false,
+                surveyUUID: "",
+            });
+        }, 500);
+    };
+
+    const copyLink = (survey_uuid: string, title: string, isPublic: boolean) => {
+        console.log("COPY  survey id", survey_uuid);
+        let value = `${link}/survey/${survey_uuid}`;
+        if (!isPublic) {
+            value = `${link}/survey/not_public/${survey_uuid}`;
         }
         
         navigator.clipboard.writeText(value).then(() => {
-            alert(`Copied to clipboard link on ${title}`);
-            setCopied(true);
+            setCopiedLink({
+                isCopied: true,
+                surveyUUID: survey_uuid,
+            });
         });
     };
 
@@ -244,10 +258,7 @@ function Home() {
                                     {(
 
                                     userSurveys.map((item, index) => {
-                                        const survey_id = item.id;
-                                        const not_public_survey_id = item.uuid;
-                                        console.log("not_public_survey_id => ", not_public_survey_id);
-                                        
+                                        const uuid = item.uuid;
                                         return (
                                             <div className={styles.overviewBoxes} key={index}>
                                                 <div className={styles.box}>
@@ -257,7 +268,9 @@ function Home() {
                                                                 <div className={styles.titlePublic}>
                                                                     {!item.published? "not public": ""}
                                                                 </div>
-                                                                <div className={styles.title}>{item.title}</div>
+                                                                <div className={styles.title}>
+                                                                    {item.title}
+                                                                </div>
                                                             </div>
                                                             
                                                             <div className={styles.containerQuestionList}>
@@ -303,13 +316,20 @@ function Home() {
                                                                     <i 
                                                                         className={styles.iconLink} 
                                                                         title="copy link" 
-                                                                        onClick={() => {copyLink(survey_id, item.title)}}
+                                                                        onClick={() => {copyLink(uuid, item.title, item.published)}}
                                                                     >
                                                                         <Image src={iconLink} height={30} width={30}/>
                                                                     </i>
-        
+
+                                                                    {
+                                                                        isCopiedLink.surveyUUID === uuid && (
+                                                                        <div className={styles.linkCopied}>
+                                                                            copied
+                                                                        </div>
+                                                                        )
+                                                                    }
                                                                     <Link 
-                                                                        href={`/survey/${survey_id}`} 
+                                                                        href={`/survey/${uuid}`} 
                                                                     >
                                                                         <a 
                                                                         // onClick={() => router.push(`/survey/${survey_id}`)} 
@@ -333,13 +353,20 @@ function Home() {
                                                                     <i 
                                                                         className={styles.iconLink} 
                                                                         title="copy link" 
-                                                                        onClick={() => {copyLink(not_public_survey_id, item.title)}}
+                                                                        onClick={() => {copyLink(uuid, item.title, item.published)}}
                                                                     >
                                                                         <Image src={iconLink} height={30} width={30}/>
                                                                     </i>
-        
+                                                                    {
+                                                                        isCopiedLink.surveyUUID === uuid && (
+                                                                        <div className={styles.linkCopied}>
+                                                                            copied
+                                                                        </div>
+                                                                        )
+                                                                    }
+                                                                    
                                                                     <Link 
-                                                                        href={`/survey/not_public/${not_public_survey_id}`} 
+                                                                        href={`/survey/not_public/${uuid}`} 
                                                                     >
                                                                         <a 
                                                                         // onClick={() => router.push(`/survey/${survey_id}`)} 
@@ -394,8 +421,12 @@ function Home() {
                             <div className={styles.modalWindow}>
                                 <div className={styles.modal}>
                                     <i className={styles.editIcon} onClick={() => setOpenDescription(!isOpenDescription)}><Image src={deleteIcon} height={30} width={30}/></i>
-                                    <div className={styles.title}>{survey.title}</div>
-                                    <div className={styles.title}>{survey.description}</div>
+                                    <div className={styles.titleShowMore}>
+                                        {survey.title}
+                                    </div>
+                                    <div className={styles.description}>
+                                        {survey.description}
+                                    </div>
                                     <button 
                                         className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} 
                                         onClick={() => {
