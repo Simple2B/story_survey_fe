@@ -3,6 +3,43 @@
     margin: 0 auto;
 }
 
+.backBtn {
+    width: 48px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding: 10px 5px;
+    border: 1px solid var(--mainBackground);
+    background-color: var(--mainOpacity);
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .3s ease-in-out;
+}
+
+.backBtn:hover {
+    border: 1px solid var(--mainOpacity);
+    background-color: var(--mainWhite); 
+    transition: all .3s ease-in-out;
+}
+
+.arrow {
+    border: solid var(--primaryColor);
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 5px;
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
 .tableRow {
     cursor: pointer;
 }

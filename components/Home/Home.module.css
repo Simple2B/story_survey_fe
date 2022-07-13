@@ -303,6 +303,11 @@
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+    color: #007bff;
+}
+
+.link:hover {
+    color: var(--mainBlack)
 }
 
 .containerIconLink {

@@ -375,7 +375,7 @@ const Home = (): ReactElement => {
                                                             )
                                                         }
                                                         
-                                                        <a href="#" 
+                                                        <div  
                                                             className={`${styles.link} card-link`}
                                                             onClick={() => {
                                                                 openSurvey({
@@ -396,13 +396,11 @@ const Home = (): ReactElement => {
                                                                     email: item.email,
                                                                     session_id: "",
                                                                     start_time: "",
-                                                                    // end_time: "",
                                                                 }} ));
-                                                                // setAnswer({question: question, answer: "", email: item.email})
                                                             }}
                                                             >
                                                                 show more
-                                                        </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

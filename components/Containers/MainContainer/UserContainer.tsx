@@ -87,26 +87,30 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
     const [icons, setMenuIcons] = useState<IMenuIcon[]>(menuIcons);
     const { push, asPath } = useRouter();
     const { data: session} = useSession();
+    const [userUUID, setUserUUID] = useState<string>("");
     const handleSignOut = async () => {
         const data = await signOut({redirect: false, callbackUrl: '/'});
         push(data.url);
     };
     useEffect(() => {
+      setUserUUID("");
       setActive(false);
           if (session) {
             const getUser = async() => {
               const userFromDB = await clientApi.getUser(session.user.email);
               console.log("userFromDB ", userFromDB);
+              const uuid = userFromDB.uuid
+              setUserUUID(uuid);
             };
-
             getUser();
-            
             const user: IUserResponse = session.profile;
-            
+            console.log("UserContainer: user profile ", user);
+
             setMenuIcons(icons.map((icon, i) => {
               if (asPath === icon.href && icon.name === SIGN_OUT) {
                   handleSignOut();
               };
+
               if ( user && asPath === icon.href && icon.href === '/user_profile/survey/users/users_list' ) { 
                   if ( user.role === ADMIN){ 
                       push('/user_profile/survey/users/users_list');
@@ -115,13 +119,14 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
                       push('/user_profile/survey/surveys_list');
                   }
               };
-              if ( asPath.includes(icon.href) ) {
+              if (asPath.includes(icon.href)) {
                     icon.classIcon = styles.active;
                     icon.isIconActive = true;
               } else {
                     icon.classIcon = "";
                     icon.isIconActive = false;
               };
+
               return icon;
             }))
           };

@@ -8,11 +8,12 @@ import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 import styles from "./UsersList.module.css";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { ISurveyInfo } from "../../../redux/types/surveyTypes";
+import handler from "../../../pages/api/keys";
 
 
 const UserList = (): ReactElement => {
     const {data: session} = useSession();
-    const {asPath} = useRouter();
+    const {push, asPath} = useRouter();
     const [user, setUser] = useState<IUserResponse>();
     const pathInfo = asPath.split("/");
     const userId = pathInfo[pathInfo.length - 1];
@@ -46,9 +47,15 @@ const UserList = (): ReactElement => {
           };
         }, [session]);
 
+    const handlerClickBack = () => {
+        push("/user_profile/survey/users/users_list")
+    }
+
     return  (
       <div className={styles.container}>
-            <div>Back</div>
+            <div className={styles.backBtn} onClick={handlerClickBack} title="go back">
+                <i className={`${styles.arrow} ${styles.left}`}/>
+            </div>
             <table className="table table-hover" id="userList">
                 <thead>
                     <tr>
