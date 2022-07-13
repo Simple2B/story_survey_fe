@@ -14,6 +14,7 @@ export interface ICreateSurvey {
     user_id?: number,
     email: string,
     questions: string[],
+    published?: boolean 
 }
 
 export interface IGetSurvey {
@@ -29,6 +30,7 @@ export interface IGetSurvey {
         questions: IQuestion[],
         questions_deleted?: IQuestion[],
         create_question?: string[],
+        published?: boolean 
 }
 
 // User list 

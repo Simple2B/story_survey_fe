@@ -3,10 +3,7 @@ import styles from "./SurveyList.module.css";
 import Image from "next/image";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
 import deleteIcon2 from "../../../styles/icons/icons8-multiply-64.png";
-
-import { questionApi } from "../../../pages/api/backend/questionInstance";
-import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
-import { surveyApi } from "../../../pages/api/backend/surveyInstance";
+import { IQuestion } from "../../../redux/types/surveyTypes";
 
 
 const EditContainer = ({

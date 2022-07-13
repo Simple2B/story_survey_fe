@@ -5,14 +5,12 @@ import plusIcon from "../../../styles/icons/icons8-add-property-64.png";
 import cancelIcon from "../../../styles/icons/icons8-cancel-64.png";
 // import editIcon from "../../../styles/icons/icons8-pencil-64.png";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
-import { useStore } from "../../../redux/store";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { ICreateSurvey } from "../../../redux/types/surveyTypes";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useTypedSelector } from "../../../redux/useTypeSelector";
 import { IUserResponse } from "../../../redux/types/userTypes";
-import { stringify } from "querystring";
+import Checkbox from "../../common/Checkbox/Checkbox";
 
 const initialStateProfile = {
     id: null,
@@ -43,10 +41,16 @@ const CreateSurvey = (): ReactElement => {
     const [description, setDescription] = useState<string>("");
     const [successfulMessage, setSuccessfulMessage] = useState<string>("");
 
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleOnChange = () => {
+        setIsChecked(!isChecked);
+    };
+
     if (isSuccess === true) {
         setTimeout(() => {
             setIsSuccess(false);
-        }, 1500);
+        }, 1000);
     };
     
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -138,6 +142,7 @@ const CreateSurvey = (): ReactElement => {
             "user_id": profile.id,
             "email": session.user.email,
             "questions": [...questions, ""],
+            "published": isChecked,
         });
 
         const data: ICreateSurvey = {
@@ -147,6 +152,7 @@ const CreateSurvey = (): ReactElement => {
             "user_id": profile.id,
             "email": session.user.email,
             "questions": [...questions, ""],
+            "published": isChecked,
         }
 
         const saveSurveyToDB = async(data: ICreateSurvey) => {
@@ -252,9 +258,21 @@ const CreateSurvey = (): ReactElement => {
                                     onClick={() => addQuestion(question)}>
                                         + add question
                                 </button>
-                                
 
-                                <button className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} disabled={titleError.length > 0} onClick={createSurvey}>Create survey</button>
+                                <Checkbox 
+                                    children={"not a public survey"}
+                                    value={"not public"}
+                                    id={"createSurveyCheckbox"} 
+                                    isChecked={isChecked} 
+                                    handleOnChange={handleOnChange}                                
+                                />
+                                <button 
+                                    className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} 
+                                    disabled={titleError.length > 0} 
+                                    onClick={createSurvey}
+                                >
+                                        Create survey
+                                </button>
                                 
                         </div>
                     )

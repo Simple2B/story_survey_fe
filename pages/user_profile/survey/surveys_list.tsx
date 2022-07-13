@@ -1,7 +1,6 @@
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import ToggleSwitch from "../../../components/common/ToggleSwitchBtn/ToggleSwitchBtn";
-import UserContainer from "../../../components/Containers/MainContainer/UserContainer";
 import SurveyList from "../../../components/UserProfile/SurveyList/SurveyList";
 import TableSurveyList from "../../../components/UserProfile/SurveyList/TableSurveyList";
 import User from "../../../components/UserProfile/User";
@@ -35,9 +34,12 @@ const ProfileSurveyLists = () => {
   const link = 'https://survey.simple2b.net';
   const [isCopied, setCopied] = useState<boolean>(false);
 
-  const copyLink = (survey_id: number, title?: string) => {
+  const copyLink = (survey_id?: number | string, title?: string) => {
       console.log("COPY  survey id", survey_id);
-      const value = `${link}/survey/${survey_id}`
+      let value = `${link}/survey/${survey_id}`;
+        if (typeof(survey_id) === 'string') {
+            value = `${link}/survey/not_public/${survey_id}`;
+        }
       navigator.clipboard.writeText(value).then(() => {
           alert(`Copied to clipboard link on ${title}`);
           setCopied(true);

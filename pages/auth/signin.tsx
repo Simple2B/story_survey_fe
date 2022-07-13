@@ -19,7 +19,7 @@ const SignIn = () => {
     
     setTimeout(() => {
       push('/user_profile/survey/surveys_list');
-    }, 1500);
+    }, 1000);
     const userProfile: any  = session.profile
     console.log("SignIn: session", session);
 

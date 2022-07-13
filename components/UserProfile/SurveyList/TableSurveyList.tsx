@@ -3,7 +3,6 @@ import React, { ReactElement, useState } from "react";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import EditContainer from "./EditContainer";
-
 import styles from "./SurveyList.module.css";
 
 const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactElement => {
@@ -144,13 +143,26 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link}): ReactEl
                             return (
                                 <tr key={index}>
                                     <th scope="row">{index+1}</th>
-                                    <td>{survey.title}</td>
+                                    <td className={styles.rowTitle}>
+                                        <span  className={styles.statusSurvey}>{!survey.published? "not public": ""}</span>
+                                        <span>{survey.title}</span>
+                                    </td>
                                     <td>{survey.description}</td>
                                     <td>{survey.questions.length - 1}</td>
-                                    <td className={styles.linkRow} onClick={() => copyLink(survey.id, survey.title)}>
+                                    <td 
+                                        className={styles.linkRow} 
+                                        onClick={() => copyLink(survey.published ? survey.id : survey.uuid, survey.title)}
+                                        // survey_id?: number, survey_uuid?: string, title?: string
+                                    >  
                                         <span className={styles.copyLinkTitle}>copy link</span>
                                         <span className={styles.copyLink}>
-                                            {`${link}/survey/${survey.id}`}
+                                            {
+                                                survey.published 
+
+                                                ? `${link}/survey/${survey.id}` 
+
+                                                : `${link}/survey/not_public/${survey.uuid}`
+                                            }
                                         </span>
                                     </td>
                                     <td className={styles.btnEditContainer}>
