@@ -6,13 +6,13 @@ import Survey from "../../components/Survey/Survey"
 const SurveyPage = () => {
   const { asPath } = useRouter();
   let modifyPath = asPath.split("/");
-  let surveyId = modifyPath[modifyPath.length - 1];
+  let surveyUUID = modifyPath[modifyPath.length - 1];
 
   // console.log("SurveyPage: surveyId ", surveyId);
  
 
   return  (
-      <Survey surveyId={surveyId}></Survey>
+      <Survey surveyUUID={surveyUUID}></Survey>
   );
 };
 
