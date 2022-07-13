@@ -6,7 +6,7 @@ import Logo from "./Logo";
 import styles from "./StripeSubscription.module.css";
 
 const BasicProductDisplay = (): ReactElement => {
-    const {data : session } = useSession();
+    const {data: session } = useSession();
     const {push, asPath} = useRouter();
     const [publicKeyStripe, setPublicKeyStripe] = useState("");
     useEffect(() => {
@@ -27,9 +27,7 @@ const BasicProductDisplay = (): ReactElement => {
     const stripePromise = loadStripe(publicKeyStripe);
     console.log(" stripePromise ", stripePromise);
     
-
     const handlerClick = async () => {
-
         const {sessionId, customer} = await fetch('/api/checkout/session', {
             method: 'POST',
             headers: {
@@ -37,14 +35,11 @@ const BasicProductDisplay = (): ReactElement => {
             },
             body: JSON.stringify({quantity: 1, email: session ? session.user.email : ""})
         }).then(res => res.json());
-        
-
         const stripe = await stripePromise;
-        
         const { error } = await stripe.redirectToCheckout({sessionId});
     };
-
-   return (
+    
+    return (
         <section className={styles.subProductContainer}>
             <div className={styles.product}>
                 <Logo />
@@ -59,6 +54,7 @@ const BasicProductDisplay = (): ReactElement => {
                 </button>
             </div>
         </section>
-)};
+    )
+};
 
 export default BasicProductDisplay;

@@ -6,14 +6,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: '2020-08-2
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        const {quantity, email } = req.body;
-
+        const { quantity, email } = req.body;
         const customer = await stripe.customers.create({
             description: 'Customer created ',
             email: email,
-          });
-
-
+        });
+        
         const session = await stripe.checkout.sessions.create({
             // payment_method_types: ['card'],
             billing_address_collection: 'auto',
@@ -28,7 +26,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             cancel_url: `${process.env.NEXTAUTH_URL}/user_profile/survey/setting?canceled=true`,
         });
           
-
         const dataSessionToDB = {
             email: email,
             basic_product_key: process.env.BASIC_PRICE_LOOKUP_KEY,
@@ -48,5 +45,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             error: e,
         });
     }
-    
 };

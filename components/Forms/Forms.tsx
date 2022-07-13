@@ -27,7 +27,6 @@ const providers = [
 ];
 
 const Forms = (): ReactElement => {
-    const { login } = useActions();
     const [form, setForm] = useState("SignIn");
 
     const [emailError, setEmailErr] = useState("");
@@ -142,7 +141,7 @@ const Forms = (): ReactElement => {
         
     //     createUser(userData);
     // };
-
+    
     return (
         <div className={styles.modalBody}>
             {
