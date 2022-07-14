@@ -28,16 +28,21 @@ const BasicProductDisplay = (): ReactElement => {
     console.log(" stripePromise ", stripePromise);
     
     const handlerClick = async () => {
+        let email;
+        if (session) email = session.user.email;
         const {sessionId, customer} = await fetch('/api/checkout/session', {
             method: 'POST',
             headers: {
                 "content-type": "application/json",
             },
-            body: JSON.stringify({quantity: 1, email: session ? session.user.email : ""})
+            body: JSON.stringify({quantity: 1, email: email })
         }).then(res => res.json());
         const stripe = await stripePromise;
         const { error } = await stripe.redirectToCheckout({sessionId});
     };
+
+    console.log(" === session "), session;
+    
     
     return (
         <section className={styles.subProductContainer}>
