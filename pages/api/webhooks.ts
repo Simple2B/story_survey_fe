@@ -28,22 +28,22 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
                     console.log(`PaymentIntent for ${paymentIntent.amount} was successful!`);
                     // Then define and call a method to handle the successful payment intent.
                     // handlePaymentIntentSucceeded(paymentIntent);
-                break;
+                    break;
                 case 'payment_method.attached':
                     const paymentMethod = event.data.object;
                     console.log(" paymentMethod ", paymentMethod);
                     
                     // Then define and call a method to handle the successful attachment of a PaymentMethod.
                     // handlePaymentMethodAttached(paymentMethod);
-                break;
+                    break;
 
                 case 'payment_method.update':
                 
-                break;
+                    break;
 
                 case 'payment_method.update':
                 
-                break;
+                    break;
 
                 case "payment_intent.canceled":
                     subscription = event.data.object;
@@ -52,7 +52,7 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
                     console.log("subscription canceled object", subscription);
                     // await stripe.subscriptions.del(subscription.id);
                     // await stripeApi.deleteSubscriptionStripe({subscription_id: subscription.id});
-                break;
+                    break;
 
                 case "customer.subscription.created":
                     subscription = event.data.object;
@@ -61,12 +61,13 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
 
                     console.log("subscription created object", subscription.id);
                     const saveSubscriptionToDB = async() => await stripeApi.createSubscriptionStripe({
+                        subscription: subscription,
                         stripe_customer: subscription.customer,
                         subscription_id: subscription.id
                       })
                     saveSubscriptionToDB();
-                break;
-
+                    break;
+                // "customer.deleted"
                 case "customer.subscription.deleted":
                     subscription = event.data.object;
                     status = subscription.status;
@@ -77,13 +78,20 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
                     await stripe.subscriptions.del(subscription.id);
                     await stripeApi.deleteSubscriptionStripe({subscription_id: subscription.id});
                     
-                break;
+                    break;
 
                 case 'customer.subscription.updated':
                     subscription = event.data.object;
                     status = subscription.status;
                     console.log(`Subscription status is ${status}.`);
                     console.log("subscription object", subscription);
+                    await stripeApi.updateSubscriptionStripe({
+                        subscription: subscription,
+                        stripe_customer: subscription.customer,
+                        subscription_id: subscription.id,
+                        status: status,
+                      });
+                    break;
                 default:
                     // Unexpected event type
                     console.log(`Unhandled event type ${event.type}.`);
