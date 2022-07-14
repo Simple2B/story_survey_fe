@@ -8,10 +8,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const { quantity, email } = req.body;
         const customer = await stripe.customers.create({
-            description: 'Customer created ',
+            description: 'Customer created with base product',
             email: email,
         });
-        
+
         const session = await stripe.checkout.sessions.create({
             // payment_method_types: ['card'],
             billing_address_collection: 'auto',
@@ -20,11 +20,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 quantity,
             }],
             // customer_email: email,
-            customer: customer.id as string,
+            customer: customer.id,
             mode: 'subscription',
             success_url: `${process.env.NEXTAUTH_URL}/user_profile/survey/setting?success=true&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXTAUTH_URL}/user_profile/survey/setting?canceled=true`,
         });
+
           
         const dataSessionToDB = {
             email: email,
@@ -36,7 +37,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const saveSessionToDB = async() => await stripeApi.createSessionStripe(dataSessionToDB)
         saveSessionToDB();
 
-        res.status(200).json({ sessionId: session.id, customer: customer.id})
+        res.status(200).json({ sessionId: session.id, customer_id: customer.id })
 
     } catch (e) {
         console.error(e);
