@@ -31,12 +31,18 @@ export type UserAction = ISetUserAction | IGetUserAction;
 
 // object types
 export interface IUserResponse {
-  id?: number;
-  uuid?: string;
-  created_at?: string;
-  email?: string;
-  image?: string;
-  role?: string;
-  username?: string;
-  surveys?: IGetSurvey[]
+    id?: number;
+    uuid?: string;
+    username?: string;
+    email?: string;
+    created_at?: string;
+    role?: string;
+    image?: string;
+    customer_id?: string;
+    session_id?: string;
+    subscription?: string;
+    cancel_at_period_end?: string;
+    subscription_id?: string;
+    product_id?: string;
+    surveys?: IGetSurvey[]
 }
