@@ -9,7 +9,6 @@ const SuccessDisplay = ({ sessionId }) => {
     const { push } = useRouter();
 
     const handlerClick = async() => {
-        
         console.log("stripeIdSession ", sessionId);
         const {url} = await fetch('/api/checkout/create_portal_session', {
             method: 'POST',
@@ -35,7 +34,10 @@ const SuccessDisplay = ({ sessionId }) => {
                 </div>
             </div>
             <div>
-                <button id="checkout-and-portal-button"  className={styles.checkoutBtn} onClick={handlerClick}>
+                <button id="checkout-and-portal-button"  
+                        className={styles.checkoutBtn} 
+                        onClick={handlerClick}
+                >
                     Manage your billing information
                 </button>
             </div>
