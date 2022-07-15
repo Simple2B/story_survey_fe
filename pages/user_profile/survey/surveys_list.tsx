@@ -1,4 +1,5 @@
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ToggleSwitch from "../../../components/common/ToggleSwitchBtn/ToggleSwitchBtn";
 import SurveyList from "../../../components/UserProfile/SurveyList/SurveyList";
@@ -10,7 +11,9 @@ import { surveyApi } from "../../api/backend/surveyInstance";
 
 const ProfileSurveyLists = () => {
   const {data: session, status} = useSession();
+  const {push, asPath} = useRouter();
   const [checked, setChecked] = useState(false);
+
   
   const handleChangeChecked = () => {
     setChecked(!checked);
@@ -60,22 +63,21 @@ const ProfileSurveyLists = () => {
     });
   };
 
-    
-
   useEffect(() => {
-
+    if (status === 'unauthenticated' && asPath.includes('/user_profile')) push("/");
     if (status === 'authenticated') {
-        
         const email: string= session.user.email;
-
         const getListSurveys = async() => {
             const list = await surveyApi.getUserSurveys(email);
             setUserSurveys(list);
         }
-
         getListSurveys();
     }
+    
   },[session]);
+
+  console.log(" status", status);
+  
 
   return (
     <User title={'Survey List'} keywords={""} style={""} headerName={'Survey List'}>

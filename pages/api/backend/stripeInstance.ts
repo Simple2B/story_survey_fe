@@ -17,12 +17,13 @@ export const stripeApi = {
           }
       },
       createSessionStripe: async (data: {
-          email: string,
-          basic_product_key?: string,
-          advance_product_key?: string,
-          stripe_customer?: string,
-          stripe_session_id: string,
-          subscription_id?: string | Stripe.Subscription
+            session: {},
+            email: string,
+            basic_product_key?: string,
+            advance_product_key?: string,
+            stripe_customer?: string,
+            stripe_session_id: string,
+            subscription_id?: string | Stripe.Subscription
       }): Promise<any> => {
           try {
               const response = await instance().post(
