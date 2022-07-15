@@ -117,7 +117,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                 <tr key={index} className={styles.rowTable}>
                                     <th scope="row">{index+1}</th>
                                     <td className={styles.rowTitle}>
-                                        <span  className={styles.statusSurvey}>{!survey.published? "not public": ""}</span>
+                                        <span  className={styles.statusSurvey}>{!survey.published? "private": ""}</span>
                                         <div className={styles.titleContent}>
                                             {survey.title}
                                         </div>

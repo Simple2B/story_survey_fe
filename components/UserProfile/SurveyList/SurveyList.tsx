@@ -157,7 +157,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                                         }}><Image src={deleteIcon} height={30} width={30}/></i>
                                         <div className={styles.titleCard}>
                                             <div className={styles.titlePublic}>
-                                                {!item.published? "not public": ""}
+                                                {!item.published? "private": ""}
                                             </div>
                                             <div className={styles.title}>
                                                 {item.title}
