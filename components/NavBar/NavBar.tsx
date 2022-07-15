@@ -20,6 +20,13 @@ const Navbar = (): ReactElement => {
     const [user, setUser] =useState();
     const isLogin = useTypedSelector((state) => state.auth.loggedIn);
 
+    const isMobile = useMediaQuery('(min-width: 768px)');
+    console.log('isMobile', !isMobile[0]);
+
+    if (!isMobile[0] === false && isOpen === true) {
+      setIsOpen(false)
+    }
+
     const handleSignIn = () => {
         push(`/auth/signin?callbackUrl=${asPath}`);
     };
@@ -32,9 +39,6 @@ const Navbar = (): ReactElement => {
         const data = await signOut({redirect: false, callbackUrl: '/'});
         push(data.url);
     };
-
-    const isMobile = useMediaQuery('(min-width: 768px)');
-    console.log('isMobile', !isMobile[0]);
 
     return (
         <>
