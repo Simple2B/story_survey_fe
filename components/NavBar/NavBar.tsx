@@ -7,11 +7,13 @@ import { CustomLink } from "../common/CustomLink";
 import { useSession, signOut } from "next-auth/react";
 import singOutIcon from "../../styles/icons/icons8-logout-64 (1).png";
 import { useTypedSelector } from "../../redux/useTypeSelector";
+import { useMediaQuery } from "@chakra-ui/react";
 
 
 const Navbar = (): ReactElement => {
     const [isOpen, setIsOpen] = useState(false);
     const handleToggle = () => setIsOpen(!isOpen);
+    console.log('%c Menu open? ', 'color: black; background-color: white; font-weight: 700', {isOpen});
 
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
@@ -31,6 +33,9 @@ const Navbar = (): ReactElement => {
         push(data.url);
     };
 
+    const isMobile = useMediaQuery('(min-width: 768px)');
+    console.log('isMobile', !isMobile[0]);
+
     return (
         <>
             <nav className={ session? styles.navbarProfile : styles.navbar }>
@@ -39,12 +44,13 @@ const Navbar = (): ReactElement => {
                         <CustomLink text={"StorySurvey"}  href="/" style={"navHeaderLogo"}/>
                         <button type="button" className={styles.navBtn} onClick={handleToggle}>
                             {   !isOpen
-                                ? <FaAlignRight size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/>
+                                ? <FaAlignRight size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/> // полоски
                                 : <FaTimes size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/>
                             }
                         </button>
                     </div>
-                    <ul className={isOpen ? `{${styles.navLinks} ${styles.showNav}}` : `${styles.navLinks}`}>
+
+                    <ul className={isOpen && !isMobile[0] ? `{${styles.navLinks} ${styles.showNav}}` : `${styles.navLinks}`}>
                         <li key={1}>
                             <CustomLink text={"About"}  href="/about" style={""}/>
                         </li>
@@ -56,36 +62,36 @@ const Navbar = (): ReactElement => {
                         </li>
                         <li key={4}>
                             {
-                            session ? 
+                            session ?
                                 (session && <>
-                                
-                                    <div className={styles.btnContainer} onClick={getProfile}>  
-                                            
+
+                                    <div className={styles.btnContainer} onClick={getProfile}>
+
                                         <div className={styles.signOutBtn}>{session.user.name}</div>
                                         <div className={styles.imageContainer}>
                                             <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
                                         </div>
-                                        
+
                                     </div>
                                     <i onClick={handleSignOut}><Image src={singOutIcon} height={25} width={25} className={styles.icon}/></i>
                                 </>
-                                    
+
                                 ) : isLogin ? (
                                         <div className={styles.btnContainer}>
                                             <div onClick={getProfile}>Profile</div>
                                             {/* <i onClick={handleLogOut}><Image src={singOutIcon} height={25} width={25} className={styles.icon}/></i> */}
                                         </div>
                                         ) :
-                                
+
                                 (<div className={styles.signBtn} onClick={handleSignIn}>Sign in</div>)
                             }
-                            
+
                         </li>
                     </ul>
                 </div>
             </nav>
         </>
-        
+
     )
 }
 export default Navbar;
