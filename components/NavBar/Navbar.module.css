@@ -10,6 +10,30 @@
     z-index: 3;
 }
 
+@media screen and (max-width: 768px) {
+  .burgerLinks {
+    list-style: none;
+    text-align: center;
+  }
+
+  .navbarProfile {
+    border-radius: 15px 50px;
+  }
+
+  .burgerLinks a {
+    list-style: none;
+    display: block;
+    text-decoration: none;
+    padding: 1rem 0;
+    color: var(--mainBlack);
+    transition: var(--mainTransition);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: var(--mainSpacing);
+  }
+}
+
 /* .navbarProfile {
   background: var(--mainOpacity) center/cover no-repeat;
   box-shadow: 1px 3px 8px 5px #1F87FF var(--mainBackground);
@@ -157,7 +181,7 @@
   .navBtn {
     display: none;
   }
-  
+
   .navCenter {
     max-width: 1170px;
     margin: 0 auto;
@@ -194,7 +218,7 @@
     border: 1px solid var(--primaryColor);
     border-radius: 2.5rem;
   }
-  
+
   .signOutBtn {
     border: none;
   }

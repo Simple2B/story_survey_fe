@@ -1,4 +1,5 @@
 import React, {ReactElement, useState} from "react";
+import clsx from "clsx";
 import styles from "./Navbar.module.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -7,6 +8,7 @@ import { CustomLink } from "../common/CustomLink";
 import { useSession, signOut } from "next-auth/react";
 import singOutIcon from "../../styles/icons/icons8-logout-64 (1).png";
 import { useTypedSelector } from "../../redux/useTypeSelector";
+import { useMediaQuery } from 'react-responsive';
 
 
 const Navbar = (): ReactElement => {
@@ -17,6 +19,12 @@ const Navbar = (): ReactElement => {
     const { data: session } = useSession();
     const [user, setUser] =useState();
     const isLogin = useTypedSelector((state) => state.auth.loggedIn);
+
+    const isMobile = useMediaQuery({minWidth: 768});
+
+    if (!isMobile === false && isOpen === true) {
+      setIsOpen(false)
+    }
 
     const handleSignIn = () => {
         push(`/auth/signin?callbackUrl=${asPath}`);
@@ -37,14 +45,15 @@ const Navbar = (): ReactElement => {
                 <div className={styles.navCenter}>
                     <div className={styles.navHeader}>
                         <CustomLink text={"StorySurvey"}  href="/" style={"navHeaderLogo"}/>
-                        <button type="button" className={styles.navBtn} onClick={handleToggle}>
+                        <button type="button" className={clsx(styles.navBtn)} onClick={handleToggle}>
                             {   !isOpen
-                                ? <FaAlignRight size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/>
+                                ? <FaAlignRight size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/> // полоски
                                 : <FaTimes size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/>
                             }
                         </button>
                     </div>
-                    <ul className={isOpen ? `{${styles.navLinks} ${styles.showNav}}` : `${styles.navLinks}`}>
+
+                    <ul className={clsx(isOpen && styles.burgerLinks, !isOpen && styles.navLinks)}>
                         <li key={1}>
                             <CustomLink text={"About"}  href="/about" style={""}/>
                         </li>
@@ -56,36 +65,36 @@ const Navbar = (): ReactElement => {
                         </li>
                         <li key={4}>
                             {
-                            session ? 
+                            session ?
                                 (session && <>
-                                
-                                    <div className={styles.btnContainer} onClick={getProfile}>  
-                                            
+
+                                    <div className={styles.btnContainer} onClick={getProfile}>
+
                                         <div className={styles.signOutBtn}>{session.user.name}</div>
                                         <div className={styles.imageContainer}>
                                             <img src={session.user.image} alt={session.user.name}  className={styles.image}/>
                                         </div>
-                                        
+
                                     </div>
                                     <i onClick={handleSignOut}><Image src={singOutIcon} height={25} width={25} className={styles.icon}/></i>
                                 </>
-                                    
+
                                 ) : isLogin ? (
                                         <div className={styles.btnContainer}>
                                             <div onClick={getProfile}>Profile</div>
                                             {/* <i onClick={handleLogOut}><Image src={singOutIcon} height={25} width={25} className={styles.icon}/></i> */}
                                         </div>
                                         ) :
-                                
+
                                 (<div className={styles.signBtn} onClick={handleSignIn}>Sign in</div>)
                             }
-                            
+
                         </li>
                     </ul>
                 </div>
             </nav>
         </>
-        
+
     )
 }
 export default Navbar;
