@@ -136,6 +136,15 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                         <span className={styles.copyLink}>
                                             {survey.published ? `${link}/survey/${survey.uuid}`:`${link}/survey/not_public/${survey.uuid}`}
                                         </span>
+                                        {
+                                            isCopiedLink.surveyUUID === survey.uuid && (
+                                                <div className={styles.linkCopiedContainer}>
+                                                    <span className={styles.linkCopied}>
+                                                        copied
+                                                    </span>
+                                                </div>
+                                            )
+                                        }
                                     </td>
                                     <td className={styles.btnEditContainer}>
                                         <span className={styles.btnEdit}
