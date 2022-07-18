@@ -94,7 +94,7 @@ ul {
     align-items: center;
 }
 
-.table td {
+.table td:first-child {
     border: none;
 }
 
