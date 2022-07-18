@@ -1,4 +1,5 @@
 import React, {ReactElement, useState} from "react";
+import clsx from "clsx";
 import styles from "./Navbar.module.css";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -7,23 +8,21 @@ import { CustomLink } from "../common/CustomLink";
 import { useSession, signOut } from "next-auth/react";
 import singOutIcon from "../../styles/icons/icons8-logout-64 (1).png";
 import { useTypedSelector } from "../../redux/useTypeSelector";
-import { useMediaQuery } from "@chakra-ui/react";
+import { useMediaQuery } from 'react-responsive';
 
 
 const Navbar = (): ReactElement => {
     const [isOpen, setIsOpen] = useState(false);
     const handleToggle = () => setIsOpen(!isOpen);
-    console.log('%c Menu open? ', 'color: black; background-color: white; font-weight: 700', {isOpen});
 
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
     const [user, setUser] =useState();
     const isLogin = useTypedSelector((state) => state.auth.loggedIn);
 
-    const isMobile = useMediaQuery('(min-width: 768px)');
-    console.log('isMobile', !isMobile[0]);
+    const isMobile = useMediaQuery({minWidth: 768});
 
-    if (!isMobile[0] === false && isOpen === true) {
+    if (!isMobile === false && isOpen === true) {
       setIsOpen(false)
     }
 
@@ -46,7 +45,7 @@ const Navbar = (): ReactElement => {
                 <div className={styles.navCenter}>
                     <div className={styles.navHeader}>
                         <CustomLink text={"StorySurvey"}  href="/" style={"navHeaderLogo"}/>
-                        <button type="button" className={styles.navBtn} onClick={handleToggle}>
+                        <button type="button" className={clsx(styles.navBtn)} onClick={handleToggle}>
                             {   !isOpen
                                 ? <FaAlignRight size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/> // полоски
                                 : <FaTimes size={"1.5rem"} color={"rgb(176, 24, 66, .7)"}/>
@@ -54,7 +53,7 @@ const Navbar = (): ReactElement => {
                         </button>
                     </div>
 
-                    <ul className={isOpen && !isMobile[0] ? `{${styles.navLinks} ${styles.showNav}}` : `${styles.navLinks}`}>
+                    <ul className={clsx(isOpen && styles.burgerLinks, !isOpen && styles.navLinks)}>
                         <li key={1}>
                             <CustomLink text={"About"}  href="/about" style={""}/>
                         </li>
