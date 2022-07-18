@@ -336,8 +336,8 @@
 .title {
     font-size: 22px;
     text-overflow: ellipsis;
-    overflow: hidden; 
-    width: 160px; 
+    overflow: hidden;
+    width: 160px;
     white-space: nowrap;
 }
 
@@ -609,7 +609,7 @@
     transition: all .5s ease-out;
 }
 
-/* edit container styles */ 
+/* edit container styles */
 .deleteIcon {
     position: absolute;
     top: -16px;
@@ -689,8 +689,12 @@
   .sidebar{
       width: 0;
   }
-  
+
   .sidebar.active{
       width: 60px;
   }
+}
+
+.tableListContainer {
+  overflow: scroll;
 }

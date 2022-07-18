@@ -1,5 +1,7 @@
+import clsx from "clsx";
 import { useSession } from "next-auth/react";
 import React, { ReactElement, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import EditContainer from "./EditContainer";
@@ -21,6 +23,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
     const [questionsDeleted, setQuestionDeleted] = useState<IQuestion[]>([]);
     const [description, setDescription] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
+    const isMobile = useMediaQuery({maxWidth: 1024});
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
 
@@ -50,8 +53,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             setQuestion(questions.map((item) => {
                 if (item.id === question.id) {
                     item = {
-                        id: question.id, 
-                        question: e.target.value, 
+                        id: question.id,
+                        question: e.target.value,
                         survey_id: question.survey_id}
                 }
                 return item;
@@ -98,7 +101,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
     };
 
     return  (
-        <div className={styles.tableListContainer}>
+        <div className={clsx(isMobile && styles.tableListContainer)}>
             <table className="table table-hover">
                 <thead>
                     <tr>
@@ -128,10 +131,10 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                         </div>
                                     </td>
                                     <td>{survey.questions.length - 1}</td>
-                                    <td 
-                                        className={styles.linkRow} 
+                                    <td
+                                        className={styles.linkRow}
                                         onClick={() => copyLink(survey.uuid, survey.title, survey.published)}
-                                    >  
+                                    >
                                         <span className={styles.copyLinkTitle}>copy link</span>
                                         <span className={styles.copyLink}>
                                             {survey.published ? `${link}/survey/${survey.uuid}`:`${link}/survey/not_public/${survey.uuid}`}
@@ -150,8 +153,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                                 setUserEmail(survey.email)
                                                 if (survey.questions.length > 0 )setQuestion(survey.questions.slice(0, survey.questions.length - 1).map((q) => {
                                                     return {
-                                                        id: q.id, 
-                                                        question: q.question, 
+                                                        id: q.id,
+                                                        question: q.question,
                                                         survey_id: q.survey_id,
                                                     }
                                                 }));
@@ -163,25 +166,25 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                 </tr>
                             )
                         })
-                    )} 
+                    )}
                 </tbody>
-            </table>  
+            </table>
             {
-                isOpen 
+                isOpen
                     &&
-                <EditContainer 
-                    isOpen={isOpen} 
-                    setIsOpen={setIsOpen} 
-                    titleError={titleError} 
-                    title={title} 
-                    handleOnchange={handleOnchange} 
+                <EditContainer
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    titleError={titleError}
+                    title={title}
+                    handleOnchange={handleOnchange}
                     questions={questions}
                     setQuestion={setQuestion}
-                    editQuestions={editQuestions} 
-                    description={description} 
-                    handleOnchangeDescription={handleOnchangeDescription} 
-                    successMessage={successMessage} 
-                    handleOnchangeSuccessMessage={handleOnchangeSuccessMessage} 
+                    editQuestions={editQuestions}
+                    description={description}
+                    handleOnchangeDescription={handleOnchangeDescription}
+                    successMessage={successMessage}
+                    handleOnchangeSuccessMessage={handleOnchangeSuccessMessage}
                     editSurvey={editSurvey}
                     userEmail={userEmail}
                     editSurveyId={editSurveyId}
@@ -190,7 +193,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                     createQuestion={createQuestion}
                     setCreateQuestion={setCreateQuestion}
                 />
-            }          
+            }
         </div>
 
     );

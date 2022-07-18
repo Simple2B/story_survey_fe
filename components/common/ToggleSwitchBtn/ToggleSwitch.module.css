@@ -67,7 +67,7 @@
     background-color: var(--mainWhite);
     cursor: not-allowed;
 }
-    
+
 .toggleSwitchInner:after {
       content: "List";
       /* text-transform: uppercase; */
@@ -97,10 +97,4 @@
 
 .toggleSwitchCheckbox:checked + .toggleSwitchLabel .toggleSwitchSwitch {
     right: 0px;
-}
-
-@media (max-width: 550px) {
-    .toggleSwitchContainer {
-        display: none;
-    }
 }
