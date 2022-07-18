@@ -61,14 +61,14 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
           isIconActive: false,
           isAdmin: false,
         },
-        {
-          image: messageIcon,
-          name: 'Messages',
-          href: '/user_profile/survey/messages',
-          classIcon: "",
-          isIconActive: false,
-          isAdmin: false,
-        },
+        // {
+        //   image: messageIcon,
+        //   name: 'Messages',
+        //   href: '/user_profile/survey/messages',
+        //   classIcon: "",
+        //   isIconActive: false,
+        //   isAdmin: false,
+        // },
         {
           image: settingsIcon,
           name: 'Setting',
@@ -92,6 +92,11 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
         const data = await signOut({redirect: false, callbackUrl: '/'});
         push(data.url);
     };
+
+    // if (!session) {
+    //   return <div className={styles.centered}>404</div>
+    // }
+
     useEffect(() => {
       setUserUUID("");
       setActive(false);
@@ -104,7 +109,6 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
             };
             getUser();
             const user: IUserResponse = session.profile;
-            console.log("UserContainer: user profile ", user);
 
             setMenuIcons(icons.map((icon, i) => {
               if (asPath === icon.href && icon.name === SIGN_OUT) {

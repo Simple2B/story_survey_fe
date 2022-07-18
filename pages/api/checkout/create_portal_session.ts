@@ -7,6 +7,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const {session_id} = req.body;
         const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
+        console.log("checkoutSession ", checkoutSession);
+        
         // This is the url to which the customer will be redirected when they are done
         // managing their billing with the portal.
         const returnUrl = `${process.env.NEXTAUTH_URL}/user_profile/survey/setting`;

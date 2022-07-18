@@ -191,6 +191,18 @@
     .btnPrimary, .titleContainer, .questionContainer {
         width: 90%;
     }
+
+    .container {
+        width: 100%;
+    }
+
+    .listSurveys {
+        width: 100%;
+    }
+
+    .survey {
+        width: 100%;
+    }
 }
 
 @media (max-width: 1000px) {

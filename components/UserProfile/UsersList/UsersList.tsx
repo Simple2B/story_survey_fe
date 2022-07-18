@@ -23,6 +23,9 @@ const UsersList = (): ReactElement => {
     const openUserList = (user_uuid: string) => {
         push(`/user_profile/survey/users/user/${user_uuid}`);
     };
+
+    console.log("UsersList: users", users);
+    
     
     return  (
         <div className={styles.container}>
@@ -33,6 +36,7 @@ const UsersList = (): ReactElement => {
                     <th scope="col">#</th>
                     <th scope="col">Email</th>
                     <th scope="col">Username</th>
+                    <th scope="col">Subscription</th>
                     <th scope="col">Survey</th>
                     <th scope="col">Info</th>
                     </tr>
@@ -50,6 +54,23 @@ const UsersList = (): ReactElement => {
                                         </span>
                                     </td>
                                     <td>{user.username}</td>
+                                    <td className={styles.subscriptionRow}>
+                                        {
+                                            user.subscription_info ?
+                                                user.subscription_info.cancel_at_period_end ?  
+                                                    <div className={styles.cancelContainer}>
+                                                        {user.subscription_info.type}
+                                                        
+                                                        <div className={styles.cancel}>
+                                                            Cancels: {user.subscription_info.cancel_at.split(",")[0]}
+                                                        </div>
+                                                    </div>
+                                                        :  
+                                                    user.subscription_info.type 
+                                                :
+                                                ""
+                                        }
+                                    </td>
                                     {user.surveys.length > 0 
                                         ? <td>{user.surveys.length}</td>
                                         : <td>0</td>

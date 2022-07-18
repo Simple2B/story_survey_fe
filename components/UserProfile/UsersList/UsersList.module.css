@@ -198,3 +198,24 @@
     color: var(--primaryColor);
     transition: all .5s ease-out;
 }
+
+.subscriptionRow {
+   display: flex;
+   justify-content: flex-start;
+   align-items: center; 
+}
+
+.cancelContainer {
+    position: relative;
+    font-size: 16px;
+}
+
+.cancel {
+    width: 150px;
+    position: absolute;
+    top: -15px;
+    left: 0;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--primaryColor);
+}

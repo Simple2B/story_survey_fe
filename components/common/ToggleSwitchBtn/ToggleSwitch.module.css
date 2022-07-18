@@ -98,3 +98,9 @@
 .toggleSwitchCheckbox:checked + .toggleSwitchLabel .toggleSwitchSwitch {
     right: 0px;
 }
+
+@media (max-width: 550px) {
+    .toggleSwitchContainer {
+        display: none;
+    }
+}

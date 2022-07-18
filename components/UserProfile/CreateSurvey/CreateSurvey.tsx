@@ -218,7 +218,7 @@ const CreateSurvey = (): ReactElement => {
                                         + add question
                                 </button>
                                 <Checkbox 
-                                    children={"not a public survey"}
+                                    children={"private"}
                                     value={"not public"}
                                     id={"createSurveyCheckbox"} 
                                     isChecked={isChecked} 

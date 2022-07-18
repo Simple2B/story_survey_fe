@@ -236,7 +236,7 @@ const Home = (): ReactElement => {
                                                     <div className={styles.rightSide}>
                                                             <div className={styles.titleCard}>
                                                                 <div className={styles.titlePublic}>
-                                                                    {!item.published? "not public": ""}
+                                                                    {!item.published? "private": ""}
                                                                 </div>
                                                                 <div className={styles.title}>
                                                                     {item.title}

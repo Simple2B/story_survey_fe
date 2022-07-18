@@ -94,6 +94,10 @@ ul {
     align-items: center;
 }
 
+.table td {
+    border: none;
+}
+
 /* survey list page  */
 
 .surveyListContainer {

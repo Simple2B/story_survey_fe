@@ -81,7 +81,7 @@ const UserList = (): ReactElement => {
                                 >
                                     <th scope="row">{index+1}</th>
                                     <td className={`${styles.rowTitle} ${styles.commonRowStyle}`}>
-                                        <div className={styles.status}>{survey.published ? "" : "not public"}</div>
+                                        <div className={styles.status}>{survey.published ? "" : "private"}</div>
                                         <div className={styles.titleContent}>
                                             {survey.title}
                                         </div>
