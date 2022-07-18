@@ -1,6 +1,8 @@
+import clsx from "clsx";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { clientApi } from "../../../pages/api/backend/userInstance";
 import { ADMIN, IUserResponse } from "../../../redux/types/userTypes";
 import styles from "./UsersList.module.css";
@@ -9,7 +11,7 @@ const UsersList = (): ReactElement => {
     const { data: session} = useSession();
     const { push } = useRouter();
     const [ users, setUsers ] = useState<IUserResponse[]>();
-    
+
     useEffect(() => {
           if (session) {
             const getUsers = async() => {
@@ -25,11 +27,10 @@ const UsersList = (): ReactElement => {
     };
 
     console.log("UsersList: users", users);
-    
-    
+    const isMobile = useMediaQuery({maxWidth: 1024});
+
     return  (
-        <div className={styles.container}>
-            
+        <div className={clsx(isMobile && styles.scrollOver, styles.container)}>
             <table className="table table-hover">
                 <thead>
                     <tr>
@@ -57,26 +58,26 @@ const UsersList = (): ReactElement => {
                                     <td className={styles.subscriptionRow}>
                                         {
                                             user.subscription_info ?
-                                                user.subscription_info.cancel_at_period_end ?  
+                                                user.subscription_info.cancel_at_period_end ?
                                                     <div className={styles.cancelContainer}>
                                                         {user.subscription_info.type}
-                                                        
+
                                                         <div className={styles.cancel}>
                                                             Cancels: {user.subscription_info.cancel_at.split(",")[0]}
                                                         </div>
                                                     </div>
-                                                        :  
-                                                    user.subscription_info.type 
+                                                        :
+                                                    user.subscription_info.type
                                                 :
                                                 ""
                                         }
                                     </td>
-                                    {user.surveys.length > 0 
+                                    {user.surveys.length > 0
                                         ? <td>{user.surveys.length}</td>
                                         : <td>0</td>
                                     }
                                     <td className={styles.btnOpenContainer}>
-                                        <span className={styles.btnOpen} 
+                                        <span className={styles.btnOpen}
                                                 onClick={() => openUserList(user.uuid)}>
                                             open
                                         </span>
@@ -84,7 +85,7 @@ const UsersList = (): ReactElement => {
                                 </tr>
                             )
                         })
-                    )} 
+                    )}
                 </tbody>
             </table>
         </div>

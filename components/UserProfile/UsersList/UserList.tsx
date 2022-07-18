@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -9,9 +10,11 @@ import styles from "./UsersList.module.css";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { ISurveyInfo } from "../../../redux/types/surveyTypes";
 import handler from "../../../pages/api/keys";
+import { useMediaQuery } from "react-responsive";
 
 
 const UserList = (): ReactElement => {
+    const isMobile = useMediaQuery({maxWidth: 1024});
     const {data: session} = useSession();
     const {push, asPath} = useRouter();
     const [user, setUser] = useState<IUserResponse>();
@@ -53,7 +56,7 @@ const UserList = (): ReactElement => {
     };
 
     return  (
-      <div className={styles.container}>
+      <div className={clsx(isMobile && styles.scrollOver, styles.container)}>
             <div className={styles.backBtn} onClick={handlerClickBack} title="go back">
                 <i className={`${styles.arrow} ${styles.left}`}/>
             </div>
@@ -67,16 +70,16 @@ const UserList = (): ReactElement => {
                         <th scope="col">Questions</th>
                         <th scope="col">Info</th>
                     </tr>
-                </thead> 
+                </thead>
                 <tbody>
                     {user && user.surveys.length > 0 && (
                         user.surveys.map((survey, index) => {
                             console.log(" survey.published ", survey.published);
-                            
+
                             return (
-                                <tr 
-                                    key={index} 
-                                    
+                                <tr
+                                    key={index}
+
                                     className={styles.tableRow}
                                 >
                                     <th scope="row">{index+1}</th>
@@ -94,7 +97,7 @@ const UserList = (): ReactElement => {
                                     <td className={styles.commonRowStyle}>{survey.created_at}</td>
                                     <td className={styles.commonRowStyle}>{survey.questions.length}</td>
                                     <td className={`${styles.btnOpenContainer} ${styles.commonRowStyle}`}>
-                                        <span className={styles.btnOpen} 
+                                        <span className={styles.btnOpen}
                                             onClick={() => {
                                                 setIsOpen(!isOpen);
                                                 const surveyId = user.surveys[index].id;
@@ -103,7 +106,7 @@ const UserList = (): ReactElement => {
                                                     setSurvey(infoSurvey);
                                                 };
                                                 getInfoSurvey();
-                                            }} 
+                                            }}
                                         >
                                             open
                                         </span>
@@ -111,7 +114,7 @@ const UserList = (): ReactElement => {
                                 </tr>
                             )
                         })
-                    )} 
+                    )}
                 </tbody>
             </table>
             {isOpen && (
@@ -133,7 +136,7 @@ const UserList = (): ReactElement => {
                                         <th scope="col">Question</th>
                                         <th scope="col">Answers</th>
                                     </tr>
-                                </thead> 
+                                </thead>
                                 <tbody>
                                 {survey.questions
                                     && (
@@ -142,7 +145,7 @@ const UserList = (): ReactElement => {
                                             <tr key={item} className={styles.tableRow}>
                                                 <th scope="row">{item+1}</th>
                                                 <td>
-                                                    {questionInfo.question.length > 0 && questionInfo.question} 
+                                                    {questionInfo.question.length > 0 && questionInfo.question}
                                                 </td>
                                                 <td className={styles.commonRowStyle}>
                                                     {questionInfo.answers.length}

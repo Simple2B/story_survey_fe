@@ -3,6 +3,10 @@
     margin: 0 auto;
 }
 
+.scrollOver {
+  overflow: scroll;
+}
+
 .backBtn {
     width: 48px;
     cursor: pointer;
@@ -24,7 +28,7 @@
 
 .backBtn:hover {
     border: 1px solid var(--mainOpacity);
-    background-color: var(--mainWhite); 
+    background-color: var(--mainWhite);
     transition: all .3s ease-in-out;
 }
 
@@ -47,6 +51,7 @@
 
 .tableRow .commonRowStyle {
     max-width: 100px;
+    text-align: center;
 }
 
 .rowTitle {
@@ -82,7 +87,7 @@
     align-items: center;
     background-color: var(--mainOpacity);
 }
-  
+
 .modal {
     position: relative;
     width: 80%;
@@ -122,7 +127,7 @@
     margin-bottom: 10px; */
     /* padding: 10px auto; */
     font-weight: 500;
-    
+
 
     cursor: pointer;
     /* white-space: nowrap; */
@@ -130,7 +135,7 @@
     text-overflow: ellipsis;
     transition: overflow .3s ease-in-out;
 }
-  
+
 .homeContent .box .titleCard:hover {
     white-space: wrap;
     overflow: visible;
@@ -202,7 +207,7 @@
 .subscriptionRow {
    display: flex;
    justify-content: flex-start;
-   align-items: center; 
+   align-items: center;
 }
 
 .cancelContainer {
