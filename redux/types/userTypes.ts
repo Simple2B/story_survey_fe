@@ -29,6 +29,17 @@ interface IGetUserAction {
 
 export type UserAction = ISetUserAction | IGetUserAction;
 
+export interface IUserSubscriptionInfo {
+    type?: string;
+    customer_id?: string;
+    session_id?: string;
+    subscription?: string;
+    cancel_at?: string;
+    cancel_at_period_end?: boolean;
+    subscription_id?: string;
+    product_id?: string;
+}
+
 // object types
 export interface IUserResponse {
     id?: number;
@@ -38,11 +49,7 @@ export interface IUserResponse {
     created_at?: string;
     role?: string;
     image?: string;
-    customer_id?: string;
-    session_id?: string;
-    subscription?: string;
-    cancel_at_period_end?: string;
-    subscription_id?: string;
-    product_id?: string;
+
+    subscription_info?: IUserSubscriptionInfo;
     surveys?: IGetSurvey[]
 }
