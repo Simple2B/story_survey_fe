@@ -56,7 +56,7 @@ const UserList = (): ReactElement => {
     };
 
     return  (
-      <div className={clsx(isMobile && styles.scrollOver, styles.container)}>
+      <div className={clsx(styles.container)}>
             <div className={styles.backBtn} onClick={handlerClickBack} title="go back">
                 <i className={`${styles.arrow} ${styles.left}`}/>
             </div>

@@ -30,7 +30,7 @@ const UsersList = (): ReactElement => {
     const isMobile = useMediaQuery({maxWidth: 1024});
 
     return  (
-        <div className={clsx(isMobile && styles.scrollOver, styles.container)}>
+        <div className={clsx(styles.container)}>
             <table className="table table-hover">
                 <thead>
                     <tr>
@@ -76,12 +76,16 @@ const UsersList = (): ReactElement => {
                                         ? <td>{user.surveys.length}</td>
                                         : <td>0</td>
                                     }
-                                    <td className={styles.btnOpenContainer}>
-                                        <span className={styles.btnOpen}
+                                    {user.surveys.length > 0
+                                      ? <td className={styles.btnOpenContainer}>
+                                          <span className={styles.btnOpen}
                                                 onClick={() => openUserList(user.uuid)}>
                                             open
-                                        </span>
-                                    </td>
+                                          </span>
+                                        </td>
+                                      : ""
+                                    }
+
                                 </tr>
                             )
                         })

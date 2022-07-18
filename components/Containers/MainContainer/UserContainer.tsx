@@ -15,6 +15,8 @@ import usersListIcon from "../../../styles/icons/icons8-conference-64.png";
 import Link from "next/link";
 import { ADMIN, CLIENT, IUserResponse } from "../../../redux/types/userTypes";
 import { clientApi } from "../../../pages/api/backend/userInstance";
+import clsx from "clsx";
+import { useMediaQuery } from "react-responsive";
 
 const SIGN_OUT = 'sing out';
 
@@ -28,6 +30,8 @@ interface IMenuIcon {
 }
 
 const UserContainer = ({children, title, keywords, style, headerName }): ReactElement => {
+    const isMobile = useMediaQuery({maxWidth: 1024});
+
     const menuIcons = [
         {
           image: surveysIcon,
@@ -115,8 +119,8 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
                   handleSignOut();
               };
 
-              if ( user && asPath === icon.href && icon.href === '/user_profile/survey/users/users_list' ) { 
-                  if ( user.role === ADMIN){ 
+              if ( user && asPath === icon.href && icon.href === '/user_profile/survey/users/users_list' ) {
+                  if ( user.role === ADMIN){
                       push('/user_profile/survey/users/users_list');
                   }
                   if ( user.role === CLIENT) {
@@ -135,7 +139,7 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
             }))
           };
     }, [session])
-  
+
     const getMainPage = () => {
         push("/");
     };
@@ -143,7 +147,7 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
     const handleClick = () => {
         setActive(!isActive);
     };
-    
+
     return (
         <>
             <Head>
@@ -157,7 +161,7 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
                     <i className="bx">SS</i>
                     <span className={styles.logoName}>Survey</span>
                 </div>
-                
+
                 <ul className={styles.navLinks}>
                     {
                       icons.map((menu, index) => {
@@ -167,8 +171,8 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
                             const isAdmin = user && user.role === ADMIN;
                             return (
                               <>
-                                  { 
-                                    isClient && !menu.isAdmin && 
+                                  {
+                                    isClient && !menu.isAdmin &&
                                     <Link href={menu.href}  >
                                       <li key={index}>
                                           <a className={menu.classIcon}>
@@ -178,8 +182,8 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
                                       </li>
                                     </Link>
                                   }
-                                  { 
-                                    isAdmin && 
+                                  {
+                                    isAdmin &&
                                     <Link href={menu.href}  >
                                       <li key={index}>
                                           <a className={menu.classIcon}>
@@ -191,7 +195,7 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
                                   }
                               </>
                             )
-                        } 
+                        }
                         else {
                               return (
                                 <li  key={index} onClick={handleSignOut}>
@@ -208,7 +212,7 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
             </div>
             <section className={styles.homeSection}>
                 <ProfileNavbar isActive={isActive} handleClick={handleClick} headerName={headerName}/>
-                <div className={styles.mainContent}>
+                <div className={clsx(isMobile && styles.mainContentScroll, styles.mainContent)}>
                     {menuIcons.map((item, index) => item.isIconActive && <div key={index}>{children}</div> )}
                     {asPath.includes("users/user/users_list") && children}
                 </div>
