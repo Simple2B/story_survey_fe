@@ -3,15 +3,19 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
 import { stripeApi } from "../../../../pages/api/backend/stripeInstance";
-import { ISubscription } from "../../../../redux/types/subscriptionTypes";
+import { clientApi } from "../../../../pages/api/backend/userInstance";
+import { IUserResponse, IUserSubscriptionInfo } from "../../../../redux/types/userTypes";
 import styles from "./StripeSubscription.module.css";
+
 
 const BasicProductDisplay = (): ReactElement => {
     const {data: session } = useSession();
-    const {push, asPath} = useRouter();
+    const {asPath} = useRouter();
     const [publicKeyStripe, setPublicKeyStripe] = useState("");
     const [priceBasicProduct, setPriceBasicProduct] = useState("");
     const [priceAdvancedProduct, setPriceAdvancedProduct] = useState(""); 
+    const [email, setEmail] = useState("");
+    const [subscription, setSubscription] = useState<IUserSubscriptionInfo>(null);
 
     useEffect(() => {
         fetch('/api/keys', {
@@ -24,7 +28,15 @@ const BasicProductDisplay = (): ReactElement => {
                 setPriceBasicProduct(data.priceBasicProduct);
                 setPriceAdvancedProduct(data.priceAdvancedProduct);
             });
-    }, [session]);
+        if (session) {
+            const getUser = async() => {
+                const userFromDB = await clientApi.getUser(session.user.email);
+                setSubscription(userFromDB.subscription_info)
+            };
+            getUser();
+            setEmail(session.user.email);
+        };
+    }, [session, asPath.includes("/user_profile/survey/setting")]);
   
     if (!publicKeyStripe && !priceBasicProduct && !priceAdvancedProduct) {
         return <div>Loading...</div>
@@ -32,39 +44,36 @@ const BasicProductDisplay = (): ReactElement => {
 
     const stripePromise = loadStripe(publicKeyStripe);
 
-    const handlerClick = async (priceKey: string) => {
-        let email: string;
-        let customer_id: string;
-        const subscription: ISubscription = session.subscription;
-        if (session){ 
-            email = session.user.email;
-            customer_id = subscription.customer_id;
-        };
-        const {sessionStripe, sessionId, customerId} = await fetch('/api/checkout/session', {
-            method: 'POST',
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({quantity: 1, email: email, product_price: priceKey, customer_id: customer_id})
-        }).then(res => res.json());
+    const handlerClick = async (priceKey: string) => {     
         const stripe = await stripePromise;
-
-        const dataSessionToDB = {
-            session: sessionStripe,
-            email: email,
-            basic_product_key: priceKey,
-            stripe_customer: customerId,
-            stripe_session_id: sessionId,
-        }
-
-        const saveSessionToDB = async() => await stripeApi.createSessionStripe(dataSessionToDB)
-        saveSessionToDB();
-        const { error } = await stripe.redirectToCheckout({sessionId});
+        if (subscription) {
+            const customer_id: string = subscription.customer_id
+            const {stripeSession, sessionId} = await fetch('/api/checkout/session', {
+                method: 'POST',
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    quantity: 1, 
+                    email: email, 
+                    product_price: priceKey, 
+                    customer_id: customer_id
+                })
+            }).then(res => res.json());
+            const dataSessionToDB = {
+                session: stripeSession,
+                email: email,
+                product_key: priceKey,
+                stripe_customer: customer_id,
+                stripe_session_id: sessionId,
+            };
+            const saveSessionToDB = async() => await stripeApi.createSessionStripe(dataSessionToDB)
+            saveSessionToDB();
+            const { error } = await stripe.redirectToCheckout({sessionId});
+            console.log(" error ", error);
+        };
     };
 
-    console.log("session ", session);
-    
-    
     return (
         <div className={styles.productsContainer}>
             <div className={styles.titleSub}>Subscription</div>
@@ -86,7 +95,7 @@ const BasicProductDisplay = (): ReactElement => {
                 </div>
             </section>
 
-            {/* <section className={styles.subProductContainer}>
+            <section className={styles.subProductContainer}>
                 <div className={styles.product}>
                     <div className={styles.description}>
                         <h3>Advanced</h3>
@@ -102,7 +111,7 @@ const BasicProductDisplay = (): ReactElement => {
                         subscribe
                     </button>
                 </div>
-            </section> */}
+            </section>
         </div>
     )
 };
