@@ -5,7 +5,6 @@ import { clientApi } from "../backend/userInstance";
 import { stripeApi } from "../backend/stripeInstance";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: '2020-08-27'});
 
 // import NodeCache from 'node-cache';
 
@@ -69,18 +68,23 @@ export default NextAuth({
             };
             const newUser = await clientApi.createUserProvider(userData);
             console.log("createUser: newUser => " , newUser); 
+
             // create customer in stripe
-            const customer = await stripe.customers.create({
-                description: user.email,
-                email: user.email,
-            });
-            // formed data from stripe customer to save to db
-            const data = {
-                email: user.email,
-                stripe_customer: customer.id,
-            }
-            const stripeCustomer = await stripeApi.createStripeCustomer(data);
-            console.log("createUser: stripeCustomer => " , stripeCustomer); 
+            let stripeCustomer;
+            if (newUser.subscription_info === null) {
+                const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {apiVersion: '2020-08-27'});
+                const customer = await stripe.customers.create({
+                    description: user.name,
+                    email: user.email,
+                });
+                // formed data from stripe customer to save to db
+                const data = {
+                    email: user.email,
+                    stripe_customer: customer.id,
+                };
+                stripeCustomer = await stripeApi.createStripeCustomer(data);
+                console.log("createUser: stripeCustomer => " , stripeCustomer);
+            };
 
             // TODO: create API call to get the token
             user.acessToken = 'FAKE-TOKEN'

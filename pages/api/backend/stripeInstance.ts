@@ -17,13 +17,12 @@ export const stripeApi = {
           }
       },
       createSessionStripe: async (data: {
-            session: {},
+            session?: {},
             email: string,
-            basic_product_key?: string,
-            advance_product_key?: string,
+            product_key?: string,
             stripe_customer?: string,
             stripe_session_id: string,
-            subscription_id?: string | Stripe.Subscription
+            // subscription_id?: string | Stripe.Subscription
       }): Promise<any> => {
           try {
               const response = await instance().post(
@@ -87,6 +86,19 @@ export const stripeApi = {
               throw error;
           }
       },
+      deleteCustomerStripe: async (data: {customer_id: string}): Promise<any> => {
+        try {
+            const response = await instance().post(
+              "/stripe/delete_customer",
+              data
+            );
+            const res = response.data;
+            return res;
+        } catch (error: any) {
+            console.log(`POST: error message => ${error.message}`);
+            throw error;
+        }
+    },
       getKeyStripe: async (): Promise<any> => {
         try {
             const response = await instance().post("/stripe/get_key");
