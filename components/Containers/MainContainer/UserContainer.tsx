@@ -109,7 +109,6 @@ const UserContainer = ({children, title, keywords, style, headerName }): ReactEl
             };
             getUser();
             const user: IUserResponse = session.profile;
-            console.log("UserContainer: user profile ", user);
 
             setMenuIcons(icons.map((icon, i) => {
               if (asPath === icon.href && icon.name === SIGN_OUT) {
