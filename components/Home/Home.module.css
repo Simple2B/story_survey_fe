@@ -99,7 +99,7 @@
 
 .hideContainerQuestion {
     visibility: hidden;
-    height: 60px;
+    height: 38px;
     overflow: auto;
     transition: all .5s ease-out;
 }
@@ -552,6 +552,10 @@
 @media (max-width: 550px) {
     .overviewBoxes .box{
         margin-bottom: 15px;
+    }
+
+    .btnPrimary {
+        width: 98%;
     }
 }
 
