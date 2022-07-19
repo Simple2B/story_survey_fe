@@ -23,43 +23,10 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
             if (!sig || !webhookSecret) return;
             event = stripe.webhooks.constructEvent(buf, sig, webhookSecret);
             switch (event.type) {  
-                // case 'payment_intent.succeeded':
-                //         // created user in db 
-                //     const paymentIntent = event.data.object;
-                //     console.log(`PaymentIntent for ${paymentIntent.amount} was successful!`);
-                //     // Then define and call a method to handle the successful payment intent.
-                //     // handlePaymentIntentSucceeded(paymentIntent);
-                //     break;
-                // case 'payment_method.attached':
-                //     const paymentMethod = event.data.object;
-                //     console.log(" paymentMethod ", paymentMethod);
-                    
-                //     // Then define and call a method to handle the successful attachment of a PaymentMethod.
-                //     // handlePaymentMethodAttached(paymentMethod);
-                //     break;
-
-                // case 'payment_method.update':
-                
-                //     break;
-
-                // case 'payment_method.update':
-                
-                //     break;
-
-                // case "payment_intent.canceled":
-                //     subscription = event.data.object;
-                //     status = subscription.status;
-                //     console.log(`Subscription canceled status is ${status}.`);
-                //     console.log("subscription canceled object", subscription);
-                //     // await stripe.subscriptions.del(subscription.id);
-                //     // await stripeApi.deleteSubscriptionStripe({subscription_id: subscription.id});
-                //     break;
-
                 case "customer.subscription.created":
                     subscription = event.data.object;
                     status = subscription.status;
                     console.log(`Subscription created status is ${status}.`);
-
                     console.log("subscription created object", subscription.id);
                     const saveSubscriptionToDB = async() => await stripeApi.createSubscriptionStripe({
                         subscription: subscription,
@@ -68,6 +35,13 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
                       })
                     saveSubscriptionToDB();
                     break;
+                // case 'customer.deleted':
+                //     customer = event.data.object;
+                //     status = subscription.status;
+                //     console.log(`customer status is ${status}.`);
+                //     console.log("customer object", customer);
+                //     await stripeApi.deleteCustomerStripe({customer_id: customer.id});
+                //     break;
                 case "customer.subscription.deleted":
                     subscription = event.data.object;
                     status = subscription.status;
@@ -80,7 +54,6 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
                     status = subscription.status;
                     console.log(`Subscription status is ${status}.`);
                     console.log("subscription object", subscription);
-                    await stripe.subscriptions.update(subscription.id);
                     await stripeApi.updateSubscriptionStripe({
                         subscription: subscription,
                         stripe_customer: subscription.customer,
@@ -88,16 +61,12 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
                         status: status,
                       });
                     break;
-
                 case 'customer.subscription.trial_will_end':
                       subscription = event.data.object;
                       status = subscription.status;
                       console.log(`Subscription status is ${status}.`);
-                      // Then define and call a method to handle the subscription trial ending.
-                      // handleSubscriptionTrialEnding(subscription);
                       break;
                 default:
-                    // Unexpected event type
                     console.log(`Unhandled event type ${event.type}.`);
             }
         } catch (error) {
