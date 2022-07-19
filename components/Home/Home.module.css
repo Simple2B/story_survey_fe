@@ -99,9 +99,12 @@
 
 .hideContainerQuestion {
     visibility: hidden;
-    height: 60px;
+    height: 40px;
     overflow: scroll;
     transition: all .5s ease-out;
+    position: relative;
+    z-index: 1000;
+    background-color: white;
 }
 
 .containerQuestionList:hover .hideContainerQuestion {

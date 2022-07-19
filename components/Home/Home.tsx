@@ -250,7 +250,12 @@ const Home = (): ReactElement => {
                                                                         item.questions.slice(0, 1).map((q, index) => {
                                                                             return (
                                                                                 <div className={styles.containerStep} key={index}>
-                                                                                    {item.questions.length > 2 && <span className={styles.btnShowMore}><i className={`${styles.arrow} ${styles.up}`}></i></span> }
+                                                                                    {
+                                                                                        item.questions.length > 2 && 
+                                                                                        <span className={styles.btnShowMore}>
+                                                                                            <i className={`${styles.arrow} ${styles.up}`}></i>
+                                                                                        </span> 
+                                                                                    }
                                                                                     
                                                                                     <div className={styles.indicator}>
                                                                                         <i className={`bx bx-right-arrow-alt`}></i>
@@ -269,7 +274,7 @@ const Home = (): ReactElement => {
                                                                                     <div className={styles.containerStep} key={index}>
                                                                                         <div className={styles.indicator}>
                                                                                             <i className={`bx bx-right-arrow-alt`}></i>
-                                                                                            <span className={styles.text}>{item.question}</span>
+                                                                                            <div className={styles.text}>{item.question}</div>
                                                                                         </div>
                                                                                     </div>
                                                                                 )

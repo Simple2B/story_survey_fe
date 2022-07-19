@@ -35,13 +35,6 @@ export default async function webhookHandler(req: NextApiRequest, res: NextApiRe
                       })
                     saveSubscriptionToDB();
                     break;
-                // case 'customer.deleted':
-                //     customer = event.data.object;
-                //     status = subscription.status;
-                //     console.log(`customer status is ${status}.`);
-                //     console.log("customer object", customer);
-                //     await stripeApi.deleteCustomerStripe({customer_id: customer.id});
-                //     break;
                 case "customer.subscription.deleted":
                     subscription = event.data.object;
                     status = subscription.status;

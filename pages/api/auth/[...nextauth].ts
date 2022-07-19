@@ -89,7 +89,7 @@ export default NextAuth({
             // TODO: create API call to get the token
             user.acessToken = 'FAKE-TOKEN'
             user.profile = newUser
-            user.subscription = stripeCustomer
+            // user.subscription = stripeCustomer
             return true
         },
         async jwt({ token, user, account, profile, isNewUser }) {
