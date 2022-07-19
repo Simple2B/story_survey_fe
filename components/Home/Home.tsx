@@ -50,6 +50,7 @@ const Home = (): ReactElement => {
     });
     const [answers, setAnswers] = useState([{
         question: null, 
+        is_answer: false,
         answer: null, 
         email: "",
         session_id: "",
@@ -59,13 +60,12 @@ const Home = (): ReactElement => {
     const [answer, setAnswer] = useState<string>("");
     const [slide, setSlide] = useState(null);
     const [indexSurvey, setIndexSurvey] = useState(null);
-    const [success, setSuccess] = useState(false);
+    const [success, setSuccess] = useState<boolean>(false);
 
-    if (success === true) {
-        setTimeout(() => {
-            setSuccess(false);
-        }, 1500)
-    };
+    const [infoMessageForAnswer, setInfoMessageForAnswer] = useState({
+        message: "", 
+        question_id: 0
+    });
 
     const [survey, setSurvey] = useState({
         id: 0,
@@ -143,19 +143,39 @@ const Home = (): ReactElement => {
     };
 
     const handleChangeAnswer = (e: { target: { value: React.SetStateAction<string>; }; }, ind: number) => {
-        setAnswers(answers.map((item, index) => index === ind ? {
-            question: item.question, 
-            answer: e.target.value, 
-            email: item.email,
-            session_id: sessionId,
-            start_time: startDate,
-        } : item));  
+        setAnswers(answers.map((item, index) => {
+                if (index === ind) {
+                    item = { 
+                        question: item.question, 
+                        is_answer: true,
+                        answer: e.target.value, 
+                        email: item.email,
+                        session_id: sessionId,
+                        start_time: startDate,
+                    }
+                } 
+                if (ind-1 !== -1) {
+                    if (index === (ind-1)) {
+                        item = { 
+                            question: item.question, 
+                            is_answer: false,
+                            answer: item.answer, 
+                            email: item.email,
+                            session_id: item.session_id,
+                            start_time: item.start_time,
+                        }
+                    }
+                }
+                return item;
+            }
+        )); 
     };
 
     const answerTheQuestion = () => {
         const data = [...answers];
         const saveQuestion = async(answersInfo: { 
             question: any; 
+            is_answer: boolean;
             answer: any; 
             email: string; 
             session_id: string,
@@ -164,6 +184,10 @@ const Home = (): ReactElement => {
         }[]) => {
             const questionsFromDB = await surveyApi.answerTheQuestion(answersInfo);
             console.log("questionsFromDB ", questionsFromDB);
+            if (questionsFromDB.message) {
+                setInfoMessageForAnswer(questionsFromDB); 
+            };
+
             if (slide === survey.questions.length - 1){ 
                 setSuccess(!success);
                 setIsOpen(!isOpen);
@@ -206,10 +230,21 @@ const Home = (): ReactElement => {
         });
     };
 
-    console.log("HOME: userSurveys => ", userSurveys);
-    console.log("HOME: isPublic => ", isPublic);
+    if (infoMessageForAnswer.message.length > 0) {
+        setTimeout(() => {
+            setInfoMessageForAnswer({
+                message: "", 
+                question_id: 0
+            }); 
+        }, 1300);
+    };
+
+    if (success === true) {
+        setTimeout(() => {
+            setSuccess(false);
+        }, 2500)
+    };
     
-    // const isPublish = 
     return (
         <div className={styles.wrapper}>
             {
@@ -360,6 +395,7 @@ const Home = (): ReactElement => {
                                                                 }, index)
                                                                 setAnswers(item.questions.map((question) => {return {
                                                                     question: question, 
+                                                                    is_answer: false,
                                                                     answer: "", 
                                                                     email: item.email,
                                                                     session_id: "",
@@ -434,30 +470,38 @@ const Home = (): ReactElement => {
                                                         {
                                                             survey.questions.length > 0 && (
                                                                 survey.questions.map((item, index) => {
-                                                                        
-                                                                        return (
-                                                                            <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
-                                                                                <div className={styles.questionBlock}>
-                                                                                    <div key={index} className={styles.question}>{index+1}). {item.question}</div>
-                                                                                    <div className={styles.answerContainer}>
-                                                                                        <textarea 
-                                                                                            placeholder="Put you answer" 
-                                                                                            value={answers[index].answer} 
-                                                                                            onChange={(e) => handleChangeAnswer(e, index)}
-                                                                                            name={item.question} 
-                                                                                            id={item.question} 
-                                                                                            cols={30} 
-                                                                                            rows={10}
-                                                                                        >
-                                                                                        </textarea>
+                                                                    return (
+                                                                        <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
+                                                                            <div className={styles.questionBlock}>
+                                                                                <div key={index} className={styles.question}>{index+1}). {item.question}</div>
+                                                                                <div className={styles.answerContainer}>
+                                                                                    <textarea 
+                                                                                        placeholder="Put you answer" 
+                                                                                        value={answers[index].answer} 
+                                                                                        onChange={(e) => handleChangeAnswer(e, index)}
+                                                                                        name={item.question} 
+                                                                                        id={item.question} 
+                                                                                        cols={30} 
+                                                                                        rows={10}
+                                                                                    >
+                                                                                    </textarea>
+                                                                                </div>
+                                                                            </div>
+                                                                            { 
+                                                                                infoMessageForAnswer.message.length > 0 &&
+                                                                                <div className={styles.containerMessageInfoForAnswer}>
+                                                                                    <div className={styles.messageInfoForAnswer}>
+                                                                                        {infoMessageForAnswer.message}
+                                                                                        You already answered the {index-1 !== -1 && survey.questions[index-1].question}
                                                                                     </div>
                                                                                 </div>
-                                                                            </SwiperSlide>
-                                                                        )
+                                                                                
+                                                                            }
+                                                                        </SwiperSlide>
+                                                                    )
                                                                 })
                                                             )
                                                         }
-
                                                 </Swiper>
                                                 { 
                                                     <button 

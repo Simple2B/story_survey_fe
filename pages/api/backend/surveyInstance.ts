@@ -47,12 +47,14 @@ export const surveyApi = {
     },
     answerTheQuestion: async (data:{
           answer: string, 
+          is_answer: boolean,
           question: {question: string, id: number, survey_id: number}, 
           email: string,
           session_id: string,
           start_time?: string,
           end_time?: string,
-    }[]): Promise<void> => {
+    }[]): Promise<any> => {
+      console.log("answerTheQuestion: data => ", data);
       try {
           const response = await instance().post('/answer/create_answer', data);
           const res = response.data;
