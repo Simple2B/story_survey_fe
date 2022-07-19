@@ -57,17 +57,17 @@ const UsersList = (): ReactElement => {
                                     <td>{user.username}</td>
                                     <td className={styles.subscriptionRow}>
                                         {
-                                            user.subscription_info ?
-                                                user.subscription_info.cancel_at_period_end ?
+                                            user.subscription_info &&
+                                                user.subscription_info.cancel_at_period_end ?  
                                                     <div className={styles.cancelContainer}>
-                                                        {user.subscription_info.type}
-
+                                                        {/* {user.subscription_info.type} */}
                                                         <div className={styles.cancel}>
                                                             Cancels: {user.subscription_info.cancel_at.split(",")[0]}
                                                         </div>
-                                                    </div>
-                                                        :
-                                                    user.subscription_info.type
+                                                    </div> : ""
+                                        }
+                                        { user.subscription_info && user.subscription_info.subscription_id ?
+                                                    user.subscription_info.type 
                                                 :
                                                 ""
                                         }
