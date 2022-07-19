@@ -6,6 +6,7 @@ import { ADMIN, CLIENT } from "../../redux/types/userTypes";
 import styles from "./Home.module.css";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Image from "next/image";
 import Link from "next/link";
 import { surveyApi } from "../../pages/api/backend/surveyInstance";
@@ -19,10 +20,11 @@ import Cookies from 'js-cookie';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { instancePagination } from "../../pages/api/backend/pagination";
 
 interface IAnswer  {
-    question: string, 
-    answer: string, 
+    question: string,
+    answer: string,
     email: string
 };
 
@@ -44,13 +46,13 @@ const Home = (): ReactElement => {
         published: true,
     }]);
     const [answerInfo, setAnswerInfo] = useState<IAnswer>({
-        question: "", 
-        answer: "", 
+        question: "",
+        answer: "",
         email: ""
     });
     const [answers, setAnswers] = useState([{
-        question: null, 
-        answer: null, 
+        question: null,
+        answer: null,
         email: "",
         session_id: "",
         start_time: "",
@@ -82,48 +84,55 @@ const Home = (): ReactElement => {
 
     const [isOpenDescription, setOpenDescription] = useState(false);
 
+    const [pageNumber, setPageNumber] = useState<number>(30);
+    const [endMessage, setEndMessage] = useState(true)
+    const [allServeyListLength, setAllServeyListLength] = useState(0)
+
+    const getListSurveys = async () => {
+      const response = await instancePagination(pageNumber).get('/survey/surveys');
+      console.log(
+        '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: white; font-weight: 700', response.data
+        );
+
+      setUserSurveys(response.data.data);
+      setAllServeyListLength(response.data.data_length)
+  };
+
+  const getMoreCards = () => {
+    console.log(userSurveys.length);
+
+    if (userSurveys.length >= allServeyListLength) {
+      setEndMessage(false);
+    }
+
+    setPageNumber((prev) => prev + 10);
+  }
+
     useEffect(() => {
-        const getListSurveys = async() => {
-            const list = await surveyApi.getSurveys();
-            if (list.length > 0 ) {
-                const listUserSurvey = list.map(( l ) =>{ return {
-                    id: l.id,
-                    uuid: l.uuid,
-                    description: l.description,
-                    title: l.title,
-                    created_at: l.created_at,
-                    user_id: l.user_id,
-                    email: l.email,
-                    questions: l.questions,
-                    successful_message: l.successful_message,
-                    published: l.published,
-                }}) 
-                setUserSurveys(listUserSurvey);
-            };
-        };
         getListSurveys();
+
         if (session) {
             const profile: any = session.profile;
             setIsPublic((profile.role === ADMIN || profile.role === CLIENT));
         } else {
             setIsPublic(false);
         };
-    },[session]);
+    },[session, pageNumber]);
 
     const openSurvey = (
-            data: React.SetStateAction<{ 
-                id: number; 
-                uuid: string; 
-                title: string; 
-                description: string; 
-                successful_message: string; 
-                created_at: string; 
-                user_id: number; 
-                email: string; 
+            data: React.SetStateAction<{
+                id: number;
+                uuid: string;
+                title: string;
+                description: string;
+                successful_message: string;
+                created_at: string;
+                user_id: number;
+                email: string;
                 questions: { question: string; id: number; survey_id: number; }[];
                 published: boolean,
-             }>, 
-                
+             }>,
+
             index: number
         ) => {
         setOpenDescription(!isOpenDescription);
@@ -144,27 +153,27 @@ const Home = (): ReactElement => {
 
     const handleChangeAnswer = (e: { target: { value: React.SetStateAction<string>; }; }, ind: number) => {
         setAnswers(answers.map((item, index) => index === ind ? {
-            question: item.question, 
-            answer: e.target.value, 
+            question: item.question,
+            answer: e.target.value,
             email: item.email,
             session_id: sessionId,
             start_time: startDate,
-        } : item));  
+        } : item));
     };
 
     const answerTheQuestion = () => {
         const data = [...answers];
-        const saveQuestion = async(answersInfo: { 
-            question: any; 
-            answer: any; 
-            email: string; 
+        const saveQuestion = async(answersInfo: {
+            question: any;
+            answer: any;
+            email: string;
             session_id: string,
             start_time?: string,
             end_time?: string,
         }[]) => {
             const questionsFromDB = await surveyApi.answerTheQuestion(answersInfo);
             console.log("questionsFromDB ", questionsFromDB);
-            if (slide === survey.questions.length - 1){ 
+            if (slide === survey.questions.length - 1){
                 setSuccess(!success);
                 setIsOpen(!isOpen);
             };
@@ -197,7 +206,7 @@ const Home = (): ReactElement => {
         if (!isPublic) {
             value = `${link}/survey/not_public/${survey_uuid}`;
         }
-        
+
         navigator.clipboard.writeText(value).then(() => {
             setCopiedLink({
                 isCopied: true,
@@ -206,27 +215,35 @@ const Home = (): ReactElement => {
         });
     };
 
-    console.log("HOME: userSurveys => ", userSurveys);
+    console.log("HOME: userSurveys => ", userSurveys, userSurveys.length);
     console.log("HOME: isPublic => ", isPublic);
-    
-    // const isPublish = 
+    console.log("HOME: pageNumber => ", pageNumber);
+
+    // const isPublish =
     return (
         <div className={styles.wrapper}>
             {
                 userSurveys[0].user_id === 0 ? (
                    <Wrapper>
                         <Banner title="Story Survey" subtitle="">
-                            <CustomLink 
-                                text={"create your survey"}  
-                                href={`/auth/signin?callbackUrl=${asPath}`} 
+                            <CustomLink
+                                text={"create your survey"}
+                                href={`/auth/signin?callbackUrl=${asPath}`}
                                 style={"btnPrimary"}
                             />
                         </Banner>
-                    </Wrapper> 
+                    </Wrapper>
                 ) : (
                     <Wrapper>
                         { userSurveys[0].user_id !== 0 && (
-                                <div className={styles.homeContent}>
+                                  <InfiniteScroll
+                                    className={styles.homeContent}
+                                    dataLength={userSurveys.length}
+                                    next={getMoreCards}
+                                    hasMore={endMessage}
+                                    loader={<h3> Loading...</h3>}
+                                    endMessage={<h4>Nothing more to show</h4>}
+                                  >
                                     {(
                                     userSurveys.map((item, index) => {
                                         const uuid = item.uuid;
@@ -242,16 +259,16 @@ const Home = (): ReactElement => {
                                                                     {item.title}
                                                                 </div>
                                                             </div>
-                                                            
+
                                                             <div className={styles.containerQuestionList}>
-                                                                
-                                                                {   
+
+                                                                {
                                                                     item.questions.length > 0 && (
                                                                         item.questions.slice(0, 1).map((q, index) => {
                                                                             return (
                                                                                 <div className={styles.containerStep} key={index}>
                                                                                     {item.questions.length > 2 && <span className={styles.btnShowMore}><i className={`${styles.arrow} ${styles.up}`}></i></span> }
-                                                                                    
+
                                                                                     <div className={styles.indicator}>
                                                                                         <i className={`bx bx-right-arrow-alt`}></i>
                                                                                         <span className={styles.text}>{q.question}</span>
@@ -262,7 +279,7 @@ const Home = (): ReactElement => {
                                                                     )
                                                                 }
                                                                 <div className={styles.hideContainerQuestion}>
-                                                                    {   
+                                                                    {
                                                                         item.questions.length > 1 && (
                                                                             item.questions.slice(1, item.questions.length - 1).map((item, index) => {
                                                                                 return (
@@ -276,16 +293,16 @@ const Home = (): ReactElement => {
                                                                             })
                                                                         )
                                                                     }
-                                                                </div> 
+                                                                </div>
                                                             </div>
                                                     </div>
                                                     <div className={styles.containerLink}>
                                                         {
                                                             ((!isPublic || isPublic) && item.published) && (
                                                                 <div className={styles.containerIconLink}>
-                                                                    <i 
-                                                                        className={styles.iconLink} 
-                                                                        title="copy link" 
+                                                                    <i
+                                                                        className={styles.iconLink}
+                                                                        title="copy link"
                                                                         onClick={() => {copyLink(uuid, item.title, item.published)}}
                                                                     >
                                                                         <Image src={iconLink} height={30} width={30}/>
@@ -310,9 +327,9 @@ const Home = (): ReactElement => {
                                                         { !item.published && isPublic &&
                                                             (
                                                                 <div className={styles.containerIconLink}>
-                                                                    <i 
-                                                                        className={styles.iconLink} 
-                                                                        title="copy link" 
+                                                                    <i
+                                                                        className={styles.iconLink}
+                                                                        title="copy link"
                                                                         onClick={() => {copyLink(uuid, item.title, item.published)}}
                                                                     >
                                                                         <Image src={iconLink} height={30} width={30}/>
@@ -324,12 +341,12 @@ const Home = (): ReactElement => {
                                                                         </div>
                                                                         )
                                                                     }
-                                                                    
-                                                                    <Link 
-                                                                        href={`/survey/not_public/${uuid}`} 
+
+                                                                    <Link
+                                                                        href={`/survey/not_public/${uuid}`}
                                                                     >
-                                                                        <a 
-                                                                        target="_blank" 
+                                                                        <a
+                                                                        target="_blank"
                                                                         className="card-link">
                                                                             survey
                                                                         </a>
@@ -337,8 +354,8 @@ const Home = (): ReactElement => {
                                                                 </div>
                                                             )
                                                         }
-                                                        
-                                                        <div  
+
+                                                        <div
                                                             className={`${styles.link} card-link`}
                                                             onClick={() => {
                                                                 openSurvey({
@@ -354,8 +371,8 @@ const Home = (): ReactElement => {
                                                                     published: item.published,
                                                                 }, index)
                                                                 setAnswers(item.questions.map((question) => {return {
-                                                                    question: question, 
-                                                                    answer: "", 
+                                                                    question: question,
+                                                                    answer: "",
                                                                     email: item.email,
                                                                     session_id: "",
                                                                     start_time: "",
@@ -368,9 +385,9 @@ const Home = (): ReactElement => {
                                                 </div>
                                             </div>
                                         )
-                                    })                
-                                    )} 
-                                </div>
+                                    })
+                                    )}
+                                    </InfiniteScroll>
                             )
                         }
                         {
@@ -386,8 +403,8 @@ const Home = (): ReactElement => {
                                     <div className={styles.description}>
                                         {survey.description}
                                     </div>
-                                    <button 
-                                        className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`} 
+                                    <button
+                                        className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`}
                                         onClick={() => {
                                             if (!survey.published && !isPublic) {
                                                 return push(`/auth/signin?callbackUrl=${asPath}`);
@@ -429,19 +446,19 @@ const Home = (): ReactElement => {
                                                         {
                                                             survey.questions.length > 0 && (
                                                                 survey.questions.map((item, index) => {
-                                                                        
+
                                                                         return (
                                                                             <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
                                                                                 <div className={styles.questionBlock}>
                                                                                     <div key={index} className={styles.question}>{index+1}). {item.question}</div>
                                                                                     <div className={styles.answerContainer}>
-                                                                                        <textarea 
-                                                                                            placeholder="Put you answer" 
-                                                                                            value={answers[index].answer} 
+                                                                                        <textarea
+                                                                                            placeholder="Put you answer"
+                                                                                            value={answers[index].answer}
                                                                                             onChange={(e) => handleChangeAnswer(e, index)}
-                                                                                            name={item.question} 
-                                                                                            id={item.question} 
-                                                                                            cols={30} 
+                                                                                            name={item.question}
+                                                                                            id={item.question}
+                                                                                            cols={30}
                                                                                             rows={10}
                                                                                         >
                                                                                         </textarea>
@@ -454,9 +471,9 @@ const Home = (): ReactElement => {
                                                         }
 
                                                 </Swiper>
-                                                { 
-                                                    <button 
-                                                        className={`nextSwiper ${styles.nextSwiper}`} 
+                                                {
+                                                    <button
+                                                        className={`nextSwiper ${styles.nextSwiper}`}
 
                                                         onClick={answerTheQuestion}
                                                     >
@@ -468,7 +485,7 @@ const Home = (): ReactElement => {
                                 )
                         }
 
-                    </Wrapper>                    
+                    </Wrapper>
                 )
             }
             {success && (
