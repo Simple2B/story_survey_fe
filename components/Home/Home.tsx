@@ -184,7 +184,7 @@ const Home = (): ReactElement => {
         }[]) => {
             const questionsFromDB = await surveyApi.answerTheQuestion(answersInfo);
             console.log("questionsFromDB ", questionsFromDB);
-            if (questionsFromDB.message) {
+            if (questionsFromDB) {
                 setInfoMessageForAnswer(questionsFromDB); 
             };
 
