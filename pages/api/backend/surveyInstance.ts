@@ -47,12 +47,14 @@ export const surveyApi = {
     },
     answerTheQuestion: async (data:{
           answer: string, 
+          is_answer: boolean,
           question: {question: string, id: number, survey_id: number}, 
           email: string,
           session_id: string,
           start_time?: string,
           end_time?: string,
-    }[]): Promise<void> => {
+    }[]): Promise<any> => {
+      console.log("answerTheQuestion: data => ", data);
       try {
           const response = await instance().post('/answer/create_answer', data);
           const res = response.data;
@@ -71,7 +73,7 @@ export const surveyApi = {
           const res = response.data;
           return res;
       } catch (error: any) {
-          console.log(`POST: error message => ${error.message}`);
+          console.log(`POST: editSurvey -> error message => ${error.message}`);
           throw new Error(error.message);
       }
     },
@@ -81,7 +83,7 @@ export const surveyApi = {
           const res = response.data;
           return res;
       } catch (error: any) {
-          console.log(`POST: error message => ${error.message}`);
+          console.log(`POST: getSurveyFromDB -> error message => ${error.message}`);
           throw new Error(error.message);
       }
     },
@@ -91,7 +93,7 @@ export const surveyApi = {
           const res = response.data;
           return res;
       } catch (error: any) {
-          console.log(`POST: error message => ${error.message}`);
+          console.log(`POST: getSurveyFromDBWithUUID -> error message => ${error.message}`);
           throw error;
       }
     },
@@ -101,7 +103,17 @@ export const surveyApi = {
           const res = response.data;
           return res;
       } catch (error: any) {
-          console.log(`POST: error message => ${error.message}`);
+          console.log(`POST: getInfoSurvey -> error message => ${error.message}`);
+          throw error;
+      }
+    },
+    getFileSurvey: async (uuid: string): Promise<any> => {
+      try {
+          const response = await instance().get(`/survey/report_survey/${uuid}`);
+          const res = response.data;
+          return res;
+      } catch (error: any) {
+          console.log(`POST: getFileSurvey -> error message => ${error.message}`);
           throw error;
       }
     },

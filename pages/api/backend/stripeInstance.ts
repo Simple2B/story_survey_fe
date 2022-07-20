@@ -77,7 +77,7 @@ export const stripeApi = {
           try {
               const response = await instance().post(
                 "/stripe/delete_subscription",
-                data.subscription_id
+                data
               );
               const res = response.data;
               return res;

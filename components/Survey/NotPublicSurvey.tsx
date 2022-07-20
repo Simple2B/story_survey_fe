@@ -20,6 +20,7 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
 
     const [answers, setAnswers] = useState([{
       question: "", 
+      is_answer: false,
       answer: "", 
       email: "",
       session_id: "",
@@ -86,13 +87,32 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
     }, [surveyUUID]);
 
     const handleChangeAnswer = (e: React.ChangeEvent<HTMLTextAreaElement>, ind: number) => {
-        setAnswers(answers.map((item, index) => index === ind ? {
-            question: item.question, 
-            answer: e.target.value, 
-            email: item.email,
-            session_id: sessionId,
-            start_time: startDate,
-        } : item)); 
+        setAnswers(answers.map((item, index) => {
+                if (index === ind) {
+                    item = { 
+                        question: item.question, 
+                        is_answer: true,
+                        answer: e.target.value, 
+                        email: item.email,
+                        session_id: sessionId,
+                        start_time: startDate,
+                    }
+                } 
+                if (ind-1 !== -1) {
+                    if (index === (ind-1)) {
+                        item = { 
+                            question: item.question, 
+                            is_answer: false,
+                            answer: item.answer, 
+                            email: item.email,
+                            session_id: item.session_id,
+                            start_time: item.start_time,
+                        }
+                    }
+                }
+                return item;
+            }
+        ));
         
         // set session_id for answer
         if (Cookies.get('session_id') === undefined && sessionId === undefined) {
@@ -110,6 +130,7 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
         const data = [...answers];
         const saveQuestion = async(answersInfo: { 
             question: any; 
+            is_answer: boolean;
             answer: any; 
             email: string; 
             session_id: string;
@@ -117,7 +138,8 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
             end_time?: string,
         }[]) => {
             const questions = await surveyApi.answerTheQuestion(answersInfo);
-            console.log("!!!!!!!questions ", questions);
+            console.log("NotPublicQuestion: questionsFromDB ", questions);
+
             if (slide === survey.questions.length - 1){ 
               setSuccess(!success);
             };

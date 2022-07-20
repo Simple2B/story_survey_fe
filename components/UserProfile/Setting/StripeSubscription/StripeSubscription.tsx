@@ -31,8 +31,11 @@ const StripeSubscription = (): ReactElement => {
           const user = await clientApi.getUser(session.user.email);
           console.log("=>>>>>StripeSubscription: user ", user);
           setUserData(user);
-          setIsCancel(user.subscription_info.cancel_at_period_end);
-          setCancelAt(user.subscription_info.cancel_at)
+          if (user.subscription_info) {
+                setIsCancel(user.subscription_info.cancel_at_period_end);
+                setCancelAt(user.subscription_info.cancel_at)
+          }
+          
       };
     };
     useEffect(() => {

@@ -99,9 +99,12 @@
 
 .hideContainerQuestion {
     visibility: hidden;
-    height: 60px;
+    height: 40px;
     overflow: scroll;
     transition: all .5s ease-out;
+    position: relative;
+    z-index: 1000;
+    background-color: white;
 }
 
 .containerQuestionList:hover .hideContainerQuestion {
@@ -428,6 +431,27 @@
     height: 90%;
     align-items: flex-start;
     text-align: left;
+}
+
+.containerMessageInfoForAnswer {
+    /* position: absolute; */
+    /* top: 100%;
+    right: 0;
+    z-index: 9998;
+    width: 100vw;
+    height: 100vh;
+    background-color: #e05260; */
+}
+
+.messageInfoForAnswer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background-color: #8FDACB;
+    z-index: 9999;
+    text-align: center;
 }
 
 .containerQuestion div:last-child div .questionBlock{

@@ -3,7 +3,10 @@ import React, { ReactElement, useState } from "react";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import EditContainer from "./EditContainer";
+import Image from "next/image";
+import downloadIcon from "../../../styles/icons/icons8-download-64.png";
 import styles from "./SurveyList.module.css";
+import { CSVLink } from "react-csv";
 
 const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
     const { data: session} = useSession();
@@ -21,6 +24,10 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
     const [questionsDeleted, setQuestionDeleted] = useState<IQuestion[]>([]);
     const [description, setDescription] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
+
+    const [file, setFile] = useState<string | any>(null);
+    const [uuid, setUUID] = useState<string>("");
+
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
 
@@ -97,6 +104,16 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
         setEditSurveyID(id);
     };
 
+    const getFileWithSurvey = async (uuid: string) => {
+        const fileFromDB =  await surveyApi.getFileSurvey(uuid);
+        setFile(fileFromDB);
+        setUUID(uuid);
+    };
+
+    if (file) {
+        console.log("file", file);
+    };
+
     return  (
         <div className={styles.tableListContainer}>
             <table className="table table-hover">
@@ -108,6 +125,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                     <th scope="col">Question</th>
                     <th scope="col">Link</th>
                     <th scope="col">Correct survey</th>
+                    <th scope="col">File</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,6 +154,15 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                         <span className={styles.copyLink}>
                                             {survey.published ? `${link}/survey/${survey.uuid}`:`${link}/survey/not_public/${survey.uuid}`}
                                         </span>
+                                        {
+                                            isCopiedLink.surveyUUID === survey.uuid && (
+                                                <div className={styles.linkCopiedContainer}>
+                                                    <span className={styles.linkCopied}>
+                                                        copied
+                                                    </span>
+                                                </div>
+                                            )
+                                        }
                                     </td>
                                     <td className={styles.btnEditContainer}>
                                         <span className={styles.btnEdit}
@@ -159,6 +186,35 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                         >
                                             edit
                                         </span>
+                                    </td>
+                                    <td 
+                                        onMouseEnter={() => {getFileWithSurvey(survey.uuid)}} 
+                                        onMouseLeave={() => {
+                                            setUUID("");
+                                            setFile(null);
+                                        }}
+                                        className={styles.downloadRow}
+                                    >
+                                        <i>
+                                            <Image src={downloadIcon} height={30} width={30}/>
+                                        </i>
+                                        {
+                                            survey.uuid  === uuid && file && (
+                                                <CSVLink 
+                                                    data={file} 
+                                                    filename={`${
+                                                        "survey_report" +
+                                                        "_" +
+                                                        new Date().toLocaleDateString("en-US")
+                                                    }.csv`}
+                                                    target="_blank"
+                                                    className={styles.downLoadCSV}
+                                                    
+                                                    >
+                                                        ok
+                                                </CSVLink>
+                                            )
+                                        }
                                     </td>
                                 </tr>
                             )
