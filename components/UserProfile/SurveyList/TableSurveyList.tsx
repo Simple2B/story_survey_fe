@@ -7,6 +7,10 @@ import Image from "next/image";
 import downloadIcon from "../../../styles/icons/icons8-download-64.png";
 import styles from "./SurveyList.module.css";
 import { CSVLink } from "react-csv";
+const [isPublished, setIsPublished] = useState(null);
+const handleOnChangePublished = () => {
+    setIsPublished(!isPublished);
+};
 
 const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
     const { data: session} = useSession();
@@ -81,6 +85,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             title: title,
             description: description,
             successful_message: successMessage,
+            published: !isPublished, 
             email: userEmail,
             questions: questions,
             questions_deleted: questionsDeleted,
@@ -245,6 +250,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                     setQuestionDeleted={setQuestionDeleted}
                     createQuestion={createQuestion}
                     setCreateQuestion={setCreateQuestion}
+                    isPublished={isPublished}
+                    handleOnChangePublished={handleOnChangePublished}
                 />
             }          
         </div>
