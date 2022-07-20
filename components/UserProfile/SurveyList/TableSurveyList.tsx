@@ -7,10 +7,7 @@ import Image from "next/image";
 import downloadIcon from "../../../styles/icons/icons8-download-64.png";
 import styles from "./SurveyList.module.css";
 import { CSVLink } from "react-csv";
-const [isPublished, setIsPublished] = useState(null);
-const handleOnChangePublished = () => {
-    setIsPublished(!isPublished);
-};
+
 
 const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
     const { data: session} = useSession();
@@ -31,6 +28,11 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
 
     const [file, setFile] = useState<string | any>(null);
     const [uuid, setUUID] = useState<string>("");
+
+    const [isPublished, setIsPublished] = useState(null);
+    const handleOnChangePublished = () => {
+        setIsPublished(!isPublished);
+    };
 
     const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
@@ -179,6 +181,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                                 setTitle(survey.title);
                                                 setQuestionDeleted([]);
                                                 setCreateQuestion([]);
+                                                setIsPublished(!survey.published)
                                                 setUserEmail(survey.email)
                                                 if (survey.questions.length > 0 )setQuestion(survey.questions.slice(0, survey.questions.length - 1).map((q) => {
                                                     return {
