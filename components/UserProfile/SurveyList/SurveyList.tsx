@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
-import { IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
+import { ICreateSurvey, IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import styles from "./SurveyList.module.css";
-import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
+import showMoreIcon from "../../../styles/icons/icons8-more-24.png";
 import iconLink from "../../../styles/icons/icons8-link-64.png";
 import EditContainer from "./EditContainer";
 import { ADMIN, CLIENT } from "../../../redux/types/userTypes";
@@ -34,6 +34,31 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
     const [isDelete, setDelete] = useState<boolean>(false);
     const [indexDelete, setIndexDelete] = useState<number>(null);
     const [nameDelete, setNameDelete] = useState<string>("");
+    const [isOpenDropDown, setIsOpenDropDown] = useState({
+        isOpen: false,
+        uuidSurvey: "",
+    });
+    const [isPublished, setIsPublished] = useState(null);
+    const [cloneSurvey, setCloneSurvey] = useState();
+
+    const [isClonedSuccess, setIsClonedSuccess] = useState(false);
+
+    const handleOnChangePublished = () => {
+        setIsPublished(!isPublished);
+    };
+
+    useEffect(() => {
+        if (session) {
+            const getUserSurveyList = async(email: string) => {
+                const list = await surveyApi.getUserSurveys(email);
+                console.log("getCloneSurvey: update list", list);
+                setUserSurveys(list);
+                setIsClonedSuccess(true);
+            };
+            getUserSurveyList(session.user.email);  
+        };
+        setIsClonedSuccess(false);
+    },[isClonedSuccess]);
 
     useEffect(() => {
         if (session) {
@@ -72,8 +97,6 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
     const handleOnchangeSuccessMessage = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setSuccessMessage(e.target.value);
     };
-
-    console.log("SurveyList: userSurveys", userSurveys);
 
     const deleteSurvey = (index: number) => {
         const email: string= session? session.user.email : "";
@@ -125,6 +148,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             description: description,
             successful_message: successMessage,
             email: userEmail,
+            published: !isPublished, 
             questions: questions,
             questions_deleted: questionsDeleted,
             create_question: createQuestion,
@@ -141,6 +165,32 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
         editSurvey(editDataSurvey, editSurveyId);
         setIsOpen(!isOpen);
     };
+
+    const getCloneSurvey = async(uuid: string, id: number) => {
+        const survey = await surveyApi.getSurveyFromDBWithUUID(uuid);
+        const questions = survey.questions.map((questionInfo: { question: string; }) => questionInfo.question);
+        const data: ICreateSurvey = {
+            "title": survey.title,
+            "description": survey.description,
+            "successful_message": survey.successful_message,
+            "user_id": id,
+            "email": survey.email,
+            "questions": [...questions],
+            "published": true,
+        };
+        const saveSurveyToDB = async(data: ICreateSurvey) => {
+            const newSurvey = await surveyApi.createSurvey(data);
+            console.log("SURVEYLIST: newSurvey => ", newSurvey);
+            setIsClonedSuccess(true);
+        };
+        saveSurveyToDB(data);   
+
+        setIsOpenDropDown({
+            isOpen: false,
+            uuidSurvey: "",
+        })
+    };
+
     return  (
         <div className={styles.homeContent}>
             {userSurveys.length > 0 && (
@@ -150,55 +200,82 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                         <div className={styles.overviewBoxes} key={index}>
                             <div className={styles.box}>
                                 <div className={styles.rightSide}>
-                                    <i className={styles.editIcon} onClick={() => {
-                                            setDelete(!isDelete);
-                                            setIndexDelete(index);
-                                            setNameDelete(item.title);
-                                        }}><Image src={deleteIcon} height={30} width={30}/></i>
-                                        <div className={styles.titleCard}>
-                                            <div className={styles.titlePublic}>
-                                                {!item.published? "private": ""}
+                                    {/* <i className={styles.editIcon} >
+                                            <Image src={deleteIcon} height={30} width={30}/>
+                                    </i> */}
+                                    <div className={styles.dropDownContainer}>
+                                        <i className={styles.editIcon} onClick={() => setIsOpenDropDown({
+                                            isOpen: !isOpenDropDown.isOpen,
+                                            uuidSurvey: item.uuid,
+                                        })}>
+                                            <Image src={showMoreIcon} height={30} width={30}/>
+                                        </i>
+                                        { isOpenDropDown.isOpen && isOpenDropDown.uuidSurvey === item.uuid &&
+                                            <div className={styles.dropdownMenu}>
+                                                <div className={styles.dropdownItem} onClick={() => getCloneSurvey(item.uuid, item.id)}>
+                                                    clone
+                                                </div>
+                                                <div className={styles.dropdownItem} onClick={() => {
+                                                            setDelete(!isDelete);
+                                                            setIndexDelete(index);
+                                                            setNameDelete(item.title);
+                                                            setIsOpenDropDown({
+                                                                isOpen: false,
+                                                                uuidSurvey: "",
+                                                            })
+                                                        }
+                                                    }
+                                                >
+                                                    delete
+                                                </div>
                                             </div>
-                                            <div className={styles.title}>
-                                                {item.title}
-                                            </div>
+                                        }
+                                        
+                                    </div>
+                                    <div className={styles.titleCard}>
+                                        <div className={styles.titlePublic}>
+                                            {!item.published? "private": ""}
                                         </div>
-                                        <div className={styles.containerQuestionList}>
+                                        <div className={styles.title}>
+                                            {item.title}
+                                        </div>
+                                    </div>
+                                    <div className={styles.containerQuestionList}>
+                                        {   
+                                            item.questions.length > 0 && (
+                                                item.questions.slice(0, 1).map((q, index) => {
+                                                    return (
+                                                        <div className={styles.containerStep} key={index}>
+                                                            {item.questions.length > 2 && <span className={styles.btnShowMore}>
+                                                                <i className={`${styles.arrow} ${styles.up}`}>
+                                                                </i></span> }
+
+                                                            <div className={styles.indicator} key={index}>
+                                                                <i className={`bx bx-right-arrow-alt`}></i>
+                                                                <span className={styles.text}>{q.question}</span>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            )
+                                        }
+                                        <div className={styles.hideContainerQuestion}>
                                             {   
-                                                item.questions.length > 0 && (
-                                                    item.questions.slice(0, 1).map((q, index) => {
+                                                item.questions.length > 1 && (
+                                                    item.questions.slice(1, item.questions.length - 1).map((item, index) => {
                                                         return (
                                                             <div className={styles.containerStep} key={index}>
-                                                                {item.questions.length > 2 && <span className={styles.btnShowMore}>
-                                                                    <i className={`${styles.arrow} ${styles.up}`}>
-                                                                    </i></span> }
-
                                                                 <div className={styles.indicator} key={index}>
                                                                     <i className={`bx bx-right-arrow-alt`}></i>
-                                                                    <span className={styles.text}>{q.question}</span>
+                                                                    <span className={styles.text}>{item.question}</span>
                                                                 </div>
                                                             </div>
                                                         )
                                                     })
                                                 )
                                             }
-                                            <div className={styles.hideContainerQuestion}>
-                                                {   
-                                                    item.questions.length > 1 && (
-                                                        item.questions.slice(1, item.questions.length - 1).map((item, index) => {
-                                                            return (
-                                                                <div className={styles.containerStep} key={index}>
-                                                                    <div className={styles.indicator} key={index}>
-                                                                        <i className={`bx bx-right-arrow-alt`}></i>
-                                                                        <span className={styles.text}>{item.question}</span>
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        })
-                                                    )
-                                                }
-                                            </div>
                                         </div>
+                                    </div>
                                 </div>
                                 <div className={styles.linkContainer}>
                                     {
@@ -273,7 +350,8 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                                             setQuestionDeleted([]);
                                             setCreateQuestion([]);
                                             setTitle(item.title);
-                                            setUserEmail(item.email)
+                                            setUserEmail(item.email);
+                                            setIsPublished(!item.published);
                                             if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
                                                 return {
                                                     id: q.id, 
@@ -326,6 +404,8 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                     setQuestionDeleted={setQuestionDeleted}
                     createQuestion={createQuestion}
                     setCreateQuestion={setCreateQuestion}
+                    isPublished={isPublished}
+                    handleOnChangePublished={handleOnChangePublished}
                 />
             }
         </div>

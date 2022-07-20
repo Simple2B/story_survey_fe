@@ -103,7 +103,7 @@ const CreateSurvey = (): ReactElement => {
             "user_id": profile.id,
             "email": session.user.email,
             "questions": [...questions, ""],
-            "published": isChecked,
+            "published": !isChecked,
         };
         const saveSurveyToDB = async(data: ICreateSurvey) => {
             const newSurvey = await surveyApi.createSurvey(data);
