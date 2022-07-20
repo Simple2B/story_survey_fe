@@ -47,8 +47,14 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
         setIsPublished(!isPublished);
     };
 
+    if (isClonedSuccess) {
+        setTimeout(() => {
+            setIsClonedSuccess(false);
+        }, 300);
+    };
+
     useEffect(() => {
-        if (session) {
+        if (session && isClonedSuccess) {
             const getUserSurveyList = async(email: string) => {
                 const list = await surveyApi.getUserSurveys(email);
                 console.log("getCloneSurvey: update list", list);
@@ -56,8 +62,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                 setIsClonedSuccess(true);
             };
             getUserSurveyList(session.user.email);  
-        };
-        setIsClonedSuccess(false);
+        } 
     },[isClonedSuccess]);
 
     useEffect(() => {
