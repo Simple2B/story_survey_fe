@@ -143,6 +143,9 @@ const Home = (): ReactElement => {
     };
 
     const handleChangeAnswer = (e: { target: { value: React.SetStateAction<string>; }; }, ind: number) => {
+        if(e.target.value === "") {
+            // setMessage("You must put some answer")
+        };
         setAnswers(answers.map((item, index) => {
                 if (index === ind) {
                     item = { 
@@ -197,8 +200,6 @@ const Home = (): ReactElement => {
     };
 
     // TODO: create link for prod
-    // process.env.COPY_LINK
-    // const link = 'http://localhost:3000';
     const link = 'https://survey.simple2b.net';
 
     const [isCopiedLink, setCopiedLink] = useState({
