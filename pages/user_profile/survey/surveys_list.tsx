@@ -14,7 +14,6 @@ const ProfileSurveyLists = () => {
   const {push, asPath} = useRouter();
   const [checked, setChecked] = useState(false);
 
-  
   const handleChangeChecked = () => {
     setChecked(!checked);
   };
@@ -32,8 +31,6 @@ const ProfileSurveyLists = () => {
   }]);
 
   // TODO: create link for prod
-  // process.env.COPY_LINK
-  // const link = 'http://localhost:3000';
   const link = 'https://survey.simple2b.net';
   const [isCopiedLink, setCopiedLink] = useState({
     isCopied: false,
@@ -75,9 +72,6 @@ const ProfileSurveyLists = () => {
     }
     
   },[session]);
-
-  console.log(" status", status);
-  
 
   return (
     <User title={'Survey List'} keywords={""} style={""} headerName={'Survey List'}>
