@@ -3,7 +3,8 @@ import axios, { AxiosInstance } from "axios";
 const API_URI = process.env.NEXT_PUBLIC_API_URL;
 
 export const instancePagination = (
-  pageNumber: number = 0
+  pageNumber: number = 0,
+  uuid?: string
 ): AxiosInstance => {
   return axios.create({
     baseURL: API_URI,
@@ -15,6 +16,7 @@ export const instancePagination = (
     },
     params: {
       page: pageNumber,
+      uuid: uuid,
     },
   });
 };

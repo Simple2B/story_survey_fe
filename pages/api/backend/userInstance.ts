@@ -36,16 +36,20 @@ export const clientApi = {
           throw error;
       }
     },
-    getUserByUUID: async (uuid: string): Promise<IUserResponse> => {
-      try {
-          const response = await instance().get(`/user/uuid/${uuid}`);
-          const res = response.data;
-          return res;
-      } catch (error: any) {
-          console.log(`POST getUserByUUID: error message => ${error.message}`);
-          throw error;
-      }
-    },
+    // getUserByUUID: async (uuid: string): Promise<IUserResponse> => {
+    //   try {
+    //       const response = await instance().get(`/user/uuid/${uuid}`);
+    //       const res = response.data;
+    //       console.log(
+    //         '%c [getUserByUUID] RESPONSE data - ', 'color: black; background-color: white; font-weight: 700', res
+    //         );
+
+    //       return res;
+    //   } catch (error: any) {
+    //       console.log(`POST getUserByUUID: error message => ${error.message}`);
+    //       throw error;
+    //   }
+    // },
     getUsers: async (): Promise<IUserResponse[]> => {
       try {
           const response = await instance().get('/user/get_users');

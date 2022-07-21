@@ -43,14 +43,6 @@ const UsersList = (): ReactElement => {
                     </tr>
                 </thead>
                 <tbody>
-                <InfiniteScroll
-                  className={styles.homeContent}
-                  dataLength={10}
-                  next={() => console.log('The end of the road')}
-                  hasMore={true}
-                  loader={<h3> Loading...</h3>}
-                  endMessage={<h4>Nothing more to show</h4>}
-                >
                     {users && users.length > 0 && (
                         users.map((user, index) => {
                             return (
@@ -94,7 +86,6 @@ const UsersList = (): ReactElement => {
                             )
                         })
                     )}
-                    </InfiniteScroll>
                 </tbody>
             </table>
         </div>
