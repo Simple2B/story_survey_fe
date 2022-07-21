@@ -15,16 +15,6 @@ export const surveyApi = {
           throw error;
       }
     },
-    getUserSurveys: async (email: string): Promise<IGetSurvey[]> => {
-      try {
-          const response = await instance().get(`/survey/${email}`);
-          const res = response.data;
-          return res;
-      } catch (error: any) {
-          console.log(`POST: getUserSurveys error message => ${error.message}`);
-          throw error;
-      }
-    },
     getSurveys: async (): Promise<IGetSurvey[]> => {
       // try {
           const response = await instance().get('/survey/surveys');
@@ -46,9 +36,9 @@ export const surveyApi = {
       }
     },
     answerTheQuestion: async (data:{
-          answer: string, 
+          answer: string,
           is_answer: boolean,
-          question: {question: string, id: number, survey_id: number}, 
+          question: {question: string, id: number, survey_id: number},
           email: string,
           session_id: string,
           start_time?: string,
