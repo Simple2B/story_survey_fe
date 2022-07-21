@@ -8,32 +8,38 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Image from "next/image";
-import Link from "next/link";
 import { surveyApi } from "../../pages/api/backend/surveyInstance";
-import { IGetSurvey } from "../../redux/types/surveyTypes";
+import { IGetSurvey, ISurveyInfo } from "../../redux/types/surveyTypes";
 import deleteIcon from "../../styles/icons/icons8-cancel-64.png";
-import { Navigation, Pagination} from "swiper";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
-import iconLink from "../../styles/icons/icons8-link-64.png";
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'js-cookie';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { instancePagination } from "../../pages/api/backend/pagination";
+import { useFetching } from "../Hooks/useFetching";
+import ContainerCopyLink from "../UserProfile/ContainerCopyLink/ContainerCopyLink";
+import QuestionList from "./QuestionList";
+import ContainerDescription from "../UserProfile/ContainerDescription/ContainerDescription";
+import SwiperContainer from "../UserProfile/SwiperContainer/SwiperContainer";
+import Loader from "../common/Loader/Loader";
+import Success from "../UserProfile/Success/Success";
 
-interface IAnswer  {
-    question: string,
-    answer: string,
-    email: string
-};
+interface IMessageInfo {
+  message: string,
+  question_id: number
+}
+
+// TODO: create link for prod
+const link = 'https://survey.simple2b.net';
 
 const Home = (): ReactElement => {
+    const {data: session } = useSession();
+    const { push, asPath } = useRouter();
+
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
     const [isPublic, setIsPublic] = useState(false);
-    const {data: session } = useSession();
-    const { push, asPath } = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([{
         title: "",
@@ -45,11 +51,6 @@ const Home = (): ReactElement => {
         successful_message: "",
         published: true,
     }]);
-    const [answerInfo, setAnswerInfo] = useState<IAnswer>({
-        question: "",
-        answer: "",
-        email: ""
-    });
     const [answers, setAnswers] = useState([{
         question: null,
         is_answer: false,
@@ -57,14 +58,12 @@ const Home = (): ReactElement => {
         email: "",
         session_id: "",
         start_time: "",
-        // end_time: "",
     }]);
-    const [answer, setAnswer] = useState<string>("");
     const [slide, setSlide] = useState(null);
     const [indexSurvey, setIndexSurvey] = useState(null);
     const [success, setSuccess] = useState<boolean>(false);
 
-    const [infoMessageForAnswer, setInfoMessageForAnswer] = useState({
+    const [infoMessageForAnswer, setInfoMessageForAnswer] = useState<IMessageInfo>({
         message: "",
         question_id: 0
     });
@@ -88,15 +87,15 @@ const Home = (): ReactElement => {
     const [endMessage, setEndMessage] = useState(true)
     const [allServeyListLength, setAllServeyListLength] = useState(0)
 
-    const getListSurveys = async () => {
-      const response = await instancePagination(pageNumber).get('/survey/surveys');
-      console.log(
-        '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: white; font-weight: 700', response.data
-        );
+  //   const getListSurveysAll = async () => {
+  //     const response = await instancePagination(pageNumber).get('/survey/surveys');
+  //     console.log(
+  //       '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: white; font-weight: 700', response.data
+  //       );
 
-      setUserSurveys(response.data.data);
-      setAllServeyListLength(response.data.data_length)
-  };
+  //     setUserSurveys(response.data.data);
+  //     setAllServeyListLength(response.data.data_length)
+  // };
 
   const getMoreCards = () => {
     console.log(userSurveys.length);
@@ -108,9 +107,18 @@ const Home = (): ReactElement => {
     setPageNumber((prev) => prev + 10);
   }
 
-    useEffect(() => {
-        getListSurveys();
+      const [getListSurveysAll, isLoading, error] = useFetching( async () => {
+        const response = await instancePagination(pageNumber).get('/survey/surveys');
+        console.log(
+          '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: white; font-weight: 700', response.data
+          );
 
+        setUserSurveys(response.data.data);
+        setAllServeyListLength(response.data.data_length)
+    });
+
+    useEffect(() => {
+      getListSurveysAll()
         if (session) {
             const profile: any = session.profile;
             setIsPublic((profile.role === ADMIN || profile.role === CLIENT));
@@ -152,6 +160,9 @@ const Home = (): ReactElement => {
     };
 
     const handleChangeAnswer = (e: { target: { value: React.SetStateAction<string>; }; }, ind: number) => {
+        if(e.target.value === "") {
+            // setMessage("You must put some answer")
+        };
         setAnswers(answers.map((item, index) => {
                 if (index === ind) {
                     item = {
@@ -205,11 +216,6 @@ const Home = (): ReactElement => {
         saveQuestion(data);
     };
 
-    // TODO: create link for prod
-    // process.env.COPY_LINK
-    // const link = 'http://localhost:3000';
-    const link = 'https://survey.simple2b.net';
-
     const [isCopiedLink, setCopiedLink] = useState({
         isCopied: false,
         surveyUUID: "",
@@ -229,8 +235,7 @@ const Home = (): ReactElement => {
         let value = `${link}/survey/${survey_uuid}`;
         if (!isPublic) {
             value = `${link}/survey/not_public/${survey_uuid}`;
-        }
-
+        };
         navigator.clipboard.writeText(value).then(() => {
             setCopiedLink({
                 isCopied: true,
@@ -239,7 +244,7 @@ const Home = (): ReactElement => {
         });
     };
 
-    if (infoMessageForAnswer.message.length > 0) {
+    if (infoMessageForAnswer.message !== "") {
         setTimeout(() => {
             setInfoMessageForAnswer({
                 message: "",
@@ -254,30 +259,65 @@ const Home = (): ReactElement => {
         }, 2500)
     };
 
+    const showMore = (item: IGetSurvey, index: number) => {
+        openSurvey({
+            id: item.id,
+            uuid: item.uuid,
+            title: item.title,
+            description: item.description,
+            created_at: item.created_at,
+            user_id: item.user_id,
+            email: item.email,
+            questions: item.questions,
+            successful_message: item.successful_message,
+            published: item.published,
+        }, index)
+        setAnswers(item.questions.map((question) => {return {
+            question: question,
+            is_answer: false,
+            answer: "",
+            email: item.email,
+            session_id: "",
+            start_time: "",
+        }} ));
+    };
+
+    const openQuestion = (survey: ISurveyInfo) => {
+        if (!survey.published && !isPublic) {
+            return push(`/auth/signin?callbackUrl=${asPath}`);
+        }
+        setOpenDescription(!isOpenDescription);
+        setIsOpen(!isOpen);
+    };
+
     return (
         <div className={styles.wrapper}>
             {
-                userSurveys[0].user_id === 0 ? (
-                   <Wrapper>
-                        <Banner title="Story Survey" subtitle="">
-                            <CustomLink
-                                text={"create your survey"}
-                                href={`/auth/signin?callbackUrl=${asPath}`}
-                                style={"btnPrimary"}
-                            />
-                        </Banner>
-                    </Wrapper>
-                ) : (
-                    <Wrapper>
-                        { userSurveys[0].user_id !== 0 && (
-                                  <InfiniteScroll
-                                    className={styles.homeContent}
-                                    dataLength={userSurveys.length}
-                                    next={getMoreCards}
-                                    hasMore={endMessage}
-                                    loader={<h3> Loading...</h3>}
-                                    endMessage={<h4>Nothing more to show</h4>}
-                                  >
+                userSurveys.length === 0 &&
+                <Wrapper>
+                    <Banner title="Story Survey" subtitle="">
+                        <CustomLink
+                            text={"create your survey"}
+                            href={`/auth/signin?callbackUrl=${asPath}`}
+                            style={"btnPrimary"}
+                        />
+                    </Banner>
+                </Wrapper>
+            }
+            {
+                <Wrapper>
+                    {/* {error && <div className={styles.ErrorContainer}>{error}</div>} */}
+                        <>
+                          <InfiniteScroll
+                              className={styles.homeContent}
+                              dataLength={userSurveys.length}
+                              next={getMoreCards}
+                              hasMore={endMessage}
+                              loader={<h3> Loading...</h3>}
+                              endMessage={<h4>Nothing more to show</h4>}
+                            >
+                            {  (
+                                <div className={styles.homeContent}>
                                     {(
                                     userSurveys.map((item, index) => {
                                         const uuid = item.uuid;
@@ -293,131 +333,20 @@ const Home = (): ReactElement => {
                                                                     {item.title}
                                                                 </div>
                                                             </div>
-
-                                                            <div className={styles.containerQuestionList}>
-
-                                                                {
-                                                                    item.questions.length > 0 && (
-                                                                        item.questions.slice(0, 1).map((q, index) => {
-                                                                            return (
-                                                                                <div className={styles.containerStep} key={index}>
-                                                                                    {
-                                                                                        item.questions.length > 2 &&
-                                                                                        <span className={styles.btnShowMore}>
-                                                                                            <i className={`${styles.arrow} ${styles.up}`}></i>
-                                                                                        </span>
-                                                                                    }
-
-                                                                                    <div className={styles.indicator}>
-                                                                                        <i className={`bx bx-right-arrow-alt`}></i>
-                                                                                        <span className={styles.text}>{q.question}</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            )
-                                                                        })
-                                                                    )
-                                                                }
-                                                                <div className={styles.hideContainerQuestion}>
-                                                                    {
-                                                                        item.questions.length > 1 && (
-                                                                            item.questions.slice(1, item.questions.length - 1).map((item, index) => {
-                                                                                return (
-                                                                                    <div className={styles.containerStep} key={index}>
-                                                                                        <div className={styles.indicator}>
-                                                                                            <i className={`bx bx-right-arrow-alt`}></i>
-                                                                                            <div className={styles.text}>{item.question}</div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                )
-                                                                            })
-                                                                        )
-                                                                    }
-                                                                </div>
-                                                            </div>
+                                                            <QuestionList questions={item.questions}/>
                                                     </div>
                                                     <div className={styles.containerLink}>
-                                                        {
-                                                            ((!isPublic || isPublic) && item.published) && (
-                                                                <div className={styles.containerIconLink}>
-                                                                    <i
-                                                                        className={styles.iconLink}
-                                                                        title="copy link"
-                                                                        onClick={() => {copyLink(uuid, item.title, item.published)}}
-                                                                    >
-                                                                        <Image src={iconLink} height={30} width={30}/>
-                                                                    </i>
-
-                                                                    {
-                                                                        isCopiedLink.surveyUUID === uuid && (
-                                                                        <div className={styles.linkCopied}>
-                                                                            copied
-                                                                        </div>
-                                                                        )
-                                                                    }
-                                                                    <Link href={`/survey/${uuid}`}>
-                                                                        <a target="_blank" className="card-link">
-                                                                            survey
-                                                                        </a>
-                                                                    </Link>
-                                                                </div>
-                                                            )
-                                                        }
-                                                        { !item.published && <div></div> }
-                                                        { !item.published && isPublic &&
-                                                            (
-                                                                <div className={styles.containerIconLink}>
-                                                                    <i
-                                                                        className={styles.iconLink}
-                                                                        title="copy link"
-                                                                        onClick={() => {copyLink(uuid, item.title, item.published)}}
-                                                                    >
-                                                                        <Image src={iconLink} height={30} width={30}/>
-                                                                    </i>
-                                                                    {
-                                                                        isCopiedLink.surveyUUID === uuid && (
-                                                                        <div className={styles.linkCopied}>
-                                                                            copied
-                                                                        </div>
-                                                                        )
-                                                                    }
-
-                                                                    <Link
-                                                                        href={`/survey/not_public/${uuid}`}
-                                                                    >
-                                                                        <a
-                                                                        target="_blank"
-                                                                        className="card-link">
-                                                                            survey
-                                                                        </a>
-                                                                    </Link>
-                                                                </div>
-                                                            )
-                                                        }
-
+                                                        <ContainerCopyLink
+                                                            isCopiedLink={isCopiedLink}
+                                                            copyLink={copyLink}
+                                                            isPublic={isPublic}
+                                                            uuid={uuid}
+                                                            title={item.title}
+                                                            published={item.published}
+                                                        />
                                                         <div
                                                             className={`${styles.link} card-link`}
-                                                            onClick={() => {
-                                                                openSurvey({
-                                                                    id: item.id,
-                                                                    uuid: item.uuid,
-                                                                    title: item.title,
-                                                                    description: item.description,
-                                                                    created_at: item.created_at,
-                                                                    user_id: item.user_id,
-                                                                    email: item.email,
-                                                                    questions: item.questions,
-                                                                    successful_message: item.successful_message,
-                                                                    published: item.published,
-                                                                }, index)
-                                                                setAnswers(item.questions.map((question) => {return {
-                                                                    question: question,
-                                                                    is_answer: false,
-                                                                    answer: "",
-                                                                    email: item.email,
-                                                                    session_id: "",
-                                                                    start_time: "",
-                                                                }} ));
-                                                            }}
+                                                            onClick={() => showMore(item, index)}
                                                             >
                                                                 show more
                                                         </div>
@@ -427,121 +356,44 @@ const Home = (): ReactElement => {
                                         )
                                     })
                                     )}
-                                    </InfiniteScroll>
-                            )
-                        }
-                        {
-                            isOpenDescription &&
-                            <div className={styles.modalWindow}>
-                                <div className={styles.modal}>
-                                    <i className={styles.editIcon} onClick={() => setOpenDescription(!isOpenDescription)}>
-                                        <Image src={deleteIcon} height={30} width={30}/>
-                                    </i>
-                                    <div className={styles.titleShowMore}>
-                                        {survey.title}
-                                    </div>
-                                    <div className={styles.description}>
-                                        {survey.description}
-                                    </div>
-                                    <button
-                                        className={`${styles.btn} ${styles.btnPrimary} ${styles.btnBlock}`}
-                                        onClick={() => {
-                                            if (!survey.published && !isPublic) {
-                                                return push(`/auth/signin?callbackUrl=${asPath}`);
-                                            }
-                                            setOpenDescription(!isOpenDescription);
-                                            setIsOpen(!isOpen);
-                                        }}
-                                    >
-                                            Answer the {survey.questions.length > 0 ? "questions" : "question"}
-                                    </button>
                                 </div>
-                            </div>
-
-                        }
-                        { isOpen &&
+                                )
+                            }
+                            {
+                                isOpenDescription &&
+                                <ContainerDescription
+                                    setOpenDescription={setOpenDescription}
+                                    isOpenDescription={isOpenDescription}
+                                    survey={survey}
+                                    openQuestion={openQuestion}
+                                />
+                            }
+                            { isOpen &&
                                 (
                                     <div className={styles.modalWindow}>
                                         <div className={styles.modal}>
                                             <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}><Image src={deleteIcon} height={30} width={30}/></i>
                                             <div className={styles.title}>{survey.title}</div>
-                                                <Swiper
-                                                    pagination={{
-                                                    type: "custom",
-                                                    }}
-                                                    navigation={{
-                                                        prevEl: '.prev',
-                                                        nextEl: '.nextSwiper',
-                                                    }}
-                                                    onSlideChange={(swiper) => {
-                                                        setSlide(swiper.activeIndex);
-                                                        console.log("indexSurvey: ", indexSurvey);
-                                                        const currentSurvey = userSurveys[indexSurvey];
-                                                        const currentQuestion = currentSurvey[swiper.activeIndex];
-                                                        console.log("currentQuestion", currentQuestion);
-                                                    }}
-                                                    modules={[Pagination, Navigation]}
-                                                    className={styles.containerQuestion}
-                                                >
-                                                        {
-                                                            survey.questions.length > 0 && (
-                                                                survey.questions.map((item, index) => {
-                                                                    return (
-                                                                        <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
-                                                                            <div className={styles.questionBlock}>
-                                                                                <div key={index} className={styles.question}>{index+1}). {item.question}</div>
-                                                                                <div className={styles.answerContainer}>
-                                                                                    <textarea
-                                                                                        placeholder="Put you answer"
-                                                                                        value={answers[index].answer}
-                                                                                        onChange={(e) => handleChangeAnswer(e, index)}
-                                                                                        name={item.question}
-                                                                                        id={item.question}
-                                                                                        cols={30}
-                                                                                        rows={10}
-                                                                                    >
-                                                                                    </textarea>
-                                                                                </div>
-                                                                            </div>
-                                                                            {
-                                                                                infoMessageForAnswer.message.length > 0 &&
-                                                                                <div className={styles.containerMessageInfoForAnswer}>
-                                                                                    <div className={styles.messageInfoForAnswer}>
-                                                                                        {infoMessageForAnswer.message}
-                                                                                        You already answered the {index-1 !== -1 && survey.questions[index-1].question}
-                                                                                    </div>
-                                                                                </div>
-
-                                                                            }
-                                                                        </SwiperSlide>
-                                                                    )
-                                                                })
-                                                            )
-                                                        }
-                                                </Swiper>
-                                                {
-                                                    <button
-                                                        className={`nextSwiper ${styles.nextSwiper}`}
-
-                                                        onClick={answerTheQuestion}
-                                                    >
-                                                            + answer
-                                                    </button>
-                                                }
+                                            <SwiperContainer
+                                                setSlide={setSlide}
+                                                survey={survey}
+                                                answers={answers}
+                                                handleChangeAnswer={handleChangeAnswer}
+                                                infoMessageForAnswer={infoMessageForAnswer}
+                                            />
+                                            { <button className={`nextSwiper ${styles.nextSwiper}`} onClick={answerTheQuestion}>
+                                                    + answer
+                                               </button>}
                                         </div>
                                     </div>
                                 )
-                        }
+                            }
+                            </InfiniteScroll>
+                        </>
 
-                    </Wrapper>
-                )
+                </Wrapper>
             }
-            {success && (
-                    <div className={styles.isSuccess}>
-                        {survey.successful_message.length === 0 && <div>answers added successfully</div>}
-                        {survey.successful_message.length > 0 && <div>{survey.successful_message}</div>}
-                    </div>
-            )}
+            {success && <Success survey={survey}/>}
         </div>
     )
 }

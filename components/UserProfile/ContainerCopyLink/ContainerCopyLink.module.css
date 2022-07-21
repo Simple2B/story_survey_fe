@@ -1,0 +1,33 @@
+.containerIconLink {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.iconLink {
+    width: 19px;
+    height: 19px;
+    margin-right: 7px;
+    cursor: pointer;
+}
+
+.linkCopied {
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: -20px;
+    left: 15px;
+    width: 42px;
+    height: 21px;
+    color: var(--offWhite);
+    background-color: var(--mainBlack);
+    border-radius: 5px;
+    border-bottom-left-radius: 0;
+}
+
+.hideContainerLink {
+    display: none;
+}
