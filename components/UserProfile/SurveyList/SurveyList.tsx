@@ -9,9 +9,10 @@ import EditContainer from "./EditContainer";
 import { ADMIN, CLIENT } from "../../../redux/types/userTypes";
 import QuestionUserList from "./QuestionsUserList";
 import ContainerCopyLink from "../ContainerCopyLink/ContainerCopyLink";
+import { instancePagination } from "../../../pages/api/backend/pagination";
 
 
-const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
+const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink, pageNumber}): ReactElement => {
     const {data: session } = useSession();
     const [isPublic, setIsPublic] = useState(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -53,13 +54,12 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
     useEffect(() => {
         if (session && isClonedSuccess) {
             const getUserSurveyList = async(email: string) => {
-                const list = await surveyApi.getUserSurveys(email);
-                console.log("getCloneSurvey: update list", list);
-                setUserSurveys(list);
+                const list = await instancePagination(pageNumber).get(`/survey/${email}`);
+                setUserSurveys(list.data.data);
                 setIsClonedSuccess(true);
             };
-            getUserSurveyList(session.user.email);  
-        } 
+            getUserSurveyList(session.user.email);
+        }
     },[isClonedSuccess]);
 
     useEffect(() => {
@@ -69,7 +69,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
         } else {
             setIsPublic(false);
         };
-        
+
     },[session]);
 
     const handleOnchangeTitle = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -117,7 +117,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
 
         const delSurvey = userSurveys.filter((_, ind) => index === ind)[0];
         console.log("deleteSurvey", delSurvey);
-        
+
 
         const data = {
             email: email,
@@ -142,14 +142,14 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             setQuestion(questions.map((item) => {
                 if (item.id === question.id) {
                     item = {
-                        id: question.id, 
-                        question: e.target.value, 
+                        id: question.id,
+                        question: e.target.value,
                         survey_id: question.survey_id}
                 }
                 return item;
             }));
         }
-        
+
     };
 
     const openEditSurvey = (item, index) => {
@@ -164,8 +164,8 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             setIsPublished(!item.published);
             if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
                 return {
-                    id: q.id, 
-                    question: q.question, 
+                    id: q.id,
+                    question: q.question,
                     survey_id: item.id,
                 }
             }));
@@ -179,7 +179,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             description: description,
             successful_message: successMessage,
             email: userEmail,
-            published: !isPublished, 
+            published: !isPublished,
             questions: questions,
             questions_deleted: questionsDeleted,
             create_question: createQuestion,
@@ -188,8 +188,9 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             const editDataSurvey: IGetSurvey = await surveyApi.editSurvey(data, id);
             console.log(" editDataSurvey ", editDataSurvey);
             const getListSurveys = async() => {
-                const list = await surveyApi.getUserSurveys(session.user.email);
-                setUserSurveys(list);
+                const list = await instancePagination(pageNumber).get(`/survey/${session.user.email}`);
+
+                setUserSurveys(list.data.data);
             }
             getListSurveys();
         };
@@ -216,7 +217,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             setIsClonedSuccess(true);
             setLoading(false);
         };
-        saveSurveyToDB(data);   
+        saveSurveyToDB(data);
 
         setIsOpenDropDown({
             isOpen: false,
@@ -262,16 +263,16 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                                     <QuestionUserList questions={item.questions}/>
                                 </div>
                                 <div className={styles.linkContainer}>
-                                    <ContainerCopyLink 
-                                        isCopiedLink={isCopiedLink} 
-                                        copyLink={copyLink} 
-                                        isPublic={isPublic} 
-                                        uuid={uuid} 
-                                        title={item.title} 
+                                    <ContainerCopyLink
+                                        isCopiedLink={isCopiedLink}
+                                        copyLink={copyLink}
+                                        isPublic={isPublic}
+                                        uuid={uuid}
+                                        title={item.title}
                                         published={item.published}
                                     />
-                                    <a href="#" 
-                                        className={`${styles.link} card-link`} 
+                                    <a href="#"
+                                        className={`${styles.link} card-link`}
                                         onClick={() => openEditSurvey(item, index)}
                                     >
                                         edit
@@ -280,9 +281,9 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                             </div>
                         </div>
                     )
-                })                
-            )} 
-            {isDelete && 
+                })
+            )}
+            {isDelete &&
                 (
                     <div className={styles.isDelete} >
                         <div className={styles.deleteTitle}>
@@ -296,19 +297,19 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                 )
             }
             {isOpen &&
-                <EditContainer 
-                    isOpen={isOpen} 
-                    setIsOpen={setIsOpen} 
-                    titleError={titleError} 
-                    title={title} 
-                    handleOnchange={handleOnchangeTitle} 
-                    questions={questions} 
+                <EditContainer
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    titleError={titleError}
+                    title={title}
+                    handleOnchange={handleOnchangeTitle}
+                    questions={questions}
                     setQuestion={setQuestion}
-                    editQuestions={editQuestions} 
-                    description={description} 
-                    handleOnchangeDescription={handleOnchangeDescription} 
-                    successMessage={successMessage} 
-                    handleOnchangeSuccessMessage={handleOnchangeSuccessMessage} 
+                    editQuestions={editQuestions}
+                    description={description}
+                    handleOnchangeDescription={handleOnchangeDescription}
+                    successMessage={successMessage}
+                    handleOnchangeSuccessMessage={handleOnchangeSuccessMessage}
                     editSurvey={editSurvey}
                     userEmail={userEmail}
                     editSurveyId={editSurveyId}

@@ -7,9 +7,10 @@ import Image from "next/image";
 import downloadIcon from "../../../styles/icons/icons8-download-64.png";
 import styles from "./SurveyList.module.css";
 import { CSVLink } from "react-csv";
+import { instancePagination } from "../../../pages/api/backend/pagination";
 
 
-const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
+const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink, pageNumber}): ReactElement => {
     const { data: session} = useSession();
     const [editSurveyId, setEditSurveyID] = useState<number | null>(null);
     const [userEmail, setUserEmail] = useState<string>("");
@@ -63,8 +64,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             setQuestion(questions.map((item) => {
                 if (item.id === question.id) {
                     item = {
-                        id: question.id, 
-                        question: e.target.value, 
+                        id: question.id,
+                        question: e.target.value,
                         survey_id: question.survey_id}
                 }
                 return item;
@@ -87,7 +88,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             title: title,
             description: description,
             successful_message: successMessage,
-            published: !isPublished, 
+            published: !isPublished,
             email: userEmail,
             questions: questions,
             questions_deleted: questionsDeleted,
@@ -97,8 +98,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             const editDataSurvey: IGetSurvey = await surveyApi.editSurvey(data, id);
             console.log(" editDataSurvey ", editDataSurvey);
             const getListSurveys = async() => {
-                const list = await surveyApi.getUserSurveys(session.user.email);
-                setUserSurveys(list);
+                const list = await instancePagination(pageNumber).get(`/survey/${session.user.email}`);
+                setUserSurveys(list.data.data);
             }
             getListSurveys();
         };
@@ -123,8 +124,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             setIsPublished(!item.published);
             if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
                 return {
-                    id: q.id, 
-                    question: q.question, 
+                    id: q.id,
+                    question: q.question,
                     survey_id: item.id,
                 }
             }));
@@ -168,10 +169,10 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                         </div>
                                     </td>
                                     <td>{survey.questions.length - 1}</td>
-                                    <td 
-                                        className={styles.linkRow} 
+                                    <td
+                                        className={styles.linkRow}
                                         onClick={() => copyLink(survey.uuid, survey.title, survey.published)}
-                                    >  
+                                    >
                                         <span className={styles.copyLinkTitle}>copy link</span>
                                         <span className={styles.copyLink}>
                                             {survey.published ? `${link}/survey/${survey.uuid}`:`${link}/survey/not_public/${survey.uuid}`}
@@ -193,8 +194,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                             edit
                                         </span>
                                     </td>
-                                    <td 
-                                        onMouseEnter={() => {getFileWithSurvey(survey.uuid)}} 
+                                    <td
+                                        onMouseEnter={() => {getFileWithSurvey(survey.uuid)}}
                                         onMouseLeave={() => {
                                             setUUID("");
                                             setFile(null);
@@ -206,8 +207,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                         </i>
                                         {
                                             survey.uuid  === uuid && file && (
-                                                <CSVLink 
-                                                    data={file} 
+                                                <CSVLink
+                                                    data={file}
                                                     filename={`${
                                                         "survey_report" +
                                                         "_" +
@@ -215,7 +216,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                                     }.csv`}
                                                     target="_blank"
                                                     className={styles.downLoadCSV}
-                                                    
+
                                                     >
                                                         ok
                                                 </CSVLink>
@@ -225,25 +226,25 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                 </tr>
                             )
                         })
-                    )} 
+                    )}
                 </tbody>
-            </table>  
+            </table>
             {
-                isOpen 
+                isOpen
                     &&
-                <EditContainer 
-                    isOpen={isOpen} 
-                    setIsOpen={setIsOpen} 
-                    titleError={titleError} 
-                    title={title} 
-                    handleOnchange={handleOnchange} 
+                <EditContainer
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    titleError={titleError}
+                    title={title}
+                    handleOnchange={handleOnchange}
                     questions={questions}
                     setQuestion={setQuestion}
-                    editQuestions={editQuestions} 
-                    description={description} 
-                    handleOnchangeDescription={handleOnchangeDescription} 
-                    successMessage={successMessage} 
-                    handleOnchangeSuccessMessage={handleOnchangeSuccessMessage} 
+                    editQuestions={editQuestions}
+                    description={description}
+                    handleOnchangeDescription={handleOnchangeDescription}
+                    successMessage={successMessage}
+                    handleOnchangeSuccessMessage={handleOnchangeSuccessMessage}
                     editSurvey={editSurvey}
                     userEmail={userEmail}
                     editSurveyId={editSurveyId}
@@ -254,7 +255,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                     isPublished={isPublished}
                     handleOnChangePublished={handleOnChangePublished}
                 />
-            }          
+            }
         </div>
 
     );

@@ -106,6 +106,7 @@ const ProfileSurveyLists = () => {
               copyLink={copyLink}
               isCopiedLink={isCopiedLink}
               link={link}
+              pageNumber={pageNumber}
             />
             </InfiniteScroll>
             :
@@ -122,6 +123,7 @@ const ProfileSurveyLists = () => {
               copyLink={copyLink}
               isCopiedLink={isCopiedLink}
               link={link}
+              pageNumber={pageNumber}
             />
             </InfiniteScroll>
         }
