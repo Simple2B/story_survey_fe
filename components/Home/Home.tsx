@@ -376,16 +376,19 @@ const Home = (): ReactElement => {
                                                 handleChangeAnswer={handleChangeAnswer}
                                                 // infoMessageForAnswer={infoMessageForAnswer}
                                             />
-                                            { <button className={`nextSwiper ${styles.nextSwiper}`} onClick={answerTheQuestion}>
+                                            <button
+                                                className={slide === survey.questions.length -1 && slide ? `nextSwiper ${styles.nextSwiper} ${styles.disabledNextBtn}` : `nextSwiper ${styles.nextSwiper}`}
+                                                onClick={answerTheQuestion}>
                                                     + answer
-                                               </button>}
+                                            </button>
+
                                         </div>
                                     </div>
                                 )
                             }
                             </InfiniteScroll>
                         </>
-
+                    ) : <div className={styles.loaderContainer}><Loader/> </div>
                 </Wrapper>
             }
             {/* {success && <Success survey={survey}/>} */}
