@@ -111,14 +111,29 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
         setEditSurveyID(id);
     };
 
+    const openEditSurvey = (item, index) => {
+        getEditSurvey(item.id, index)
+            setEditSurveyID(item.id);
+            setDescription(item.description);
+            setSuccessMessage(item.successful_message)
+            setQuestionDeleted([]);
+            setCreateQuestion([]);
+            setTitle(item.title);
+            setUserEmail(item.email);
+            setIsPublished(!item.published);
+            if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
+                return {
+                    id: q.id, 
+                    question: q.question, 
+                    survey_id: item.id,
+                }
+            }));
+    }
+
     const getFileWithSurvey = async (uuid: string) => {
         const fileFromDB =  await surveyApi.getFileSurvey(uuid);
         setFile(fileFromDB);
         setUUID(uuid);
-    };
-
-    if (file) {
-        console.log("file", file);
     };
 
     return  (
@@ -173,24 +188,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                     </td>
                                     <td className={styles.btnEditContainer}>
                                         <span className={styles.btnEdit}
-                                            onClick={() => {
-                                                getEditSurvey(survey.id, index)
-                                                setEditSurveyID(survey.id);
-                                                setDescription(survey.description);
-                                                setSuccessMessage(survey.successful_message)
-                                                setTitle(survey.title);
-                                                setQuestionDeleted([]);
-                                                setCreateQuestion([]);
-                                                setIsPublished(!survey.published)
-                                                setUserEmail(survey.email)
-                                                if (survey.questions.length > 0 )setQuestion(survey.questions.slice(0, survey.questions.length - 1).map((q) => {
-                                                    return {
-                                                        id: q.id, 
-                                                        question: q.question, 
-                                                        survey_id: q.survey_id,
-                                                    }
-                                                }));
-                                            }}
+                                            onClick={() => openEditSurvey(survey, index)}
                                         >
                                             edit
                                         </span>

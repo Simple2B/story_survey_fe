@@ -24,9 +24,6 @@ const UsersList = (): ReactElement => {
         push(`/user_profile/survey/users/user/${user_uuid}`);
     };
 
-    console.log("UsersList: users", users);
-    
-    
     return  (
         <div className={styles.container}>
             

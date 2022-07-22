@@ -88,26 +88,30 @@
 }
 
 .containerQuestionList {
+    position: relative;
     width: 100%;
     height: auto;
     display: inline-block;
 }
 
 .containerStep {
+    height: 40px;
     position: relative;
 }
 
 .hideContainerQuestion {
     visibility: hidden;
-    height: 40px;
+    width: 100%;
+    max-height: 70px;
     overflow: scroll;
     transition: all .5s ease-out;
-    position: relative;
+    position: absolute;
+    top: 0;
     z-index: 1000;
     background-color: white;
 }
 
-.containerQuestionList:hover .hideContainerQuestion {
+.containerStep:hover .hideContainerQuestion {
     visibility: visible;
 }
 
@@ -122,7 +126,7 @@
     transition: all .3s ease-out;
 }
 
-.containerQuestionList:hover .btnShowMore .up {
+.containerStep:hover .btnShowMore .up {
     transform: rotate(45deg);
 }
 
@@ -135,19 +139,27 @@
 
 .homeContent .box .indicator{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: flex-start;
     padding-bottom: 5px;
 }
 
+.indicatorIcon {
+    padding-bottom: 5px;
+    align-self: flex-start;
+}
+
 .homeContent .box .indicator i{
+    display: block;
     height: 10px;
     width: 10px;
     background: #8FDACB;
-    line-height: 20px;
+    /* line-height: 20px; */
     text-align: center;
     border-radius: 50%;
     color: #fff;
     font-size: 20px;
+    margin-top: 3px;
     margin-right: 5px;
 }
 
@@ -156,6 +168,14 @@
 }
   
 .homeContent .box .indicator .text{
+    align-self: flex-start;
+    /* padding: 2px 3px; */
+    font-size: 12px;
+    /* height: 25px; */
+}
+
+.textHidden {
+    align-self: flex-start;
     font-size: 12px;
 }
 
@@ -215,6 +235,12 @@
 .salesBoxes .box .title{
     font-size: 24px;
     font-weight: 500;
+}
+
+.titleSurvey {
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
 }
 
 .salesBoxes .salesDetails li.topic{
@@ -313,39 +339,6 @@
     color: var(--mainBlack)
 }
 
-.containerIconLink {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.iconLink {
-    width: 19px;
-    height: 19px;
-    margin-right: 7px;
-    cursor: pointer;
-}
-
-.linkCopied {
-    font-size: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: -20px;
-    left: 15px;
-    width: 42px;
-    height: 21px;
-    color: var(--offWhite);
-    background-color: var(--mainBlack);
-    border-radius: 5px;
-    border-bottom-left-radius: 0;
-}
-
-.hideContainerLink {
-    display: none;
-}
 
 .modalWindow {
     position: fixed;
@@ -381,23 +374,9 @@
     white-space: nowrap;
 }
 
-.titleShowMore {
-    font-size: 22px;
-    text-align: center;
-    padding: 5px;
-    margin-bottom: 10px;
-}
-
-.description {
-    text-align: justify;
-    text-indent: 25px;
-    height: 250px;
-    overflow-y: scroll;
-}
-
 .isSuccess {
     width: 100%;
-    height: 90vh;
+    /* height: 90vh; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -406,6 +385,7 @@
     top: 0;
     left: 0;
     right: 0;
+    z-index: 3003;
 }
 
 .isSuccess div {
@@ -414,15 +394,15 @@
     word-spacing: 5px;
     letter-spacing: 2px;
     font-weight: bold;
-    width: 70vw;
-    height: 200px;
+    width: 100%;
+    height: 60vh;
     display: flex;
     justify-content: center;
     align-items: center;
     border: var(--mainWhite) 1px solid;
-    box-shadow: -10px 0px 13px -7px var(--mainOpacity), 10px 0px 13px -7px var(--mainOpacity), 5px 5px 15px 5px var(--mainOpacity);
+    /* box-shadow: -10px 0px 13px -7px var(--mainOpacity), 10px 0px 13px -7px var(--mainOpacity), 5px 5px 15px 5px var(--mainOpacity); */
     border-radius: 10px;
-    background-color: var(--offWhite);
+    background-color: var(--mainWhite);
 }
 
 .containerQuestion {
@@ -450,7 +430,7 @@
     right: 0;
     padding: 10px;
     background-color: #8FDACB;
-    z-index: 9999;
+    /* z-index: 9999; */
     text-align: center;
 }
 
@@ -533,13 +513,24 @@
     position: absolute;
     right: 15px;
     top: 48%;
-    z-index: 10010;
+    z-index: 1000;
     color: var(--mainBlack);
     font-weight: bold;
 }
 
+.homeContent .overviewBoxes:last-child .modalWindow button{
+    color: transparent;
+}
+
 .disabledNextBtn {
-    color: var(--mainOpacity);
+    color: transparent;
+}
+
+.loaderContainer {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
   
   /* Responsive Media Query */

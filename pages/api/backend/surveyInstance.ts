@@ -26,14 +26,14 @@ export const surveyApi = {
       }
     },
     getSurveys: async (): Promise<IGetSurvey[]> => {
-      try {
+      // try {
           const response = await instance().get('/survey/surveys');
           const res = response.data;
           return res;
-      } catch (error: any) {
-          console.log(`POST: getSurveys error message => ${error.message}`);
-          throw error;
-      }
+      // } catch (error: any) {
+      //     console.log(`POST: getSurveys error message => ${error.message}`);
+      //     throw error;
+      // }
     },
     deleteSurvey: async (data: {email: string, survey_id: number}): Promise<void> => {
       try {
@@ -114,6 +114,19 @@ export const surveyApi = {
           return res;
       } catch (error: any) {
           console.log(`POST: getFileSurvey -> error message => ${error.message}`);
+          throw error;
+      }
+    },
+    getAnswerSessionOfSurvey: async (data: {
+      uuid: string,
+      session: string
+    }): Promise<any> => {
+      try {
+          const response = await instance().post('/survey/info_survey', data);
+          const res = response.data;
+          return res;
+      } catch (error: any) {
+          console.log(`POST: getAnswerSessionOfSurvey -> error message => ${error.message}`);
           throw error;
       }
     },
