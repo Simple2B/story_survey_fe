@@ -5,9 +5,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import styles from "../../Home/Home.module.css";
+import Success from '../Success/Success';
 
-const SwiperContainer = ({setSlide, survey, answers, handleChangeAnswer, infoMessageForAnswer}): ReactElement => {
-    console.log("SwiperContainer: infoMessageForAnswer ", infoMessageForAnswer)
+const SwiperContainer = ({setSlide, survey, answers, handleChangeAnswer}): ReactElement => {
     return (
         <Swiper
             pagination={{
@@ -26,31 +26,36 @@ const SwiperContainer = ({setSlide, survey, answers, handleChangeAnswer, infoMes
                         survey.questions.map((item, index) => {
                             return (
                                 <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
-                                    <div className={styles.questionBlock}>
-                                        <div key={index} className={styles.question}>{index+1}). {item.question}</div>
-                                        <div className={styles.answerContainer}>
-                                            <textarea 
-                                                placeholder="Put you answer" 
-                                                value={answers[index].answer} 
-                                                onChange={(e) => handleChangeAnswer(e, index)}
-                                                name={item.question} 
-                                                id={item.question} 
-                                                cols={30} 
-                                                rows={10}
-                                            >
-                                            </textarea>
+                                    {
+                                        index === (survey.questions.length - 1) ?
+                                        <Success survey={survey} styles={styles.isSuccess}/>
+                                        :
+                                        <div className={styles.questionBlock}>
+                                            <div key={index} className={styles.question}>{index+1}). {item.question}</div>
+                                            <div className={styles.answerContainer}>
+                                                <textarea 
+                                                    placeholder="Put you answer" 
+                                                    value={answers[index].answer} 
+                                                    onChange={(e) => handleChangeAnswer(e, index)}
+                                                    name={item.question} 
+                                                    id={item.question} 
+                                                    cols={30} 
+                                                    rows={10}
+                                                >
+                                                </textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    { 
+                                     }
+                                    {/* { 
                                         infoMessageForAnswer.message !== "" &&
                                         <div className={styles.containerMessageInfoForAnswer}>
                                             <div className={styles.messageInfoForAnswer}>
-                                                {/* {infoMessageForAnswer.message} */}
+                                                {infoMessageForAnswer.message}
                                                 You already answered the {index-1 !== -1 && survey.questions[index-1].question}
                                             </div>
                                         </div>
                                         
-                                    }
+                                    } */}
                                 </SwiperSlide>
                             )
                         })

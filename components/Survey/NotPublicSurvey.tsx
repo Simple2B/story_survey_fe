@@ -10,6 +10,9 @@ import { surveyApi } from "../../pages/api/backend/surveyInstance";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { useCheckAnswer } from "../Hooks/useCheckAnswer";
+import InfoMessage from "../common/InfoMessage/InfoMessage";
+import Success from "../UserProfile/Success/Success";
 
 
 
@@ -139,7 +142,6 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
         }[]) => {
             const questions = await surveyApi.answerTheQuestion(answersInfo);
             console.log("NotPublicQuestion: questionsFromDB ", questions);
-
             if (slide === survey.questions.length - 1){ 
               setSuccess(!success);
             };
@@ -147,13 +149,18 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
         saveQuestion(data);
     };
 
+    const isAnswer = useCheckAnswer(surveyUUID);
+    console.log("NotPublicSurvey: isAnswer ", isAnswer);
+
     return  (
         <Wrapper>
           <div className={styles.title}>
             {survey.title}
           </div>
-          <div className={styles.modal}>
-            {/* <div className={styles.description}>{survey.description}</div> */}
+          {isAnswer ? 
+            <InfoMessage children={"You are already answer the questions for this survey"} infoStyle={styles.infoMessage}/> 
+            :
+            <div className={styles.modal}>
                 <Swiper
                     pagination={{type: "custom"}}
                     onSlideChange={(swiper) => {setSlide(swiper.activeIndex)}}
@@ -166,6 +173,9 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
                           survey.questions.map((item, index) => {
                               return (
                                   <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
+                                    {  index === (survey.questions.length - 1) ?
+                                            <Success survey={survey} styles={styles.successMessage}/>
+                                            :
                                       <div className={styles.questionBlock}>
                                           <div key={index} className={styles.question}>{index+1}). {item.question}</div>
                                           <div className={styles.answerContainer}>
@@ -183,13 +193,12 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
                                               </textarea>
                                           </div>
                                       </div>
-                                      
+                                    }                                     
                                   </SwiperSlide>
                               )
                           })
                       )
                     }
-
                 </Swiper>
             <button 
               className={slide ===  survey.questions.length - 1  ? `nextSwiperSurvey ${styles.disabledNextBtn}`: `nextSwiperSurvey ${styles.nextSwiper}`} 
@@ -203,7 +212,9 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
                     {survey.successful_message.length > 0 && <div>{survey.successful_message}</div>}
                 </div>
               )}
-          </div>
+            </div>
+            }
+          
         </Wrapper>
     );
 };

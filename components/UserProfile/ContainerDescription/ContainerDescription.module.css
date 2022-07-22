@@ -77,3 +77,13 @@
     background-color: var(--mainBackground);
     border-color: transparent;
 }
+
+.infoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 15px;
+    background-color: #8FDACB;
+    border-radius: 5px;
+    cursor: pointer;
+}

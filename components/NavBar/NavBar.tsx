@@ -14,12 +14,10 @@ import { useMediaQuery } from 'react-responsive';
 const Navbar = (): ReactElement => {
     const [isOpen, setIsOpen] = useState(false);
     const handleToggle = () => setIsOpen(!isOpen);
-
     const { push, asPath } = useRouter();
     const { data: session } = useSession();
     const [user, setUser] =useState();
     const isLogin = useTypedSelector((state) => state.auth.loggedIn);
-
     const isMobile = useMediaQuery({minWidth: 768});
 
     if (!isMobile === false && isOpen === true) {
