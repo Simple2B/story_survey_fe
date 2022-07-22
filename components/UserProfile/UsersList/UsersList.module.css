@@ -56,10 +56,15 @@
 .status {
     position: absolute;
     top: 0;
-    left: -23px;
+    left: 0;
     font-size: 13px;
     font-style: italic;
     color: var(--primaryColor);
+    font-weight: bold;
+}
+
+.titleContent {
+  text-align: left;
 }
 
 
@@ -158,15 +163,17 @@
 
 .emailContainer {
     position: relative;
+    text-align: left;
 }
 
 .emailContainer .role {
     position: absolute;
     top: 0;
-    left: -23px;
+    left: 0;
     font-size: 13px;
     font-style: italic;
     color: var(--primaryColor);
+    font-weight: bold;
 }
 
 .btnOpenContainer {

@@ -65,7 +65,7 @@ const UsersList = (): ReactElement => {
               <thead>
                   <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Email</th>
+                  <th scope="col" style={{textAlign: 'left'}}>Email</th>
                   <th scope="col">Username</th>
                   <th scope="col">Subscription</th>
                   <th scope="col">Survey</th>

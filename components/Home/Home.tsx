@@ -388,7 +388,7 @@ const Home = (): ReactElement => {
                             }
                             </InfiniteScroll>
                         </>
-                    ) : <div className={styles.loaderContainer}><Loader/> </div>
+                    ) : <div className={styles.loaderContainer}>{userSurveys.length !== allServeyListLength && <Loader/>} </div>
                 </Wrapper>
             }
             {/* {success && <Success survey={survey}/>} */}

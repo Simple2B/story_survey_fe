@@ -92,7 +92,7 @@ const UserList = (): ReactElement => {
           <i className={`${styles.arrow} ${styles.left}`}/>
         </div>
 
-        <table className="table table-hover test 1" id="userList">
+        <table className="table table-hover" id="userList">
           <thead>
             <tr>
               <th scope="col">#</th>

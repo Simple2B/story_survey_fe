@@ -143,6 +143,14 @@
     cursor: pointer;
 }
 
+.description {
+  width: 500px;
+}
+
+.titleContent {
+  text-align: left;
+}
+
 .description .descriptionContent, .rowTitle .titleContent{
     padding-bottom: 5px;
     overflow: auto;
@@ -637,8 +645,8 @@
 
 .linkRow .linkCopiedContainer {
     position: absolute;
-    top: 20px;
-    right: 95%;
+    top: 10px;
+    right: 70%;
 }
 
 .linkRow .linkCopied {
@@ -667,7 +675,7 @@
 }
 
 .btnEdit {
-    position: absolute;
+    /* position: absolute; */
     top: 45%;
     cursor: pointer;
     padding: 3px 10px;

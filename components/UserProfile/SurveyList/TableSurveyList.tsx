@@ -157,7 +157,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                     <th scope="col">Description</th>
                     <th scope="col">Question</th>
                     <th scope="col">Link</th>
-                    <th scope="col">Correct survey</th>
+                    <th scope="col" style={{textAlign: 'center'}}>Correct survey</th>
                     <th scope="col">File</th>
                     </tr>
                 </thead>
