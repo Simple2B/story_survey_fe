@@ -117,4 +117,17 @@ export const surveyApi = {
           throw error;
       }
     },
+    getAnswerSessionOfSurvey: async (data: {
+      uuid: string,
+      session: string
+    }): Promise<any> => {
+      try {
+          const response = await instance().post('/survey/info_survey', data);
+          const res = response.data;
+          return res;
+      } catch (error: any) {
+          console.log(`POST: getAnswerSessionOfSurvey -> error message => ${error.message}`);
+          throw error;
+      }
+    },
 }
