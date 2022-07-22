@@ -16,12 +16,15 @@ import { surveyApi } from "../../pages/api/backend/surveyInstance";
 import { useCheckAnswer } from "../Hooks/useCheckAnswer";
 import InfoMessage from "../common/InfoMessage/InfoMessage";
 import Success from "../UserProfile/Success/Success";
+import { useSession } from "next-auth/react";
+import Loader from "../common/Loader/Loader";
 
 
 const Survey = ({surveyUUID}): ReactElement => {
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
     const {push} = useRouter();
+    const {data: session, status} = useSession();
     const [answers, setAnswers] = useState([{
       question: "",
       is_answer: false,
@@ -150,80 +153,89 @@ const Survey = ({surveyUUID}): ReactElement => {
   };
 
   const isAnswer = useCheckAnswer(surveyUUID);
-  console.log("Survey: isAnswer ", isAnswer);
+
+  console.log("Survey: status ", status);
+  
   return  (
-      <Wrapper>
-        <div className={styles.title}>{survey.title}</div>
-        { isAnswer ? 
-            <InfoMessage children={"You are already answer the questions for this survey"} infoStyle={styles.infoMessage}/> 
-            :
-            <div className={styles.modal}>
-                  <Swiper
-                      pagination={{
-                      type: "custom",
-                      }}
-                      onSlideChange={(swiper) => {
-                        setSlide(swiper.activeIndex);
+    <>
+      {
+          status === "loading" ? <div className={styles.loaderContainer}><Loader style={styles.loaderColor}/></div> : 
+            <Wrapper>
+                  <div className={styles.title}>{survey.title}</div>
+              
+                  { isAnswer ? 
+                      <InfoMessage children={"You are already answer the questions for this survey"} infoStyle={styles.infoMessage}/> 
+                      :
+                      <div className={styles.modal}>
+                            <Swiper
+                                pagination={{
+                                type: "custom",
+                                }}
+                                onSlideChange={(swiper) => {
+                                  setSlide(swiper.activeIndex);
 
-                      }
-                    }
-                    navigation={{
-                      prevEl: '.prev',
-                      nextEl: '.nextSwiperSurvey',
-                    }}
-                      modules={[Pagination, Navigation]}
-                      className={styles.containerQuestion}
-                  >
-                          {
-                              survey.questions.length > 0 && (
-                                  survey.questions.map((item, index) => {
-                                          
-                                          return (
-                                              <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
-                                                {
-                                                  index === (survey.questions.length - 1) ?
-                                                  <Success survey={survey} styles={styles.successMessage}/>
-                                                  :
-                                                  <div className={styles.questionBlock}>
-                                                      <div key={index} className={styles.question}>{index+1}). {item.question}</div>
-                                                      <div className={styles.answerContainer}>
-                                                          <textarea 
-                                                            placeholder="Put you answer" 
-                                                            value={answers[index].answer} 
-                                                            onChange={(e) => handleChangeAnswer(e, index)} 
-                                                            name={item.question} 
-                                                            id={item.question} 
-                                                            cols={30} 
-                                                            rows={10}
-                                                            className={styles.textareaInput}
-                                                          >
-                                                                  {/* {answer}  */}
-                                                          </textarea>
-                                                      </div>
-                                                  </div>
-                                                }
-                                              </SwiperSlide>
-                                          )
-                                  })
-                              )
-                          }
+                                }
+                              }
+                              navigation={{
+                                prevEl: '.prev',
+                                nextEl: '.nextSwiperSurvey',
+                              }}
+                                modules={[Pagination, Navigation]}
+                                className={styles.containerQuestion}
+                            >
+                                    {   
+                                        survey.questions.length > 0 && (
+                                            survey.questions.map((item, index) => {
+                                                    const questionLength = survey.questions.length - 1;
+                                                    const isSuccess = index === questionLength;
+                                                    return (
+                                                        <SwiperSlide key={index} onClick={() => console.log("SwiperSlide") }>
+                                                          {
+                                                            isSuccess ?
+                                                            <Success survey={survey} styles={styles.successMessage}/>
+                                                            :
+                                                            <div className={styles.questionBlock}>
+                                                                <div key={index} className={styles.question}>{index+1}). {item.question}</div>
+                                                                <div className={styles.answerContainer}>
+                                                                    <textarea 
+                                                                      placeholder="Put you answer" 
+                                                                      value={answers[index].answer} 
+                                                                      onChange={(e) => handleChangeAnswer(e, index)} 
+                                                                      name={item.question} 
+                                                                      id={item.question} 
+                                                                      cols={30} 
+                                                                      rows={10}
+                                                                      className={styles.textareaInput}
+                                                                    >
+                                                                            {/* {answer}  */}
+                                                                    </textarea>
+                                                                </div>
+                                                            </div>
+                                                          }
+                                                        </SwiperSlide>
+                                                    )
+                                            })
+                                        )
+                                    }
 
-                  </Swiper>
-              <button 
-                className={slide ===  survey.questions.length - 1  ? `nextSwiperSurvey ${styles.disabledNextBtn}`: `nextSwiperSurvey ${styles.nextSwiper}`} 
-                onClick={answerTheQuestion}
-                >
-                  + answer
-              </button>
-                {success && (
-                        <div className={styles.isSuccess}>
-                            {survey.successful_message.length === 0 && <div>answers added successfully</div>}
-                            {survey.successful_message.length > 0 && <div>{survey.successful_message}</div>}
-                        </div>
-                )}
-            </div>
-        }
-      </Wrapper>
+                            </Swiper>
+                        <button 
+                          className={slide ===  survey.questions.length - 1  ? `nextSwiperSurvey ${styles.disabledNextBtn}`: `nextSwiperSurvey ${styles.nextSwiper}`} 
+                          onClick={answerTheQuestion}
+                          >
+                            + answer
+                        </button>
+                          {success && (
+                                  <div className={styles.isSuccess}>
+                                      {survey.successful_message.length === 0 && <div>answers added successfully</div>}
+                                      {survey.successful_message.length > 0 && <div>{survey.successful_message}</div>}
+                                  </div>
+                          )}
+                      </div>
+                  }
+          </Wrapper>
+          }
+    </>
   );
 };
 

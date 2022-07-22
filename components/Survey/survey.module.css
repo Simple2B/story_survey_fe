@@ -17,6 +17,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    color: var(--primaryColor)
+}
+
+.loaderContainer {
+    width: 100vw;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+}
+
+.loaderColor {
+    margin: 0 auto;
+    align-self: center;
+    color: var(--mainBackground);
 }
   
 .title {

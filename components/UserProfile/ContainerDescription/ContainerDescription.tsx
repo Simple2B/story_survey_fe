@@ -1,9 +1,7 @@
-import React, { ReactElement, useMemo, useState } from 'react';
-
+import React, { ReactElement } from 'react';
 import Image from "next/image";
 import styles from "./ContainerDescription.module.css";
 import deleteIcon from "../../../styles/icons/icons8-cancel-64.png";
-import { surveyApi } from '../../../pages/api/backend/surveyInstance';
 import { useCheckAnswer } from '../../Hooks/useCheckAnswer';
 import InfoMessage from '../../common/InfoMessage/InfoMessage';
 
