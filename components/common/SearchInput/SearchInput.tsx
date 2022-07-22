@@ -16,9 +16,6 @@ const SearchInput = ({querySearch, setSearchQuery}): ReactElement => {
                             setSearchQuery(e.target.value);
                         }}
                         />
-                    {/* <button type="submit" className={styles.searchButton}>
-                        <i className="fa fa-search"></i>
-                    </button> */}
                 </div>
             </div>
         </div>
