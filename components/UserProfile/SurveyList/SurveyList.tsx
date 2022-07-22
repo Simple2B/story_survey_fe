@@ -10,6 +10,7 @@ import { ADMIN, CLIENT } from "../../../redux/types/userTypes";
 import QuestionUserList from "./QuestionsUserList";
 import ContainerCopyLink from "../ContainerCopyLink/ContainerCopyLink";
 import { instancePagination } from "../../../pages/api/backend/pagination";
+import SearchInput from "../../common/SearchInput/SearchInput";
 
 
 const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink, pageNumber}): ReactElement => {

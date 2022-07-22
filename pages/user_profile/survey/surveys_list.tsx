@@ -2,6 +2,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import SearchInput from "../../../components/common/SearchInput/SearchInput";
 import ToggleSwitch from "../../../components/common/ToggleSwitchBtn/ToggleSwitchBtn";
 import SurveyList from "../../../components/UserProfile/SurveyList/SurveyList";
 import TableSurveyList from "../../../components/UserProfile/SurveyList/TableSurveyList";
@@ -90,62 +91,56 @@ const ProfileSurveyLists = () => {
   return (
     <User title={'Survey List'} keywords={""} style={""} headerName={'Survey List'}>
       <div className="surveyListContainer">
-          <div className="">
-            <input
-            placeholder="Search..."
-            value={querySearch}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-            }}
+        <div className="surveyContainers">
+            <SearchInput querySearch={querySearch} setSearchQuery={setSearchQuery}/>
+            <ToggleSwitch
+                checked={ checked }
+                onChange={ handleChangeChecked }
+                id={"SurveyList"}
             />
-          </div>
-        <ToggleSwitch
-          checked={ checked }
-          onChange={ handleChangeChecked }
-          id={"SurveyList"}
-        />
+        </div>
         {
           !checked ?
-          <InfiniteScroll
-          dataLength={userSurveys.length}
-          next={getMoreCards}
-          hasMore={endMessage}
-          loader={
-            userSurveys.length > defaultQuantityItems
-            ? <h3 className="paginationMessage"> Loading...</h3>
-            : ''
-          }
-          endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
-        >
-            <SurveyList
-              userSurveys={userSurveys}
-              setUserSurveys={setUserSurveys}
-              copyLink={copyLink}
-              isCopiedLink={isCopiedLink}
-              link={link}
-              pageNumber={pageNumber}
-            />
+            <InfiniteScroll
+                dataLength={userSurveys.length}
+                next={getMoreCards}
+                hasMore={endMessage}
+                loader={
+                  userSurveys.length > defaultQuantityItems
+                  ? <h3 className="paginationMessage"> Loading...</h3>
+                  : ''
+                }
+                endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
+            >
+                <SurveyList
+                    userSurveys={userSurveys}
+                    setUserSurveys={setUserSurveys}
+                    copyLink={copyLink}
+                    isCopiedLink={isCopiedLink}
+                    link={link}
+                    pageNumber={pageNumber}
+                />
             </InfiniteScroll>
             :
             <InfiniteScroll
-            dataLength={userSurveys.length}
-            next={getMoreCards}
-            hasMore={endMessage}
-            loader={
-              userSurveys.length > defaultQuantityItems
-              ? <h3 className="paginationMessage"> Loading...</h3>
-              : ''
-            }
-            endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
-          >
-            <TableSurveyList
-              userSurveys={userSurveys}
-              setUserSurveys={setUserSurveys}
-              copyLink={copyLink}
-              isCopiedLink={isCopiedLink}
-              link={link}
-              pageNumber={pageNumber}
-            />
+                  dataLength={userSurveys.length}
+                  next={getMoreCards}
+                  hasMore={endMessage}
+                  loader={
+                    userSurveys.length > defaultQuantityItems
+                    ? <h3 className="paginationMessage"> Loading...</h3>
+                    : ''
+                  }
+                  endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
+            >
+                <TableSurveyList
+                  userSurveys={userSurveys}
+                  setUserSurveys={setUserSurveys}
+                  copyLink={copyLink}
+                  isCopiedLink={isCopiedLink}
+                  link={link}
+                  pageNumber={pageNumber}
+                />
             </InfiniteScroll>
         }
       </div>

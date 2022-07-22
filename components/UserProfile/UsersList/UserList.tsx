@@ -11,6 +11,7 @@ import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { IGetSurvey, ISurveyInfo } from "../../../redux/types/surveyTypes";
 import handler from "../../../pages/api/keys";
 import { instancePagination } from "../../../pages/api/backend/pagination";
+import SearchInput from "../../common/SearchInput/SearchInput";
 
 // The number of items that are shown when the page opens (before scrolling and loading more)
 const defaultQuantityItems = 24
@@ -79,84 +80,72 @@ const UserList = (): ReactElement => {
 
   return  (
     <div className={styles.container}>
-          <div className="">
-            <input
-            placeholder="Search..."
-            value={querySearch}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-            }}
-            />
-          </div>
-      <InfiniteScroll
-        dataLength={userSurveys.length}
-        next={getMoreCards}
-        hasMore={endMessage}
-        loader={
-          userSurveys.length > defaultQuantityItems
-          ? <h3 className="paginationMessage"> Loading...</h3>
-          : ''
-        }
-        endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
-      >
+        <SearchInput querySearch={querySearch} setSearchQuery={setSearchQuery}/>
+        <InfiniteScroll dataLength={userSurveys.length} next={getMoreCards} hasMore={endMessage}
+              loader={
+                userSurveys.length > defaultQuantityItems
+                ? <h3 className="paginationMessage"> Loading...</h3>
+                : ''
+              }
+              endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
+        >
         <div className={styles.backBtn} onClick={handlerClickBack} title="go back">
-          <i className={`${styles.arrow} ${styles.left}`}/>
+            <i className={`${styles.arrow} ${styles.left}`}/>
         </div>
-
         <table className="table table-hover" id="userList">
           <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Create</th>
-              <th scope="col">Questions</th>
-              <th scope="col">Info</th>
-            </tr>
+              <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Create</th>
+                  <th scope="col">Questions</th>
+                  <th scope="col">Info</th>
+              </tr>
           </thead>
-            <tbody>
-                {userSurveys && userSurveys.length > 0 && (
-                      userSurveys.map((survey, index) => {
-                        return (
-                              <tr
-                                  key={index}
+          <tbody>
+              {userSurveys && userSurveys.length > 0 && (
+                    userSurveys.map((survey, index) => {
+                      return (
+                            <tr
+                                key={index}
 
-                                  className={styles.tableRow}
-                              >
-                                  <th scope="row">{index+1}</th>
-                                  <td className={`${styles.rowTitle} ${styles.commonRowStyle}`}>
-                                      <div className={styles.status}>{survey.published ? "" : "private"}</div>
-                                      <div className={styles.titleContent}>
-                                          {survey.title}
-                                      </div>
-                                  </td>
-                                  <td className={`${styles.description} ${styles.commonRowStyle}`}>
-                                      <div className={styles.descriptionContent}>
-                                          {survey.description}
-                                      </div>
-                                  </td>
-                                  <td className={styles.commonRowStyle}>{survey.created_at}</td>
-                                  <td className={styles.commonRowStyle}>{survey.questions.length}</td>
-                                  <td className={`${styles.btnOpenContainer} ${styles.commonRowStyle}`}>
-                                      <span className={styles.btnOpen}
-                                          onClick={() => {
-                                              setIsOpen(!isOpen);
-                                              const surveyId = userSurveys[index].id;
-                                              const getInfoSurvey = async() => {
-                                                  const infoSurvey = await surveyApi.getInfoSurvey(surveyId);
-                                                  setSurvey(infoSurvey);
-                                              };
-                                              getInfoSurvey();
-                                          }}
-                                      >
-                                          open
-                                      </span>
-                                  </td>
-                              </tr>
-                          )
-                      })
-                    )}
-            </tbody>
+                                className={styles.tableRow}
+                            >
+                                <th scope="row">{index+1}</th>
+                                <td className={`${styles.rowTitle} ${styles.commonRowStyle}`}>
+                                    <div className={styles.status}>{survey.published ? "" : "private"}</div>
+                                    <div className={styles.titleContent}>
+                                        {survey.title}
+                                    </div>
+                                </td>
+                                <td className={`${styles.description} ${styles.commonRowStyle}`}>
+                                    <div className={styles.descriptionContent}>
+                                        {survey.description}
+                                    </div>
+                                </td>
+                                <td className={styles.commonRowStyle}>{survey.created_at}</td>
+                                <td className={styles.commonRowStyle}>{survey.questions.length}</td>
+                                <td className={`${styles.btnOpenContainer} ${styles.commonRowStyle}`}>
+                                    <span className={styles.btnOpen}
+                                        onClick={() => {
+                                            setIsOpen(!isOpen);
+                                            const surveyId = userSurveys[index].id;
+                                            const getInfoSurvey = async() => {
+                                                const infoSurvey = await surveyApi.getInfoSurvey(surveyId);
+                                                setSurvey(infoSurvey);
+                                            };
+                                            getInfoSurvey();
+                                        }}
+                                    >
+                                        open
+                                    </span>
+                                </td>
+                            </tr>
+                        )
+                    })
+                  )}
+          </tbody>
         </table>
           {isOpen && (
           <div className={styles.modalWindow}>
@@ -203,7 +192,7 @@ const UserList = (): ReactElement => {
               </div>
           </div>
           )}
-          </InfiniteScroll>
+      </InfiniteScroll>
     </div>
   );
 };

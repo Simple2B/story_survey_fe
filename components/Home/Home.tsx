@@ -23,21 +23,18 @@ import SwiperContainer from "../UserProfile/SwiperContainer/SwiperContainer";
 import ContainerDescription from "../UserProfile/ContainerDescription/ContainerDescription";
 import ContainerCopyLink from "../UserProfile/ContainerCopyLink/ContainerCopyLink";
 import QuestionList from "./QuestionList";
-import { useCheckAnswer } from "../Hooks/useCheckAnswer";
-import Success from "../UserProfile/Success/Success";
-
-interface IMessageInfo {
-  message: string,
-  question_id: number
-}
-
-
+import SearchInput from "../common/SearchInput/SearchInput";
 
 // TODO: create link for prod
 const link = 'https://survey.simple2b.net';
 
 // The number of items that are shown when the page opens (before scrolling and loading more)
 const defaultQuantityItems = 30
+
+interface IMessageInfo {
+    message: string,
+    question_id: number
+}
 
 const Home = (): ReactElement => {
     const {data: session } = useSession();
@@ -90,32 +87,32 @@ const Home = (): ReactElement => {
 
     const [pageNumber, setPageNumber] = useState<number>(defaultQuantityItems);
     const [endMessage, setEndMessage] = useState(true)
-    const [allServeyListLength, setAllServeyListLength] = useState(0)
+    const [allSurveyListLength, setAllSurveyListLength] = useState(0)
     const [querySearch, setSearchQuery] = useState<string>("");
     console.log('SEARCH', querySearch);
 
-  const getMoreCards = () => {
-    console.log(userSurveys.length);
+    const getMoreCards = () => {
+        console.log(userSurveys.length);
 
-    if (userSurveys.length >= allServeyListLength && userSurveys.length > defaultQuantityItems) {
-      setEndMessage(false);
+        if (userSurveys.length >= allSurveyListLength && userSurveys.length > defaultQuantityItems) {
+        setEndMessage(false);
+        }
+
+        setPageNumber((prev) => prev + 10);
     }
 
-    setPageNumber((prev) => prev + 10);
-  }
-
-      const [getListSurveysAll, isLoading, error] = useFetching( async () => {
+    const [getListSurveysAll, isLoading, error] = useFetching( async () => {
         const response = await instancePagination(pageNumber, querySearch).get('/survey/surveys');
         console.log(
           '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: white; font-weight: 700', response.data
           );
 
         setUserSurveys(response.data.data);
-        setAllServeyListLength(response.data.data_length)
+        setAllSurveyListLength(response.data.data_length)
     });
 
     useEffect(() => {
-      getListSurveysAll()
+        getListSurveysAll()
         if (session) {
             const profile: any = session.profile;
             setIsPublic((profile.role === ADMIN || profile.role === CLIENT));
@@ -285,11 +282,10 @@ const Home = (): ReactElement => {
         setIsOpen(!isOpen);
     };
 
-    console.log(" userSurveys ", userSurveys);
     return (
         <div className={styles.wrapper}>
             {
-                userSurveys.length === 0 &&
+                userSurveys.length === 0 && querySearch === "*" &&
                 <Wrapper>
                     <Banner title="Story Survey" subtitle="">
                         <CustomLink
@@ -302,116 +298,105 @@ const Home = (): ReactElement => {
             }
             {
                 <Wrapper>
-          <div className={styles.searchBox}>
-              <input
-              type={styles.text}
-              placeholder="Search..."
-              value={querySearch}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-              }}
-              />
-              <i className={`${styles.bx} ${styles.bxSearch} bx bx-search`}/>
-          </div>
-                        <>
-                          <InfiniteScroll
-                              className={styles.homeContent}
-                              dataLength={userSurveys.length}
-                              next={getMoreCards}
-                              hasMore={endMessage}
-                              loader={userSurveys.length > defaultQuantityItems
-                                ? <h3 className="paginationMessage"> Loading...</h3>
-                                : ''
-                              }
-                              endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
-                            >
-                            {  (
-                                <div className={styles.homeContent}>
-                                    {(
-                                    userSurveys.map((item, index) => {
-                                        const uuid = item.uuid;
+                    <SearchInput querySearch={querySearch} setSearchQuery={setSearchQuery}/>
+                    <InfiniteScroll
+                            className={styles.homeContent}
+                            dataLength={userSurveys.length}
+                            next={getMoreCards}
+                            hasMore={endMessage}
+                            loader={userSurveys.length > defaultQuantityItems
+                            ? <h3 className="paginationMessage"> Loading...</h3>
+                            : ''
+                            }
+                            endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
+                        >
+                        {  (
+                            <div className={styles.homeContent}>
+                                {(
+                                userSurveys.map((item, index) => {
+                                    const uuid = item.uuid;
 
-                                        return (
-                                            <div className={styles.overviewBoxes} key={index}>
-                                                <div className={styles.box}>
-                                                    <div className={styles.rightSide}>
-                                                            <div className={styles.titleCard}>
-                                                                <div className={styles.titlePublic}>
-                                                                    {!item.published? "private": ""}
-                                                                </div>
-                                                                <div className={styles.title}>
-                                                                    {/* {isAnswer &&
-                                                                        <i>
-                                                                            <Image src={successIcon} height={30} width={30}/>
-                                                                        </i>
-                                                                    } */}
-                                                                    {item.title}
-                                                                </div>
+                                    return (
+                                        <div className={styles.overviewBoxes} key={index}>
+                                            <div className={styles.box}>
+                                                <div className={styles.rightSide}>
+                                                        <div className={styles.titleCard}>
+                                                            <div className={styles.titlePublic}>
+                                                                {!item.published? "private": ""}
                                                             </div>
-                                                            <QuestionList questions={item.questions}/>
-                                                    </div>
-                                                    <div className={styles.containerLink}>
-                                                        <ContainerCopyLink
-                                                            isCopiedLink={isCopiedLink}
-                                                            copyLink={copyLink}
-                                                            isPublic={isPublic}
-                                                            uuid={uuid}
-                                                            title={item.title}
-                                                            published={item.published}
-                                                        />
-                                                        <div
-                                                            className={`${styles.link} card-link`}
-                                                            onClick={() => showMore(item, index)}
-                                                            >
-                                                                show more
+                                                            <div className={styles.title}>
+                                                                {/* {isAnswer &&
+                                                                    <i>
+                                                                        <Image src={successIcon} height={30} width={30}/>
+                                                                    </i>
+                                                                } */}
+                                                                {item.title}
+                                                            </div>
                                                         </div>
+                                                        <QuestionList questions={item.questions}/>
+                                                </div>
+                                                <div className={styles.containerLink}>
+                                                    <ContainerCopyLink
+                                                        isCopiedLink={isCopiedLink}
+                                                        copyLink={copyLink}
+                                                        isPublic={isPublic}
+                                                        uuid={uuid}
+                                                        title={item.title}
+                                                        published={item.published}
+                                                    />
+                                                    <div
+                                                        className={`${styles.link} card-link`}
+                                                        onClick={() => showMore(item, index)}
+                                                        >
+                                                            show more
                                                     </div>
                                                 </div>
                                             </div>
-                                        )
-                                    })
-                                    )}
-                                </div>
-                                )
-                            }
-                            {
-                                isOpenDescription &&
-                                <ContainerDescription
-                                    setOpenDescription={setOpenDescription}
-                                    isOpenDescription={isOpenDescription}
-                                    survey={survey}
-                                    openQuestion={openQuestion}
-                                />
-                            }
-                            { isOpen &&
-                                (
-                                    <div className={styles.modalWindow}>
-                                        <div className={styles.modal}>
-                                            <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}><Image src={deleteIcon} height={30} width={30}/></i>
-                                            <div className={styles.title}>{survey.title}</div>
-                                            <SwiperContainer
-                                                setSlide={setSlide}
-                                                survey={survey}
-                                                answers={answers}
-                                                handleChangeAnswer={handleChangeAnswer}
-                                                // infoMessageForAnswer={infoMessageForAnswer}
-                                            />
-                                            <button
-                                                className={`nextSwiper ${styles.nextSwiper}`}
-                                                onClick={answerTheQuestion}>
-                                                    + answer
-                                            </button>
-
                                         </div>
+                                    )
+                                })
+                                )}
+                            </div>
+                            )
+                        }
+                        {
+                            isOpenDescription &&
+                            <ContainerDescription
+                                setOpenDescription={setOpenDescription}
+                                isOpenDescription={isOpenDescription}
+                                survey={survey}
+                                openQuestion={openQuestion}
+                            />
+                        }
+                        { isOpen &&
+                            (
+                                <div className={styles.modalWindow}>
+                                    <div className={styles.modal}>
+                                        <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}><Image src={deleteIcon} height={30} width={30}/></i>
+                                        <div className={styles.title}>{survey.title}</div>
+                                        <SwiperContainer
+                                            setSlide={setSlide}
+                                            survey={survey}
+                                            answers={answers}
+                                            handleChangeAnswer={handleChangeAnswer}
+                                            // infoMessageForAnswer={infoMessageForAnswer}
+                                        />
+                                        <button
+                                            className={`nextSwiper ${styles.nextSwiper}`}
+                                            onClick={answerTheQuestion}>
+                                                + answer
+                                        </button>
+
                                     </div>
-                                )
-                            }
-                            </InfiniteScroll>
-                        </>
-                    ) : <div className={styles.loaderContainer}>{userSurveys.length !== allServeyListLength && <Loader/>} </div>
+                                </div>
+                            )
+                        }
+                    </InfiniteScroll>
+                    <div className={styles.loaderContainer}>
+                        {userSurveys.length !== allSurveyListLength && <Loader/>} 
+                    </div>
                 </Wrapper>
             }
-            {/* {success && <Success survey={survey}/>} */}
         </div>
     )
 }

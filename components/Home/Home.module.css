@@ -5,6 +5,7 @@
 }
 
 .homeContent{
+    width: 99%;
     cursor: pointer;
     align-self: flex-start;
     position: relative;
@@ -531,6 +532,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.loaderContainer input{ 
+    width: 70%;
+}
+
+/* search input */
+.searchBox  {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin-bottom: 20px;
 }
 
   /* Responsive Media Query */
