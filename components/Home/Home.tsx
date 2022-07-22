@@ -131,6 +131,7 @@ const Home = (): ReactElement => {
         setOpenDescription(!isOpenDescription);
         setSurvey(data);
         setIndexSurvey(index);
+        setSlide(index);
 
         // set session_id for answer
         if (Cookies.get('session_id') === undefined && sessionId === undefined) {
@@ -373,7 +374,7 @@ const Home = (): ReactElement => {
                                             // infoMessageForAnswer={infoMessageForAnswer}
                                         />
                                         <button
-                                            className={`nextSwiper ${styles.nextSwiper}`}
+                                            className={survey.questions.length - 1 === slide  ? `nextSwiper ${styles.disabledNextBtn}` : `nextSwiper ${styles.nextSwiper}`}
                                             onClick={answerTheQuestion}>
                                                 + answer
                                         </button>
