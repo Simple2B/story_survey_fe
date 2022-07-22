@@ -193,7 +193,6 @@ const Home = (): ReactElement => {
 
             if (slide === survey.questions.length - 1){ 
                 setSuccess(!success);
-                setSlide(null);
                 setTimeout(() => {
                     setIsOpen(!isOpen);
                 }, 2000);
@@ -363,7 +362,7 @@ const Home = (): ReactElement => {
                                                 // infoMessageForAnswer={infoMessageForAnswer}
                                             />
                                             <button 
-                                                className={slide === survey.questions.length -1 && slide ? `nextSwiper ${styles.nextSwiper} ${styles.disabledNextBtn}` : `nextSwiper ${styles.nextSwiper}`} 
+                                                className={`nextSwiper ${styles.nextSwiper}`} 
                                                 onClick={answerTheQuestion}>
                                                     + answer
                                             </button>
