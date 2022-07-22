@@ -272,6 +272,9 @@ const Home = (): ReactElement => {
         setOpenDescription(!isOpenDescription);
         setIsOpen(!isOpen);
     };
+
+    console.log(" userSurveys ", userSurveys);
+    
     
     return (
         <div className={styles.wrapper}>
@@ -355,7 +358,7 @@ const Home = (): ReactElement => {
                                                 survey={survey} 
                                                 answers={answers} 
                                                 handleChangeAnswer={handleChangeAnswer} 
-                                                infoMessageForAnswer={infoMessageForAnswer}
+                                                // infoMessageForAnswer={infoMessageForAnswer}
                                             />
                                             { <button className={`nextSwiper ${styles.nextSwiper}`} onClick={answerTheQuestion}>
                                                     + answer
