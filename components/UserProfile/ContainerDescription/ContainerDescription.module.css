@@ -5,6 +5,7 @@
     width: 100vw;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: var(--mainOpacity);
@@ -79,6 +80,12 @@
 }
 
 .infoContainer {
+    position: fixed;
+    top: 20%;
+    left: 0;
+    right: 0;
+    width: 70vw;
+    text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,4 +94,5 @@
     border-radius: 5px;
     cursor: pointer;
     margin: 30px auto;
+    z-index: 1000;
 }

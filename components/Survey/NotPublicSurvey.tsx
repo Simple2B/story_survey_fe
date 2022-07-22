@@ -206,18 +206,12 @@ const NotPublicSurvey = ({surveyUUID}): ReactElement => {
                                 )
                                 }
                             </Swiper>
-                        <button 
-                        className={slide ===  survey.questions.length - 1  ? `nextSwiperSurvey ${styles.disabledNextBtn}`: `nextSwiperSurvey ${styles.nextSwiper}`} 
-                        onClick={answerTheQuestion}
-                        >
-                            + answer
-                        </button>
-                        {success && (
-                            <div className={styles.isSuccess}>
-                                {survey.successful_message.length === 0 && <div>answers added successfully</div>}
-                                {survey.successful_message.length > 0 && <div>{survey.successful_message}</div>}
-                            </div>
-                        )}
+                            <button 
+                            className={slide ===  survey.questions.length - 1  ? `nextSwiperSurvey ${styles.disabledNextBtn}`: `nextSwiperSurvey ${styles.nextSwiper}`} 
+                            onClick={answerTheQuestion}
+                            >
+                                + answer
+                            </button>
                         </div>
                         }
                     

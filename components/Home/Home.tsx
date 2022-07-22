@@ -11,6 +11,7 @@ import Image from "next/image";
 import { surveyApi } from "../../pages/api/backend/surveyInstance";
 import { IGetSurvey, ISurveyInfo } from "../../redux/types/surveyTypes";
 import deleteIcon from "../../styles/icons/icons8-cancel-64.png";
+import successIcon from "../../styles/icons/icons8-ok-64.png";
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'js-cookie';
 import "swiper/css";
@@ -18,17 +19,20 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { instancePagination } from "../../pages/api/backend/pagination";
 import { useFetching } from "../Hooks/useFetching";
+import Loader from "../common/Loader/Loader";
+import SwiperContainer from "../UserProfile/SwiperContainer/SwiperContainer";
+import ContainerDescription from "../UserProfile/ContainerDescription/ContainerDescription";
 import ContainerCopyLink from "../UserProfile/ContainerCopyLink/ContainerCopyLink";
 import QuestionList from "./QuestionList";
-import ContainerDescription from "../UserProfile/ContainerDescription/ContainerDescription";
-import SwiperContainer from "../UserProfile/SwiperContainer/SwiperContainer";
-import Loader from "../common/Loader/Loader";
+import { useCheckAnswer } from "../Hooks/useCheckAnswer";
 import Success from "../UserProfile/Success/Success";
 
 interface IMessageInfo {
   message: string,
   question_id: number
 }
+
+
 
 // TODO: create link for prod
 const link = 'https://survey.simple2b.net';
@@ -39,7 +43,6 @@ const defaultQuantityItems = 30
 const Home = (): ReactElement => {
     const {data: session } = useSession();
     const { push, asPath } = useRouter();
-
     const [sessionId, setSessionId ] = useState();
     const [startDate, setStartDate ] = useState();
     const [isPublic, setIsPublic] = useState(false);
@@ -203,7 +206,7 @@ const Home = (): ReactElement => {
 
             if (slide === survey.questions.length - 1){
                 setSuccess(!success);
-                setIsOpen(!isOpen);
+                // setIsOpen(!isOpen);
             };
         }
         saveQuestion(data);
@@ -245,8 +248,6 @@ const Home = (): ReactElement => {
             });
         }, 1300);
     };
-
-
 
     const showMore = (item: IGetSurvey, index: number) => {
         console.log("showMore: item ", item.questions);
@@ -316,6 +317,7 @@ const Home = (): ReactElement => {
                                     {(
                                     userSurveys.map((item, index) => {
                                         const uuid = item.uuid;
+
                                         return (
                                             <div className={styles.overviewBoxes} key={index}>
                                                 <div className={styles.box}>
@@ -325,6 +327,11 @@ const Home = (): ReactElement => {
                                                                     {!item.published? "private": ""}
                                                                 </div>
                                                                 <div className={styles.title}>
+                                                                    {/* {isAnswer &&
+                                                                        <i>
+                                                                            <Image src={successIcon} height={30} width={30}/>
+                                                                        </i>
+                                                                    } */}
                                                                     {item.title}
                                                                 </div>
                                                             </div>
