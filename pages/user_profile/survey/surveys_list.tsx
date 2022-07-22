@@ -11,6 +11,8 @@ import { IUserResponse } from "../../../redux/types/userTypes";
 import { instancePagination } from "../../api/backend/pagination";
 import { surveyApi } from "../../api/backend/surveyInstance";
 
+// The number of items that are shown when the page opens (before scrolling and loading more)
+const defaultQuantityItems = 24
 
 const ProfileSurveyLists = () => {
   const {data: session, status} = useSession();
@@ -30,7 +32,7 @@ const ProfileSurveyLists = () => {
 
   const [allServeyListLength, setAllServeyListLength] = useState(0);
   const [userSurveys, setUserSurveys] = useState<IUserResponse[]>([]);
-  const [pageNumber, setPageNumber] = useState<number>(24);
+  const [pageNumber, setPageNumber] = useState<number>(defaultQuantityItems);
   const [endMessage, setEndMessage] = useState(true);
 
   const getListSurveysByUUID = async () => {
@@ -45,7 +47,7 @@ const ProfileSurveyLists = () => {
   };
 
   const getMoreCards = () => {
-    if (userSurveys.length >= allServeyListLength) {
+    if (userSurveys.length >= allServeyListLength && userSurveys.length > defaultQuantityItems) {
       setEndMessage(false);
     }
 
@@ -97,8 +99,12 @@ const ProfileSurveyLists = () => {
           dataLength={userSurveys.length}
           next={getMoreCards}
           hasMore={endMessage}
-          loader={<h3> Loading...</h3>}
-          endMessage={<h4>Nothing more to show</h4>}
+          loader={
+            userSurveys.length > defaultQuantityItems
+            ? <h3 className="paginationMessage"> Loading...</h3>
+            : ''
+          }
+          endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
         >
             <SurveyList
               userSurveys={userSurveys}
@@ -114,8 +120,12 @@ const ProfileSurveyLists = () => {
             dataLength={userSurveys.length}
             next={getMoreCards}
             hasMore={endMessage}
-            loader={<h3> Loading...</h3>}
-            endMessage={<h4>Nothing more to show</h4>}
+            loader={
+              userSurveys.length > defaultQuantityItems
+              ? <h3 className="paginationMessage"> Loading...</h3>
+              : ''
+            }
+            endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
           >
             <TableSurveyList
               userSurveys={userSurveys}

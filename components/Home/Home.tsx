@@ -33,6 +33,9 @@ interface IMessageInfo {
 // TODO: create link for prod
 const link = 'https://survey.simple2b.net';
 
+// The number of items that are shown when the page opens (before scrolling and loading more)
+const defaultQuantityItems = 30
+
 const Home = (): ReactElement => {
     const {data: session } = useSession();
     const { push, asPath } = useRouter();
@@ -83,24 +86,14 @@ const Home = (): ReactElement => {
 
     const [isOpenDescription, setOpenDescription] = useState(false);
 
-    const [pageNumber, setPageNumber] = useState<number>(30);
+    const [pageNumber, setPageNumber] = useState<number>(defaultQuantityItems);
     const [endMessage, setEndMessage] = useState(true)
     const [allServeyListLength, setAllServeyListLength] = useState(0)
-
-  //   const getListSurveysAll = async () => {
-  //     const response = await instancePagination(pageNumber).get('/survey/surveys');
-  //     console.log(
-  //       '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: white; font-weight: 700', response.data
-  //       );
-
-  //     setUserSurveys(response.data.data);
-  //     setAllServeyListLength(response.data.data_length)
-  // };
 
   const getMoreCards = () => {
     console.log(userSurveys.length);
 
-    if (userSurveys.length >= allServeyListLength) {
+    if (userSurveys.length >= allServeyListLength && userSurveys.length > defaultQuantityItems) {
       setEndMessage(false);
     }
 
@@ -313,8 +306,11 @@ const Home = (): ReactElement => {
                               dataLength={userSurveys.length}
                               next={getMoreCards}
                               hasMore={endMessage}
-                              loader={<h3> Loading...</h3>}
-                              endMessage={<h4>Nothing more to show</h4>}
+                              loader={userSurveys.length > defaultQuantityItems
+                                ? <h3 className="paginationMessage"> Loading...</h3>
+                                : ''
+                              }
+                              endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
                             >
                             {  (
                                 <div className={styles.homeContent}>

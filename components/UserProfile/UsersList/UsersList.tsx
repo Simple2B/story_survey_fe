@@ -7,13 +7,16 @@ import { clientApi } from "../../../pages/api/backend/userInstance";
 import { ADMIN, IUserResponse } from "../../../redux/types/userTypes";
 import styles from "./UsersList.module.css";
 
+// The number of items that are shown when the page opens (before scrolling and loading more)
+const defaultQuantityItems = 24
+
 const UsersList = (): ReactElement => {
   const { data: session} = useSession();
   const { push } = useRouter();
 
   const [allServeyListLength, setAllServeyListLength] = useState(0);
   const [userSurveys, setUserSurveys] = useState<IUserResponse[]>([]);
-  const [pageNumber, setPageNumber] = useState<number>(24);
+  const [pageNumber, setPageNumber] = useState<number>(defaultQuantityItems);
   const [endMessage, setEndMessage] = useState(true);
 
   const getListSurveysByUUID = async () => {
@@ -27,7 +30,7 @@ const UsersList = (): ReactElement => {
   };
 
   const getMoreCards = () => {
-    if (userSurveys.length >= allServeyListLength) {
+    if (userSurveys.length >= allServeyListLength && userSurveys.length > defaultQuantityItems) {
       setEndMessage(false);
     }
 
@@ -51,7 +54,12 @@ const UsersList = (): ReactElement => {
           dataLength={userSurveys.length}
           next={getMoreCards}
           hasMore={endMessage}
-          loader={""}
+          loader={
+            userSurveys.length > defaultQuantityItems
+            ? <h3 className="paginationMessage"> Loading...</h3>
+            : ''
+          }
+          endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
         >
           <table className="table table-hover">
               <thead>

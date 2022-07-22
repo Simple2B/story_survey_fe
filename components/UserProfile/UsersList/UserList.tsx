@@ -12,6 +12,8 @@ import { IGetSurvey, ISurveyInfo } from "../../../redux/types/surveyTypes";
 import handler from "../../../pages/api/keys";
 import { instancePagination } from "../../../pages/api/backend/pagination";
 
+// The number of items that are shown when the page opens (before scrolling and loading more)
+const defaultQuantityItems = 24
 
 const UserList = (): ReactElement => {
   const {data: session} = useSession();
@@ -41,7 +43,7 @@ const UserList = (): ReactElement => {
 
   const [allServeyListLength, setAllServeyListLength] = useState(0);
   const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([]);
-  const [pageNumber, setPageNumber] = useState<number>(24);
+  const [pageNumber, setPageNumber] = useState<number>(defaultQuantityItems);
   const [endMessage, setEndMessage] = useState(true);
 
   const getListSurveysByUUID = async () => {
@@ -55,7 +57,7 @@ const UserList = (): ReactElement => {
   };
 
   const getMoreCards = () => {
-    if (userSurveys.length >= allServeyListLength) {
+    if (userSurveys.length >= allServeyListLength && userSurveys.length > defaultQuantityItems) {
       setEndMessage(false);
     }
 
@@ -76,11 +78,15 @@ const UserList = (): ReactElement => {
   return  (
     <div className={styles.container}>
       <InfiniteScroll
-        className="InfiniteScroll"
         dataLength={userSurveys.length}
         next={getMoreCards}
         hasMore={endMessage}
-        loader={<h3> Loading...</h3>}
+        loader={
+          userSurveys.length > defaultQuantityItems
+          ? <h3 className="paginationMessage"> Loading...</h3>
+          : ''
+        }
+        endMessage={<h4 className="paginationMessage">Nothing more to show</h4>}
       >
         <div className={styles.backBtn} onClick={handlerClickBack} title="go back">
           <i className={`${styles.arrow} ${styles.left}`}/>
