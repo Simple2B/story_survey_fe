@@ -2,7 +2,6 @@ import React, { ReactElement } from 'react';
 import styles from "./Home.module.css";
 
 const QuestionList = ({questions}): ReactElement => {
-    console.log("QuestionList: questions ", questions);
 
     return (
         <div className={styles.containerQuestionList}>

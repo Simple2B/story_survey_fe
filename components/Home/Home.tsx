@@ -236,13 +236,11 @@ const Home = (): ReactElement => {
         }, 1300);
     };
 
-    if (success === true) {
-        setTimeout(() => {
-            setSuccess(false);
-        }, 2500)
-    };
+    
 
     const showMore = (item: IGetSurvey, index: number) => {
+        console.log("showMore: item ", item.questions);
+        
         openSurvey({
             id: item.id,
             uuid: item.uuid,
@@ -273,9 +271,12 @@ const Home = (): ReactElement => {
         setIsOpen(!isOpen);
     };
 
-    console.log(" userSurveys ", userSurveys);
-    
-    
+    // if (success === true) {
+        //     setTimeout(() => {
+        //         setSuccess(false);
+        //     }, 2500)
+        // };
+
     return (
         <div className={styles.wrapper}>
             {
@@ -352,7 +353,7 @@ const Home = (): ReactElement => {
                                     <div className={styles.modalWindow}>
                                         <div className={styles.modal}>
                                             <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}><Image src={deleteIcon} height={30} width={30}/></i>
-                                            <div className={styles.title}>{survey.title}</div>
+                                            <div className={styles.titleSurvey}>{survey.title}</div>
                                             <SwiperContainer 
                                                 setSlide={setSlide} 
                                                 survey={survey} 
@@ -372,7 +373,7 @@ const Home = (): ReactElement => {
                     }
                 </Wrapper>                 
             }
-            {success && <Success survey={survey}/>}
+            {/* {success && <Success survey={survey}/>} */}
         </div>
     )
 }
