@@ -11,7 +11,6 @@ import Image from "next/image";
 import { surveyApi } from "../../pages/api/backend/surveyInstance";
 import { IGetSurvey, ISurveyInfo } from "../../redux/types/surveyTypes";
 import deleteIcon from "../../styles/icons/icons8-cancel-64.png";
-import successIcon from "../../styles/icons/icons8-ok-64.png";
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'js-cookie';
 import "swiper/css";
@@ -206,7 +205,9 @@ const Home = (): ReactElement => {
 
             if (slide === survey.questions.length - 1){
                 setSuccess(!success);
-                // setIsOpen(!isOpen);
+                setTimeout(() => {
+                    setIsOpen(!isOpen);
+                }, 2000)
             };
         }
         saveQuestion(data);
