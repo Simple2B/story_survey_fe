@@ -6,8 +6,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import styles from "../../Home/Home.module.css";
 
-const SwiperContainer = ({setSlide, survey, answers, handleChangeAnswer, infoMessageForAnswer}): ReactElement => {
-    console.log("SwiperContainer: infoMessageForAnswer ", infoMessageForAnswer)
+const SwiperContainer = ({setSlide, survey, answers, handleChangeAnswer}): ReactElement => {
     return (
         <Swiper
             pagination={{
@@ -41,16 +40,16 @@ const SwiperContainer = ({setSlide, survey, answers, handleChangeAnswer, infoMes
                                             </textarea>
                                         </div>
                                     </div>
-                                    { 
+                                    {/* { 
                                         infoMessageForAnswer.message !== "" &&
                                         <div className={styles.containerMessageInfoForAnswer}>
                                             <div className={styles.messageInfoForAnswer}>
-                                                {/* {infoMessageForAnswer.message} */}
+                                                {infoMessageForAnswer.message}
                                                 You already answered the {index-1 !== -1 && survey.questions[index-1].question}
                                             </div>
                                         </div>
                                         
-                                    }
+                                    } */}
                                 </SwiperSlide>
                             )
                         })

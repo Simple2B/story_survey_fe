@@ -290,6 +290,7 @@ const Home = (): ReactElement => {
         setIsOpen(!isOpen);
     };
 
+    console.log(" userSurveys ", userSurveys);
     return (
         <div className={styles.wrapper}>
             {
@@ -374,12 +375,12 @@ const Home = (): ReactElement => {
                                         <div className={styles.modal}>
                                             <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}><Image src={deleteIcon} height={30} width={30}/></i>
                                             <div className={styles.title}>{survey.title}</div>
-                                            <SwiperContainer
-                                                setSlide={setSlide}
-                                                survey={survey}
-                                                answers={answers}
-                                                handleChangeAnswer={handleChangeAnswer}
-                                                infoMessageForAnswer={infoMessageForAnswer}
+                                            <SwiperContainer 
+                                                setSlide={setSlide} 
+                                                survey={survey} 
+                                                answers={answers} 
+                                                handleChangeAnswer={handleChangeAnswer} 
+                                                // infoMessageForAnswer={infoMessageForAnswer}
                                             />
                                             { <button className={`nextSwiper ${styles.nextSwiper}`} onClick={answerTheQuestion}>
                                                     + answer
