@@ -1,9 +1,11 @@
 .toggleSwitchContainer {
-    width: 94%;
-    margin-bottom: 3%;
+    /* width: 94%; */
+    margin-bottom: 20px;
+    margin-right: 30px;
     position: relative;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center;
 }
 
 .toggleSwitch {

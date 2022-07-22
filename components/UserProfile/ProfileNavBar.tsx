@@ -23,13 +23,8 @@ const ProfileNavbar = ({isActive, handleClick, headerName}) => {
               <i className={`bx ${isActive ? 'bx-menu-alt-right': 'bx-menu'} sidebarBtn`}/>
               <span className={styles.dashboard}>{headerName}</span>
           </div>
-
-          <div className={styles.searchBox}>
-              <input type={styles.text} placeholder="Search..."/>
-              <i className={`${styles.bx} ${styles.bxSearch} bx bx-search`}/>
-          </div>
           {session && (
-            <div className={styles.btnContainer} onClick={getProfile}>  
+            <div className={styles.btnContainer} onClick={getProfile}>
                 <div className={styles.signOutBtn}>{session.user.name}</div>
                 <div className={styles.imageContainer}>
                     <img src={session.user.image} alt={session.user.name} className={styles.image}/>

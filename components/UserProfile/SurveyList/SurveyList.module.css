@@ -85,12 +85,12 @@
 }
 
 .dropdownItem:first-child {
-    
+
     border-bottom: 1px solid #8FDACB;
 }
 
 .dropdownItem:last-child {
-    
+
 }
 
 .dropdownItem:hover {
@@ -143,9 +143,17 @@
     cursor: pointer;
 }
 
+.description {
+  width: 500px;
+}
+
+.titleContent {
+  text-align: left;
+}
+
 .description .descriptionContent, .rowTitle .titleContent{
     padding-bottom: 5px;
-    overflow-y: scroll;
+    overflow: auto;
     height: 50px;
 }
 
@@ -160,6 +168,16 @@
     height: auto;
     display: inline-block;
     position: relative;
+}
+
+.hideContainerQuestion {
+    visibility: hidden;
+    max-height: 70px;
+    overflow: auto;
+    background-color: var(--mainWhite);
+    position: absolute;
+    top: 0;
+    z-index: 2000;
 }
 
 .containerQuestionList:hover .hideContainerQuestion {
@@ -188,19 +206,15 @@
     padding: 3px;
 }
 
-.hideContainerQuestion {
-    visibility: hidden;
-    height: 60px;
-    overflow: scroll;
-}
-
 .homeContent .box .indicator{
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     padding-bottom: 5px;
 }
 
 .homeContent .box .indicator i{
+    align-self: flex-start;
     height: 20px;
     width: 20px;
     background: #8FDACB;
@@ -217,6 +231,10 @@
 }
 
 .homeContent .box .indicator .text{
+    font-size: 12px;
+}
+
+.textHidden {
     font-size: 12px;
 }
 
@@ -386,8 +404,8 @@
 .title {
     font-size: 22px;
     text-overflow: ellipsis;
-    overflow: hidden; 
-    width: 160px; 
+    overflow: hidden;
+    width: 160px;
     white-space: nowrap;
 }
 
@@ -628,7 +646,7 @@
 .linkRow .linkCopiedContainer {
     position: absolute;
     top: 10px;
-    right: 65%;
+    right: 70%;
 }
 
 .linkRow .linkCopied {
@@ -657,7 +675,7 @@
 }
 
 .btnEdit {
-    position: absolute;
+    /* position: absolute; */
     top: 45%;
     cursor: pointer;
     padding: 3px 10px;
@@ -725,7 +743,7 @@
     text-decoration: none;
 } */
 
-/* edit container styles */ 
+/* edit container styles */
 .deleteIcon {
     position: absolute;
     top: -16px;
@@ -820,7 +838,7 @@
     .sidebar{
         width: 0;
     }
-    
+
     .sidebar.active{
         width: 60px;
     }

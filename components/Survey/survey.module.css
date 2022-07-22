@@ -12,6 +12,26 @@
     align-items: center;
     flex-direction: column;
 }
+
+.infoMessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primaryColor)
+}
+
+.loaderContainer {
+    width: 100vw;
+    display: flex;
+    justify-self: center;
+    align-items: center;
+}
+
+.loaderColor {
+    margin: 0 auto;
+    align-self: center;
+    color: var(--mainBackground);
+}
   
 .title {
     margin: 0 auto;
@@ -151,7 +171,32 @@
 }
 
 .disabledNextBtn {
-    color: var(--mainOpacity);
+    color: transparent;
+}
+
+.successMessage {
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: green;
+    word-spacing: 5px;
+    letter-spacing: 2px;
+    /* text-transform: uppercase;
+    word-spacing: 5px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center; */
+    /* border: var(--mainWhite) 1px solid;
+    box-shadow: -10px 0px 13px -7px var(--mainOpacity), 10px 0px 13px -7px var(--mainOpacity), 5px 5px 15px 5px var(--mainOpacity);
+    border-radius: 10px; */
+    /* background-color: var(--offWhite); */
 }
 
 @media (max-width: 700px) {

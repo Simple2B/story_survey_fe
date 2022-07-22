@@ -30,11 +30,6 @@ const EditContainer = ({
         handleOnChangePublished,
     }): ReactElement => {
 
-    // const [delQuestions, setDelQuestions] = useState<IQuestion[]>([{
-    //     id: 0,
-    //     question: "",
-    //     survey_id: 0,
-    // }]);
     const [writeQuestion, setWriteQuestion] = useState<string>("");
     const deleteQuestion = async (questionId: number, surveyId: number) => {
         if (questions.length < 1 || createQuestion.length < 0) {

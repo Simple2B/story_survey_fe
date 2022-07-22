@@ -1,21 +1,20 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { surveyApi } from "../../../pages/api/backend/surveyInstance";
 import { ICreateSurvey, IGetSurvey, IQuestion } from "../../../redux/types/surveyTypes";
 import styles from "./SurveyList.module.css";
 import showMoreIcon from "../../../styles/icons/icons8-more-24.png";
-import iconLink from "../../../styles/icons/icons8-link-64.png";
 import EditContainer from "./EditContainer";
 import { ADMIN, CLIENT } from "../../../redux/types/userTypes";
+import QuestionUserList from "./QuestionsUserList";
+import ContainerCopyLink from "../ContainerCopyLink/ContainerCopyLink";
+import { instancePagination } from "../../../pages/api/backend/pagination";
+import SearchInput from "../../common/SearchInput/SearchInput";
 
 
-const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
+const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink, pageNumber}): ReactElement => {
     const {data: session } = useSession();
-    const { asPath } = useRouter();
-    // const isSurveyList = asPath.includes("surveys_list");
     const [isPublic, setIsPublic] = useState(false);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [editSurveyId, setEditSurveyID] = useState<number | null>(null);
@@ -39,9 +38,9 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
         uuidSurvey: "",
     });
     const [isPublished, setIsPublished] = useState(null);
-    const [cloneSurvey, setCloneSurvey] = useState();
 
     const [isClonedSuccess, setIsClonedSuccess] = useState(false);
+    const [isLoading, setLoading] = useState(false);
 
     const handleOnChangePublished = () => {
         setIsPublished(!isPublished);
@@ -56,13 +55,12 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
     useEffect(() => {
         if (session && isClonedSuccess) {
             const getUserSurveyList = async(email: string) => {
-                const list = await surveyApi.getUserSurveys(email);
-                console.log("getCloneSurvey: update list", list);
-                setUserSurveys(list);
+                const list = await instancePagination(pageNumber).get(`/survey/${email}`);
+                setUserSurveys(list.data.data);
                 setIsClonedSuccess(true);
             };
-            getUserSurveyList(session.user.email);  
-        } 
+            getUserSurveyList(session.user.email);
+        }
     },[isClonedSuccess]);
 
     useEffect(() => {
@@ -72,10 +70,10 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
         } else {
             setIsPublic(false);
         };
-        
+
     },[session]);
 
-    const handleOnchange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    const handleOnchangeTitle = (e: { target: { value: React.SetStateAction<string>; }; }) => {
         setTitle(e.target.value)
         let value = e.target.value;
         let errMsg ="";
@@ -103,6 +101,16 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
         setSuccessMessage(e.target.value);
     };
 
+    const openDeleteSurvey = (item, index) => {
+        setDelete(!isDelete);
+        setIndexDelete(index);
+        setNameDelete(item.title);
+        setIsOpenDropDown({
+            isOpen: false,
+            uuidSurvey: "",
+        })
+    }
+
     const deleteSurvey = (index: number) => {
         const email: string= session? session.user.email : "";
 
@@ -110,7 +118,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
 
         const delSurvey = userSurveys.filter((_, ind) => index === ind)[0];
         console.log("deleteSurvey", delSurvey);
-        
+
 
         const data = {
             email: email,
@@ -135,14 +143,33 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             setQuestion(questions.map((item) => {
                 if (item.id === question.id) {
                     item = {
-                        id: question.id, 
-                        question: e.target.value, 
+                        id: question.id,
+                        question: e.target.value,
                         survey_id: question.survey_id}
                 }
                 return item;
             }));
         }
-        
+
+    };
+
+    const openEditSurvey = (item, index) => {
+        getEditSurvey(item.id, index)
+            setEditSurveyID(item.id);
+            setDescription(item.description);
+            setSuccessMessage(item.successful_message)
+            setQuestionDeleted([]);
+            setCreateQuestion([]);
+            setTitle(item.title);
+            setUserEmail(item.email);
+            setIsPublished(!item.published);
+            if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
+                return {
+                    id: q.id,
+                    question: q.question,
+                    survey_id: item.id,
+                }
+            }));
     };
 
     const editSurvey = () => {
@@ -153,7 +180,7 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             description: description,
             successful_message: successMessage,
             email: userEmail,
-            published: !isPublished, 
+            published: !isPublished,
             questions: questions,
             questions_deleted: questionsDeleted,
             create_question: createQuestion,
@@ -162,8 +189,9 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             const editDataSurvey: IGetSurvey = await surveyApi.editSurvey(data, id);
             console.log(" editDataSurvey ", editDataSurvey);
             const getListSurveys = async() => {
-                const list = await surveyApi.getUserSurveys(session.user.email);
-                setUserSurveys(list);
+                const list = await instancePagination(pageNumber).get(`/survey/${session.user.email}`);
+
+                setUserSurveys(list.data.data);
             }
             getListSurveys();
         };
@@ -184,11 +212,13 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
             "published": true,
         };
         const saveSurveyToDB = async(data: ICreateSurvey) => {
+            setLoading(true);
             const newSurvey = await surveyApi.createSurvey(data);
             console.log("SURVEYLIST: newSurvey => ", newSurvey);
             setIsClonedSuccess(true);
+            setLoading(false);
         };
-        saveSurveyToDB(data);   
+        saveSurveyToDB(data);
 
         setIsOpenDropDown({
             isOpen: false,
@@ -205,9 +235,6 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                         <div className={styles.overviewBoxes} key={index}>
                             <div className={styles.box}>
                                 <div className={styles.rightSide}>
-                                    {/* <i className={styles.editIcon} >
-                                            <Image src={deleteIcon} height={30} width={30}/>
-                                    </i> */}
                                     <div className={styles.dropDownContainer}>
                                         <i className={styles.editIcon} onClick={() => setIsOpenDropDown({
                                             isOpen: !isOpenDropDown.isOpen,
@@ -220,22 +247,11 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                                                 <div className={styles.dropdownItem} onClick={() => getCloneSurvey(item.uuid, item.id)}>
                                                     clone
                                                 </div>
-                                                <div className={styles.dropdownItem} onClick={() => {
-                                                            setDelete(!isDelete);
-                                                            setIndexDelete(index);
-                                                            setNameDelete(item.title);
-                                                            setIsOpenDropDown({
-                                                                isOpen: false,
-                                                                uuidSurvey: "",
-                                                            })
-                                                        }
-                                                    }
-                                                >
+                                                <div className={styles.dropdownItem} onClick={() => openDeleteSurvey(item, index)}>
                                                     delete
                                                 </div>
                                             </div>
                                         }
-                                        
                                     </div>
                                     <div className={styles.titleCard}>
                                         <div className={styles.titlePublic}>
@@ -245,137 +261,30 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                                             {item.title}
                                         </div>
                                     </div>
-                                    <div className={styles.containerQuestionList}>
-                                        {   
-                                            item.questions.length > 0 && (
-                                                item.questions.slice(0, 1).map((q, index) => {
-                                                    return (
-                                                        <div className={styles.containerStep} key={index}>
-                                                            {item.questions.length > 2 && <span className={styles.btnShowMore}>
-                                                                <i className={`${styles.arrow} ${styles.up}`}>
-                                                                </i></span> }
-
-                                                            <div className={styles.indicator} key={index}>
-                                                                <i className={`bx bx-right-arrow-alt`}></i>
-                                                                <span className={styles.text}>{q.question}</span>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                })
-                                            )
-                                        }
-                                        <div className={styles.hideContainerQuestion}>
-                                            {   
-                                                item.questions.length > 1 && (
-                                                    item.questions.slice(1, item.questions.length - 1).map((item, index) => {
-                                                        return (
-                                                            <div className={styles.containerStep} key={index}>
-                                                                <div className={styles.indicator} key={index}>
-                                                                    <i className={`bx bx-right-arrow-alt`}></i>
-                                                                    <span className={styles.text}>{item.question}</span>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    })
-                                                )
-                                            }
-                                        </div>
-                                    </div>
+                                    <QuestionUserList questions={item.questions}/>
                                 </div>
                                 <div className={styles.linkContainer}>
-                                    {
-                                        ((!isPublic || isPublic) && item.published) && (
-                                            <div className={styles.containerIconLink}>
-                                                <i 
-                                                    className={styles.iconLink} 
-                                                    title="copy link" 
-                                                    onClick={() => {copyLink(uuid, item.title, item.published)}}
-                                                >
-                                                    <Image src={iconLink} height={30} width={30}/>
-                                                </i>
-                                                {isCopiedLink.surveyUUID === uuid && 
-                                                    (
-                                                        <div className={styles.linkCopied}>
-                                                            copied
-                                                        </div>
-                                                    )
-                                                }
-                                                <Link href={`/survey/${uuid}`}>
-                                                    <a target="_blank" className="card-link">
-                                                        survey
-                                                    </a>
-                                                </Link>
-                                            </div>
-                                        )
-                                    }
-                                    { !item.published &&
-                                        (
-                                            <div></div>
-                                        )
-                                    }
-                                    { !item.published && isPublic &&
-                                        (
-                                            <div className={styles.containerIconLink}>
-                                                <i 
-                                                    className={styles.iconLink} 
-                                                    title="copy link" 
-                                                    onClick={() => {copyLink(uuid, item.title)}}
-                                                >
-                                                    <Image src={iconLink} height={30} width={30}/>
-                                                </i>
-
-                                                {
-                                                    isCopiedLink.surveyUUID === uuid && (
-                                                    <div className={styles.linkCopied}>
-                                                        copied
-                                                    </div>
-                                                    )
-                                                }
-
-                                                <Link 
-                                                    href={`/survey/not_public/${uuid}`} 
-                                                >
-                                                    <a 
-                                                    // onClick={() => router.push(`/survey/${survey_id}`)} 
-                                                    target="_blank" 
-                                                    className="card-link">
-                                                        survey
-                                                    </a>
-                                                </Link>
-                                            </div>
-                                        )
-                                    }
-                                    <a href="#" 
+                                    <ContainerCopyLink
+                                        isCopiedLink={isCopiedLink}
+                                        copyLink={copyLink}
+                                        isPublic={isPublic}
+                                        uuid={uuid}
+                                        title={item.title}
+                                        published={item.published}
+                                    />
+                                    <a href="#"
                                         className={`${styles.link} card-link`}
-                                        onClick={() => {
-                                            getEditSurvey(item.id, index)
-                                            setEditSurveyID(item.id);
-                                            setDescription(item.description);
-                                            setSuccessMessage(item.successful_message)
-                                            setQuestionDeleted([]);
-                                            setCreateQuestion([]);
-                                            setTitle(item.title);
-                                            setUserEmail(item.email);
-                                            setIsPublished(!item.published);
-                                            if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
-                                                return {
-                                                    id: q.id, 
-                                                    question: q.question, 
-                                                    survey_id: item.id,
-                                                }
-                                            }));
-                                            // setAnswers(item.questions.map((question) => {return {question: question, answer: "", email: session? session.user.email : ""}} ));
-                                        }}
-                                        >
-                                            edit
+                                        onClick={() => openEditSurvey(item, index)}
+                                    >
+                                        edit
                                     </a>
                                 </div>
                             </div>
                         </div>
                     )
-                })                
-            )} 
-            {isDelete && 
+                })
+            )}
+            {isDelete &&
                 (
                     <div className={styles.isDelete} >
                         <div className={styles.deleteTitle}>
@@ -389,19 +298,19 @@ const SurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink})
                 )
             }
             {isOpen &&
-                <EditContainer 
-                    isOpen={isOpen} 
-                    setIsOpen={setIsOpen} 
-                    titleError={titleError} 
-                    title={title} 
-                    handleOnchange={handleOnchange} 
-                    questions={questions} 
+                <EditContainer
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    titleError={titleError}
+                    title={title}
+                    handleOnchange={handleOnchangeTitle}
+                    questions={questions}
                     setQuestion={setQuestion}
-                    editQuestions={editQuestions} 
-                    description={description} 
-                    handleOnchangeDescription={handleOnchangeDescription} 
-                    successMessage={successMessage} 
-                    handleOnchangeSuccessMessage={handleOnchangeSuccessMessage} 
+                    editQuestions={editQuestions}
+                    description={description}
+                    handleOnchangeDescription={handleOnchangeDescription}
+                    successMessage={successMessage}
+                    handleOnchangeSuccessMessage={handleOnchangeSuccessMessage}
                     editSurvey={editSurvey}
                     userEmail={userEmail}
                     editSurveyId={editSurveyId}

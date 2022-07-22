@@ -7,9 +7,10 @@ import Image from "next/image";
 import downloadIcon from "../../../styles/icons/icons8-download-64.png";
 import styles from "./SurveyList.module.css";
 import { CSVLink } from "react-csv";
+import { instancePagination } from "../../../pages/api/backend/pagination";
 
 
-const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink}): ReactElement => {
+const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedLink, pageNumber}): ReactElement => {
     const { data: session} = useSession();
     const [editSurveyId, setEditSurveyID] = useState<number | null>(null);
     const [userEmail, setUserEmail] = useState<string>("");
@@ -87,7 +88,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             title: title,
             description: description,
             successful_message: successMessage,
-            published: !isPublished, 
+            published: !isPublished,
             email: userEmail,
             questions: questions,
             questions_deleted: questionsDeleted,
@@ -97,8 +98,8 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
             const editDataSurvey: IGetSurvey = await surveyApi.editSurvey(data, id);
             console.log(" editDataSurvey ", editDataSurvey);
             const getListSurveys = async() => {
-                const list = await surveyApi.getUserSurveys(session.user.email);
-                setUserSurveys(list);
+                const list = await instancePagination(pageNumber).get(`/survey/${session.user.email}`);
+                setUserSurveys(list.data.data);
             }
             getListSurveys();
         };
@@ -111,14 +112,29 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
         setEditSurveyID(id);
     };
 
+    const openEditSurvey = (item, index) => {
+        getEditSurvey(item.id, index)
+            setEditSurveyID(item.id);
+            setDescription(item.description);
+            setSuccessMessage(item.successful_message)
+            setQuestionDeleted([]);
+            setCreateQuestion([]);
+            setTitle(item.title);
+            setUserEmail(item.email);
+            setIsPublished(!item.published);
+            if (item.questions.length > 0 )setQuestion(item.questions.slice(0, item.questions.length - 1).map((q) => {
+                return {
+                    id: q.id, 
+                    question: q.question, 
+                    survey_id: item.id,
+                }
+            }));
+    }
+
     const getFileWithSurvey = async (uuid: string) => {
         const fileFromDB =  await surveyApi.getFileSurvey(uuid);
         setFile(fileFromDB);
         setUUID(uuid);
-    };
-
-    if (file) {
-        console.log("file", file);
     };
 
     return  (
@@ -173,24 +189,7 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                     </td>
                                     <td className={styles.btnEditContainer}>
                                         <span className={styles.btnEdit}
-                                            onClick={() => {
-                                                getEditSurvey(survey.id, index)
-                                                setEditSurveyID(survey.id);
-                                                setDescription(survey.description);
-                                                setSuccessMessage(survey.successful_message)
-                                                setTitle(survey.title);
-                                                setQuestionDeleted([]);
-                                                setCreateQuestion([]);
-                                                setIsPublished(!survey.published)
-                                                setUserEmail(survey.email)
-                                                if (survey.questions.length > 0 )setQuestion(survey.questions.slice(0, survey.questions.length - 1).map((q) => {
-                                                    return {
-                                                        id: q.id, 
-                                                        question: q.question, 
-                                                        survey_id: q.survey_id,
-                                                    }
-                                                }));
-                                            }}
+                                            onClick={() => openEditSurvey(survey, index)}
                                         >
                                             edit
                                         </span>
