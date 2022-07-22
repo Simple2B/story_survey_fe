@@ -362,7 +362,7 @@ const Home = (): ReactElement => {
                                                 // infoMessageForAnswer={infoMessageForAnswer}
                                             />
                                             <button 
-                                                className={success ? `nextSwiper ${styles.disabledNextBtn}` :`nextSwiper ${styles.nextSwiper}`} 
+                                                className={`nextSwiper ${styles.nextSwiper}`} 
                                                 onClick={answerTheQuestion}>
                                                     + answer
                                             </button>
