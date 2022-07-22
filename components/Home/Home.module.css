@@ -13,7 +13,7 @@
     align-items: center;
     flex-wrap: wrap;
 }
-  
+
 .homeContent .overviewBoxes{
     display: flex;
     align-items: center;
@@ -21,7 +21,7 @@
     flex-wrap: wrap;
     margin-bottom: 26px;
 }
-  
+
 .overviewBoxes .box{
     position: relative;
     width: 18rem;
@@ -54,7 +54,7 @@
     right: 8px;
     top: 8px;
 }
-  
+
 .overviewBoxes .boxTopic{
     font-size: 20px;
     font-weight: 500;
@@ -103,7 +103,7 @@
     visibility: hidden;
     width: 100%;
     max-height: 70px;
-    overflow: scroll;
+    overflow: auto;
     transition: all .5s ease-out;
     position: absolute;
     top: 0;
@@ -166,7 +166,7 @@
 .box .indicator i.down{
     background: #e87d88;
 }
-  
+
 .homeContent .box .indicator .text{
     align-self: flex-start;
     /* padding: 2px 3px; */
@@ -196,7 +196,7 @@
     color: #2BD47D;
     background: #C0F2D8;
 }
-  
+
 .homeContent .box .cart.three{
     color: #ffc233;
     background: #ffe8b3;
@@ -216,7 +216,7 @@
     display: flex;
     justify-content: space-between;
 }
-  
+
 .homeContent .salesBoxes .recentSales{
     width: 65%;
     background: #fff;
@@ -280,7 +280,7 @@
 .salesBoxes .box .button a:hover{
     background:  #0d3073;
 }
-  
+
   /* Right box */
 .homeContent .salesBoxes .topSales{
     width: 35%;
@@ -369,8 +369,8 @@
 .title {
     font-size: 22px;
     text-overflow: ellipsis;
-    overflow: hidden; 
-    width: 160px; 
+    overflow: hidden;
+    width: 160px;
     white-space: nowrap;
 }
 
@@ -521,7 +521,7 @@
 .disabledNextBtn {
     color: var(--mainOpacity);
 }
-  
+
   /* Responsive Media Query */
 @media (max-width: 1150px) {
     .homeContent .salesBoxes{
@@ -540,25 +540,25 @@
         margin: 0;
     }
 }
-  
+
 @media (max-width: 1000px) {
     .overviewBoxes .box{
         margin-bottom: 15px;
     }
 }
-  
+
 @media (max-width: 700px) {
     .homeContent .salesBoxes .salesDetails{
         width: 560px;
     }
 }
-  
+
 @media (max-width: 550px) {
     .overviewBoxes .box{
         margin-bottom: 15px;
     }
 }
-  
+
 @media (max-width: 400px) {
     .sidebar{
         width: 0;

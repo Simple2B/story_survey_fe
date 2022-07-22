@@ -137,6 +137,16 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
         setUUID(uuid);
     };
 
+    const publicSurvey = (uuid: string) => {
+      const copyLink = `${link}/survey/${uuid}`
+      return copyLink
+    }
+
+    const privateSurvey = (uuid: string) => {
+      const copyLink = `${link}/survey/not_public/${uuid}`
+      return copyLink
+    }
+
     return  (
         <div className={styles.tableListContainer}>
             <table className="table table-hover">
@@ -175,7 +185,11 @@ const TableSurveyList = ({userSurveys, setUserSurveys, copyLink, link, isCopiedL
                                     >
                                         <span className={styles.copyLinkTitle}>copy link</span>
                                         <span className={styles.copyLink}>
-                                            {survey.published ? `${link}/survey/${survey.uuid}`:`${link}/survey/not_public/${survey.uuid}`}
+                                            {
+                                            survey.published
+                                            ? <span className={styles.btnEdit} onClick={() => publicSurvey(survey.uuid)}>Copy</span>
+                                            : <span className={styles.btnEdit} onClick={() => privateSurvey(survey.uuid)}>Copy</span>
+                                            }
                                         </span>
                                         {
                                             isCopiedLink.surveyUUID === survey.uuid && (

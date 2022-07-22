@@ -11,9 +11,9 @@ const ContainerCopyLink = ({isCopiedLink, copyLink, isPublic, uuid, title, publi
             {
                 ((!isPublic || isPublic) && published) && (
                     <div className={styles.containerIconLink}>
-                        <i 
-                            className={styles.iconLink} 
-                            title="copy link" 
+                        <i
+                            className={styles.iconLink}
+                            title="copy link"
                             onClick={() => {copyLink(uuid, title, published)}}
                         >
                             <Image src={iconLink} height={30} width={30}/>
@@ -38,9 +38,9 @@ const ContainerCopyLink = ({isCopiedLink, copyLink, isPublic, uuid, title, publi
             { !published && isPublic &&
                 (
                     <div className={styles.containerIconLink}>
-                        <i 
-                            className={styles.iconLink} 
-                            title="copy link" 
+                        <i
+                            className={styles.iconLink}
+                            title="copy link"
                             onClick={() => {copyLink(uuid, title, published)}}
                         >
                             <Image src={iconLink} height={30} width={30}/>
@@ -52,12 +52,12 @@ const ContainerCopyLink = ({isCopiedLink, copyLink, isPublic, uuid, title, publi
                             </div>
                             )
                         }
-                        
-                        <Link 
-                            href={`/survey/not_public/${uuid}`} 
+
+                        <Link
+                            href={`/survey/not_public/${uuid}`}
                         >
-                            <a 
-                            target="_blank" 
+                            <a
+                            target="_blank"
                             className="card-link">
                                 survey
                             </a>
