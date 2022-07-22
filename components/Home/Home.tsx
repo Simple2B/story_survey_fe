@@ -24,6 +24,7 @@ import ContainerDescription from "../UserProfile/ContainerDescription/ContainerD
 import ContainerCopyLink from "../UserProfile/ContainerCopyLink/ContainerCopyLink";
 import QuestionList from "./QuestionList";
 import SearchInput from "../common/SearchInput/SearchInput";
+import { Divider } from "@chakra-ui/react";
 
 // TODO: create link for prod
 const link = 'https://survey.simple2b.net';
@@ -43,16 +44,7 @@ const Home = (): ReactElement => {
     const [startDate, setStartDate ] = useState();
     const [isPublic, setIsPublic] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([{
-        title: "",
-        description: "",
-        created_at: "",
-        user_id: 0,
-        email: "",
-        questions: [],
-        successful_message: "",
-        published: true,
-    }]);
+    const [userSurveys, setUserSurveys] = useState<IGetSurvey[]>([]);
     const [answers, setAnswers] = useState([{
         question: null,
         is_answer: false,
@@ -95,9 +87,8 @@ const Home = (): ReactElement => {
         console.log(userSurveys.length);
 
         if (userSurveys.length >= allSurveyListLength && userSurveys.length > defaultQuantityItems) {
-        setEndMessage(false);
+            setEndMessage(false);
         }
-
         setPageNumber((prev) => prev + 10);
     }
 
@@ -285,7 +276,7 @@ const Home = (): ReactElement => {
     return (
         <div className={styles.wrapper}>
             {
-                userSurveys.length === 0 && querySearch === "*" &&
+                (userSurveys.length === 0 && querySearch === "*") &&
                 <Wrapper>
                     <Banner title="Story Survey" subtitle="">
                         <CustomLink
@@ -298,7 +289,7 @@ const Home = (): ReactElement => {
             }
             {
                 <Wrapper>
-                    <SearchInput querySearch={querySearch} setSearchQuery={setSearchQuery}/>
+                    {userSurveys.length > 45 && <SearchInput querySearch={querySearch} setSearchQuery={setSearchQuery}/>}
                     <InfiniteScroll
                             className={styles.homeContent}
                             dataLength={userSurveys.length}
@@ -312,49 +303,49 @@ const Home = (): ReactElement => {
                         >
                         {  (
                             <div className={styles.homeContent}>
-                                {(
-                                userSurveys.map((item, index) => {
-                                    const uuid = item.uuid;
+                                {(userSurveys.length > 0 &&
+                                    userSurveys.map((item, index) => {
+                                        const uuid = item.uuid;
 
-                                    return (
-                                        <div className={styles.overviewBoxes} key={index}>
-                                            <div className={styles.box}>
-                                                <div className={styles.rightSide}>
-                                                        <div className={styles.titleCard}>
-                                                            <div className={styles.titlePublic}>
-                                                                {!item.published? "private": ""}
+                                        return (
+                                            <div className={styles.overviewBoxes} key={index}>
+                                                <div className={styles.box}>
+                                                    <div className={styles.rightSide}>
+                                                            <div className={styles.titleCard}>
+                                                                <div className={styles.titlePublic}>
+                                                                    {!item.published? "private": ""}
+                                                                </div>
+                                                                <div className={styles.title}>
+                                                                    {/* {isAnswer &&
+                                                                        <i>
+                                                                            <Image src={successIcon} height={30} width={30}/>
+                                                                        </i>
+                                                                    } */}
+                                                                    {item.title}
+                                                                </div>
                                                             </div>
-                                                            <div className={styles.title}>
-                                                                {/* {isAnswer &&
-                                                                    <i>
-                                                                        <Image src={successIcon} height={30} width={30}/>
-                                                                    </i>
-                                                                } */}
-                                                                {item.title}
-                                                            </div>
+                                                            <QuestionList questions={item.questions}/>
+                                                    </div>
+                                                    <div className={styles.containerLink}>
+                                                        <ContainerCopyLink
+                                                            isCopiedLink={isCopiedLink}
+                                                            copyLink={copyLink}
+                                                            isPublic={isPublic}
+                                                            uuid={uuid}
+                                                            title={item.title}
+                                                            published={item.published}
+                                                        />
+                                                        <div
+                                                            className={`${styles.link} card-link`}
+                                                            onClick={() => showMore(item, index)}
+                                                            >
+                                                                show more
                                                         </div>
-                                                        <QuestionList questions={item.questions}/>
-                                                </div>
-                                                <div className={styles.containerLink}>
-                                                    <ContainerCopyLink
-                                                        isCopiedLink={isCopiedLink}
-                                                        copyLink={copyLink}
-                                                        isPublic={isPublic}
-                                                        uuid={uuid}
-                                                        title={item.title}
-                                                        published={item.published}
-                                                    />
-                                                    <div
-                                                        className={`${styles.link} card-link`}
-                                                        onClick={() => showMore(item, index)}
-                                                        >
-                                                            show more
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                })
+                                        )
+                                    })
                                 )}
                             </div>
                             )

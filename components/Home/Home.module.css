@@ -234,6 +234,7 @@
 }
 
 .salesBoxes .box .title{
+    align-items: center;
     font-size: 24px;
     font-weight: 500;
 }
