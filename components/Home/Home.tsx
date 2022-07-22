@@ -205,9 +205,10 @@ const Home = (): ReactElement => {
 
             if (slide === survey.questions.length - 1){
                 setSuccess(!success);
+                setSlide(null);
                 setTimeout(() => {
                     setIsOpen(!isOpen);
-                }, 2000)
+                }, 2000);
             };
         }
         saveQuestion(data);
