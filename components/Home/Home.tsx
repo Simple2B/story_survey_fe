@@ -281,12 +281,7 @@ const Home = (): ReactElement => {
         setIsOpen(!isOpen);
     };
 
-    // if (success === true) {
-        //     setTimeout(() => {
-        //         setSuccess(false);
-        //     }, 2500)
-        // };
-
+    console.log(" userSurveys ", userSurveys);
     return (
         <div className={styles.wrapper}>
             {
@@ -373,12 +368,13 @@ const Home = (): ReactElement => {
                                     <div className={styles.modalWindow}>
                                         <div className={styles.modal}>
                                             <i className={styles.editIcon} onClick={() => {setIsOpen(!isOpen)}}><Image src={deleteIcon} height={30} width={30}/></i>
-                                            <div className={styles.titleSurvey}>{survey.title}</div>
+                                            <div className={styles.title}>{survey.title}</div>
                                             <SwiperContainer
-                                              setSlide={setSlide}
-                                              survey={survey}
-                                              answers={answers}
-                                              handleChangeAnswer={handleChangeAnswer}
+                                                setSlide={setSlide}
+                                                survey={survey}
+                                                answers={answers}
+                                                handleChangeAnswer={handleChangeAnswer}
+                                                // infoMessageForAnswer={infoMessageForAnswer}
                                             />
                                             { <button className={`nextSwiper ${styles.nextSwiper}`} onClick={answerTheQuestion}>
                                                     + answer
