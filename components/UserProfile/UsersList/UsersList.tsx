@@ -18,9 +18,11 @@ const UsersList = (): ReactElement => {
   const [userSurveys, setUserSurveys] = useState<IUserResponse[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(defaultQuantityItems);
   const [endMessage, setEndMessage] = useState(true);
+  const [querySearch, setSearchQuery] = useState<string>("");
+  console.log('SEARCH', querySearch);
 
   const getListSurveysByUUID = async () => {
-    const response = await instancePagination(pageNumber).get('/user/get_users');
+    const response = await instancePagination(pageNumber, querySearch).get('/user/get_users');
     console.log(
       '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: green; font-weight: 700', response
       );
@@ -42,7 +44,7 @@ const UsersList = (): ReactElement => {
       getListSurveysByUUID()
     };
 
-  }, [session, pageNumber]);
+  }, [session, pageNumber, querySearch]);
 
   const openUserList = (user_uuid: string) => {
     push(`/user_profile/survey/users/user/${user_uuid}`);
@@ -50,6 +52,15 @@ const UsersList = (): ReactElement => {
 
   return  (
       <div className={styles.container}>
+          <div className="">
+            <input
+            placeholder="Search..."
+            value={querySearch}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+            />
+          </div>
         <InfiniteScroll
           dataLength={userSurveys.length}
           next={getMoreCards}

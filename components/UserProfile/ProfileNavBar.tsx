@@ -29,7 +29,7 @@ const ProfileNavbar = ({isActive, handleClick, headerName}) => {
               <i className={`${styles.bx} ${styles.bxSearch} bx bx-search`}/>
           </div>
           {session && (
-            <div className={styles.btnContainer} onClick={getProfile}>  
+            <div className={styles.btnContainer} onClick={getProfile}>
                 <div className={styles.signOutBtn}>{session.user.name}</div>
                 <div className={styles.imageContainer}>
                     <img src={session.user.image} alt={session.user.name} className={styles.image}/>

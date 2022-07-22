@@ -3,7 +3,8 @@ import axios, { AxiosInstance } from "axios";
 const API_URI = process.env.NEXT_PUBLIC_API_URL;
 
 export const instancePagination = (
-  pageNumber: number = 0,
+  page: number = 0,
+  query: string = '',
   uuid?: string
 ): AxiosInstance => {
   return axios.create({
@@ -15,8 +16,9 @@ export const instancePagination = (
       "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
     },
     params: {
-      page: pageNumber,
-      uuid: uuid,
+      page,
+      query,
+      uuid,
     },
   });
 };

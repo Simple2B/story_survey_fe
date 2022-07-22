@@ -91,6 +91,8 @@ const Home = (): ReactElement => {
     const [pageNumber, setPageNumber] = useState<number>(defaultQuantityItems);
     const [endMessage, setEndMessage] = useState(true)
     const [allServeyListLength, setAllServeyListLength] = useState(0)
+    const [querySearch, setSearchQuery] = useState<string>("");
+    console.log('SEARCH', querySearch);
 
   const getMoreCards = () => {
     console.log(userSurveys.length);
@@ -103,7 +105,7 @@ const Home = (): ReactElement => {
   }
 
       const [getListSurveysAll, isLoading, error] = useFetching( async () => {
-        const response = await instancePagination(pageNumber).get('/survey/surveys');
+        const response = await instancePagination(pageNumber, querySearch).get('/survey/surveys');
         console.log(
           '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: white; font-weight: 700', response.data
           );
@@ -120,7 +122,7 @@ const Home = (): ReactElement => {
         } else {
             setIsPublic(false);
         };
-    },[session, pageNumber]);
+    },[session, pageNumber, querySearch]);
 
     const openSurvey = (
             data: React.SetStateAction<{
@@ -300,7 +302,17 @@ const Home = (): ReactElement => {
             }
             {
                 <Wrapper>
-                    {/* {error && <div className={styles.ErrorContainer}>{error}</div>} */}
+          <div className={styles.searchBox}>
+              <input
+              type={styles.text}
+              placeholder="Search..."
+              value={querySearch}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
+              />
+              <i className={`${styles.bx} ${styles.bxSearch} bx bx-search`}/>
+          </div>
                         <>
                           <InfiniteScroll
                               className={styles.homeContent}

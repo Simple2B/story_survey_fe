@@ -34,10 +34,12 @@ const ProfileSurveyLists = () => {
   const [userSurveys, setUserSurveys] = useState<IUserResponse[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(defaultQuantityItems);
   const [endMessage, setEndMessage] = useState(true);
+  const [querySearch, setSearchQuery] = useState<string>("");
+  console.log('SEARCH', querySearch);
 
   const getListSurveysByUUID = async () => {
     const email: string= session.user.email;
-    const response = await instancePagination(pageNumber).get(`/survey/${email}`);
+    const response = await instancePagination(pageNumber, querySearch).get(`/survey/${email}`);
     console.log(
       '%c [getListSurveys] RESPONSE data - ', 'color: black; background-color: green; font-weight: 700', response
       );
@@ -83,11 +85,20 @@ const ProfileSurveyLists = () => {
       getListSurveysByUUID()
     }
 
-  },[session, pageNumber]);
+  },[session, pageNumber, querySearch]);
 
   return (
     <User title={'Survey List'} keywords={""} style={""} headerName={'Survey List'}>
       <div className="surveyListContainer">
+          <div className="">
+            <input
+            placeholder="Search..."
+            value={querySearch}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+            }}
+            />
+          </div>
         <ToggleSwitch
           checked={ checked }
           onChange={ handleChangeChecked }
